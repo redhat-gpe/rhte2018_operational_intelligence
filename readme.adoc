@@ -1,0 +1,7 @@
+= Operational Intelligence Multi-Product Lab
+
+== Related session(s) at RHT Tech Exchange
+
+. link:https://www.youtube.com/watch?v=-izxHJQSQ7E[Data streaming with Apache Kafka] 
++
+Speakers at each Tech Exchange are TBD
