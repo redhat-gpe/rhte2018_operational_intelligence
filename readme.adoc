@@ -1,5 +1,9 @@
 = Operational Intelligence Multi-Product Lab
 
+. https://etherpad.net/p/RHTE-Operational-Intelligence                      :   etherpad   
+. https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence        :   lab instructions
+. https://github.com/gpe-mw-training/operational_intelligence               :   lab assets
+
 == Related session(s) at RHT Tech Exchange
 
 . link:https://www.youtube.com/watch?v=-izxHJQSQ7E[Data streaming with Apache Kafka] 
