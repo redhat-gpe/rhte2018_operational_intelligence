@@ -16,7 +16,7 @@ Speakers at each Tech Exchange are TBD
 :toc2:
 :linkattrs:
 
-= API Mgmt and Service Mesh Lab
+= API Mgmt and Service Mesh Lab  (Using this template, Work in Progress, Please don't clone)
 
 .Goals
 * Inject Istio Envoy proxy configs into an Apicast gateway
