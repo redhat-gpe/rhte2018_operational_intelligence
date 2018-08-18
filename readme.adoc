@@ -16,21 +16,23 @@ Speakers at each Tech Exchange are TBD
 :toc2:
 :linkattrs:
 
-= API Mgmt and Service Mesh Lab  (Using this template, Work in Progress, Please don't clone)
+= Operational Intelligence and Apache Spark Lab  (Using this template, Work in Progress, Please don't cone)
 
 .Goals
-* Inject Istio Envoy proxy configs into an Apicast gateway
-* Configure an Istio Egress Route for an Apicast gateway
-* End-to-end distributed tracing of a MSA application using Jaeger implementation of the _OpenTracing_ specification
+* Apache Spark Deployment on Oshinko Cluster
+* Uber Data Analysis and Surge Prediction 
+* End-to-end Monitoring of Real Time Uber Data using Apache Spark,Kafka,Spark MLLIB.
+* Visualization of Real Time Monitoring Data using Interactive Notebooks Zeppelin and Juypter Notebook.
 
 .Prerequisite
 * Skills
-** Completion of the _APIs as a Business_ lab
-** Completion of the _MSA and Service Mesh_ lab
+** Programming Knowledge of Python, Scala and Java Languages
+** Knowledge on OpenShift Deployments
 * Tools
 ** `curl` utility
 ** `sed` utility
-** `istioctl` utility
+** `PIP Install` utility
+** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
 
 :numbered:
