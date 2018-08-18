@@ -16,7 +16,7 @@ Speakers at each Tech Exchange are TBD
 :toc2:
 :linkattrs:
 
-= Operational Intelligence and Apache Spark Lab  (Using this template, Work in Progress, Please don't cone)
+= Operational Intelligence and Apache Spark Lab  (Using this template, Work in Progress, Please don't clone)
 
 .Goals
 * Apache Spark Deployment on Oshinko Cluster
