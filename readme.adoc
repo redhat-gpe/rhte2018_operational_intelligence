@@ -16,7 +16,7 @@ Speakers at each Tech Exchange are TBD
 :toc2:
 :linkattrs:
 
-= Operational Intelligence and Apache Spark Lab  (Using this template, Work in Progress, Please don't clone)
+= Operational Intelligence and Apache Spark Lab 
 
 .Goals
 * Apache Spark Deployment on Oshinko Cluster
@@ -34,6 +34,12 @@ Speakers at each Tech Exchange are TBD
 ** `PIP Install` utility
 ** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
+
+= How this Lab Structured?
+* Basic of Data Analytics.
+* Apache Spark Deployment on Oshinko cluster (Simple Exercise)
+* Usage of Interactive Notebooks (Zeppelin and Jupyter) on Uber Near Time Data Analysis (Medium Exercise).
+* Structured Streaming of Uber Data using Apache Spark Streaming and Kafka API (Complex Exercise).
 
 :numbered:
 
