@@ -60,7 +60,7 @@ Apart from these Spark Provides several performance benefits by handling and par
 
 === Reference
 
-. Istio / Service Mesh
+. Youtube video https://www.redhat.com/en/about/videos/red-hat-consulting-decision-manager-and-apache-spark-integration. 
 
 . Distributed Tracing:
 .. link:https://github.com/opentracing[Github organization for OpenTracing]
