@@ -52,9 +52,9 @@ This Project shows how Spark is integrated with RedHatDecision Manager (Drools),
 The purpose of this lab is to apply both a Drools and Apache Spark deployment on Oshinko Cluster.
 
 == Why do we need this Simple Exercise Lab and how the students get benefitted by this lab?
-This Lab helps the students to get to know the basics of cluster level deployment of Spark Master/Worker node configuration.
-Basic deployment of spark jobs on Oshinko cluster.
-Integration between Drools and Apache Spark, so that on how the rules getting fired while spark is executing the job.
+This Lab helps the students to get to know the basics of cluster level deployment of Spark Master/Worker node configuration.<br>
+Basic deployment of spark jobs on Oshinko cluster.<br>
+Integration between Drools and Apache Spark, so that on how the rules getting fired while spark is executing the job.<br>
 
 === Background
 
