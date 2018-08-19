@@ -137,15 +137,15 @@ Your lab environment includes access to a Oshinko Cluster Environment.
 
 For the purpose of this lab, you will serve as the administrator of your own rules _tenant_ (aka: _domain_)
 
-. Log into the admin portal of your 3scale AMP environment using the information to do provided by your instructor
+. Log into the Openshift portal of your dedicated clustered environment using the information to do provided by your instructor
 
-. To access the admin portal of your 3scale environment, point to your browser to the output of the following:
+. Instructor will assig you the user code to access the dedicated clustered environment, point to your browser to the output of the following:
 +
 -----
-$ echo -en "\n\nhttps://$TENANT_NAME-admin.$OCP_WILDCARD_DOMAIN\n\n"
+$ echo -en "\n\nhttps://$TENANT_NAME-rules.$OCP_WILDCARD_DOMAIN\n\n"
 -----
 
-. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD   (Your 3scale credentials are the same as your OCP credentials).
+. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD   (Use your OCP credentials).
 +
 image::images/3scale_login.png[]
 
