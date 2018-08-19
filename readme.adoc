@@ -157,7 +157,7 @@ You lab environment is built on Red Hat's OpenShift Container Platform.
 Access to your OCP resources can be gained via both the `oc` utility as well as the OCP web console.
 
 . Log into OpenShift
-+
+
 -----
 $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
 -----
@@ -235,17 +235,14 @@ Project can be easily imported as an Maven Project and fitted to be running in a
 
 ==== Deployment in Openshift - Oshinko Cluster
 
-+
 -----
 $ oc new-project  -n $OCP_PROJECT
 
 ...
 
-NAME              REVISION   DESIRED   CURRENT   TRIGGERED BY
-catalog-mongodb   1          1         1         config,image(mongodb:3.4)
 -----
 
-. Review Deployment
+. Create Deployment Objects using Template
 +
 -----
 $ oc create -f https://raw.githubusercontent.com/Pkrish15/spark-drools/master/resources.yaml 
@@ -262,7 +259,7 @@ template "oshinko-webui" created
 
 -----
 
-. Review running pods -n $OCP_PROJECT
+. Apply the webui template, this will pull the oshinko cluster to every student's desktop
 +
 -----
 $ oc new-app oshinko-webui 
@@ -288,7 +285,24 @@ $ oc new-app oshinko-webui
 ...
 -----
 
-. Retrieve the URL of the unsecured _catalog_ route:
+. Get the Routes and Access the URL.
+-----
+...
+NAME                HOST/PORT                                                         PATH      SERVICES                            PORT            TERMINATION   WILDCARD
+oshinko-web         oshinko-web-rhte-mw-rules-user1.apps.6d13.openshift.opentlc.com   /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
+oshinko-web-proxy   oshinko-web-rhte-mw-rules-user1.apps.6d13.openshift.opentlc.com   /proxy    oshinko-web-proxy                   oc-proxy-port                 None
+...
+-----
+
+. Using the S2I Image to build and deploy the Project.
++
+----
+oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=spark-drools \
+    -p APP_MAIN_CLASS=com.redhat.gpte.App \
+    -p GIT_URI=https://github.com/Pkrish15/spark-drools \
+----
+
 +
 [source,text]
 ----
