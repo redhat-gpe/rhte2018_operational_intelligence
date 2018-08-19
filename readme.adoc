@@ -420,7 +420,7 @@ WIP
 
 WIP
 
-# Data Discovery Phase  - First Phase
+# Data Discovery Phase  - First Phase (Medium Level Project)
 # Analytics using the Data Model - Second Phase 
 It use Spark Streaming and Rules Implementation.WIP <br>
 # Where do we get these DataSets? <br>
