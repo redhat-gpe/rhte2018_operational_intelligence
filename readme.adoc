@@ -52,15 +52,11 @@ The purpose of this lab is to apply both a Drools and Apache Spark deployment on
 
 === Background
 
-_Gartner's Magic Quadrant for Full Life Cylce API Management_ puts Red Hat's API management solution in the leader's quadrant.
+Apache Spark Performs sequences of Operations like Inputting the data -> Filter the data -> Tag the Data (Business Logics like loan defaulters ) -> Model -> as the useful business data. Hence huge amount of Java Code (rule logic)in tagging the data for writing/cleansing the data for different transactions and scenarios which is not necessary.
 
-Red Hat is also a significant innovator in the technologies used to facilitate _Dev Ops_ and _MicroService Architectures_ (MSAs).
+Instead you can use the RedHatDecisionManager which completes the seperates the business logic with the application scope and make the clear abstractions with business rules and application logic. Developer can easily maintain these rules in RedHatDecision Manager.
 
-With MSAs, the need for a _service mesh_ becomes critical.
-As such, Red Hat is contributing to the Istio community project.
-In addition, Red Hat is actively working to productize Istio as a supported product on Red Hat's OpenShift Container Platform (OCP).
-
-The following table provides an overview of a feature comparison between API Management and a Service Mesh.
+Apart from these Spark Provides several performance benefits by handling and parallelly processing huge amount of data and also in near-realtime transactions.
 
 === Reference
 
