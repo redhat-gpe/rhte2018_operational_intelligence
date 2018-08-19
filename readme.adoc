@@ -50,8 +50,6 @@ This Project shows how Spark is integrated with RedHatDecision Manager (Drools),
 
 The purpose of this lab is to apply both a Drools and Apache Spark deployment on Oshinko Cluster.
 
-Along the way, a comparison of some features between API Mgmt and a Service Mesh will be conducted.
-
 === Background
 
 _Gartner's Magic Quadrant for Full Life Cylce API Management_ puts Red Hat's API management solution in the leader's quadrant.
