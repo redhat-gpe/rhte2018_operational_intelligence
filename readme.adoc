@@ -91,9 +91,9 @@ Outcomes of this working group may potentially guide the development and roadmap
 Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
 
 ifdef::showscript[]
-If student lab environment and 3scale tenants were provisioned using the ocp-workload-rhte-mw-api-mesh ansible role, then student details can be found in:
+If student lab environment and Oshinko Cluster were provisioned using the ocp-workload-rhte-mw-api-mesh ansible role, then student details can be found in:
 
-/tmp/3scale_tenants/user_info_file.txt
+/tmp/user_info_file.txt
 
 endif::showscript[]
 
@@ -110,31 +110,23 @@ $ export API_ADMIN_ACCESS_TOKEN=<provided by your instructor>
 #######  Using above variables, the following can be copied and pasted in same terminal window   ########
 
 $ export OCP_WILDCARD_DOMAIN=apps.$REGION.openshift.opentlc.com
-$ export TENANT_NAME=$OCP_USERNAME-3scale
-
-#   THREESCALE_PORTAL_ENDPOINT
-#   - Notice the value of this variable is being set to the route of the 3scale AMP system-provider 
-#   - Technically, it could instead be the system-provider service endpoint of 3scale AMP.
-#   - Later in this lab We'll use a route instead of a service to highlight default traffic management settings in Istio
-
-$ export THREESCALE_PORTAL_ENDPOINT=https://${API_ADMIN_ACCESS_TOKEN}@$TENANT_NAME-admin.$OCP_WILDCARD_DOMAIN
+$ export TENANT_NAME=$OCP_USERNAME-rules
 
 $ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=rhte-mw-api-mesh-$GUID
+$ export OCP_PROJECT=rhte-mw-api-rules-$GUID
 -----
 
 ifdef::showscript[]
 
 # Potential alternative using service endpoint (may need to use master)
-$ export THREESCALE_PORTAL_ENDPOINT=http://${API_ADMIN_ACCESS_TOKEN}@system-provider.3scale-mt-adm0.svc.cluster.local
 
 endif::showscript[]
 
-=== 3scale AMP access
+=== Oshinko Cluster Access
 
-Your lab environment includes access to a multi-tenant 3scale AMP installation.
+Your lab environment includes access to a Oshinko Cluster Environment.
 
-For the purpose of this lab, you will serve as the administrator of your own 3scale _tenant_ (aka: _domain_)
+For the purpose of this lab, you will serve as the administrator of your own rules _tenant_ (aka: _domain_)
 
 . Log into the admin portal of your 3scale AMP environment using the information to do provided by your instructor
 
