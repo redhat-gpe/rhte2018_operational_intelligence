@@ -44,11 +44,11 @@ Speakers at each Tech Exchange are TBD
 :numbered:
 
 
-== Overview
+== Overview (Simple Exercise - Lab 1)
 
-An _Istio_ based service mesh introduces features that are similar to those found in an API management solution.
+This Project shows how Spark is integrated with RedHatDecision Manager (Drools), Business use case of Simple Credit Approval Logic,  When the credit score is greater than 600, Approve the loan. 
 
-The purpose of this lab is to apply both a _service mesh_ and an API management solution to a container native application.
+The purpose of this lab is to apply both a Drools and Apache Spark deployment on Oshinko Cluster.
 
 Along the way, a comparison of some features between API Mgmt and a Service Mesh will be conducted.
 
