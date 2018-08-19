@@ -26,7 +26,8 @@ Speakers at each Tech Exchange are TBD
 
 .Prerequisite
 * Skills
-** Programming Knowledge of Python, Scala and Java Languages
+** Programming Knowledge of Python, Scala and Java Languages.
+** Basic Knowledge of Apache Spark.
 ** Knowledge on OpenShift Deployments
 * Tools
 ** `curl` utility
@@ -35,7 +36,7 @@ Speakers at each Tech Exchange are TBD
 ** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
 
-= How this Lab Structured?
+= How is this Lab Structured?
 * Basic of Data Analytics.
 * Apache Spark Deployment on Oshinko cluster (Simple Exercise)
 * Usage of Interactive Notebooks (Zeppelin and Jupyter) on Uber Near Time Data Analysis (Medium Exercise).
@@ -62,23 +63,13 @@ Apart from these Spark Provides several performance benefits by handling and par
 
 . Youtube video https://www.redhat.com/en/about/videos/red-hat-consulting-decision-manager-and-apache-spark-integration. 
 
-. Distributed Tracing:
-.. link:https://github.com/opentracing[Github organization for OpenTracing]
-+
-Includes the OpenTracing specification as well as the OpenTracing client libraries for many languages.
-
-.. link:https://www.jaegertracing.io/[jaegertracing.io]
-.. link:https://github.com/jaegertracing/[Github organization for community Jaeger]
-+
-Includes source code to community Jaeger as well as Jaeger client libraries for many languages (that implement the corresponding OpenTracing client libraries]
-
 === Alternatives
 
-In regards to API Management and a MSA service mesh, the following are related community initiatives that are not covered in this lab.
+In regards to Apache Spark , the following are related community initiatives that are not covered in this lab.
 
-==== Standalone community Jaeger
+==== Scala Programming Language
  
-Of related interest is that the upstream community APIcast gateway from Red Hat's 3scale product bundles _OpenTracing_ client library using _Jaeger_.
+Scala is an Excellent functional programming JVM Language which is currently used in wide spread.
 Subsequently, this allows community apicast to participate in distributed tracing.
 
 Also available in the open-source community is the _all-in-one_ community Jaeger that includes a jaeger-agent, jaeger-collector and jaeger-collector.
