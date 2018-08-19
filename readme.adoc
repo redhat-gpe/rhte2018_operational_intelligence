@@ -301,20 +301,48 @@ oc new-app --template oshinko-java-spark-build-dc \
     -p APPLICATION_NAME=spark-drools \
     -p APP_MAIN_CLASS=com.redhat.gpte.App \
     -p GIT_URI=https://github.com/Pkrish15/spark-drools \
+    -p APP_FILE=spark-drools.jar \
+    -p OSHINKO_DEL_CLUSTER=false
+
+----
+----
+...
+--> Deploying template "rhte-mw-rules-user1/oshinko-java-spark-build-dc" to project rhte-mw-rules-user1
+
+     Apache Spark Java
+     ---------
+     Create a buildconfig, imagestream and deploymentconfig using source-to-image and Java Spark source files hosted in git'
+
+     * With parameters:
+        * APPLICATION_NAME=spark-drools
+        * GIT_URI=https://github.com/Pkrish15/spark-drools
+        * GIT_REF=master
+        * CONTEXT_DIR=
+        * APP_FILE=spark-drools
+        * APP_ARGS=
+        * APP_MAIN_CLASS=com.redhat.gpte.App
+        * SPARK_OPTIONS=
+        * OSHINKO_CLUSTER_NAME=
+        * OSHINKO_NAMED_CONFIG=
+        * OSHINKO_SPARK_DRIVER_CONFIG=
+        * OSHINKO_DEL_CLUSTER=false
+
+--> Creating resources ...
+    imagestream "spark-drools" created
+    buildconfig "spark-drools" created
+    deploymentconfig "spark-drools" created
+    service "spark-drools" created
+    service "spark-drools-headless" created
+--> Success
+    Build scheduled, use 'oc logs -f bc/spark-drools' to track its progress.
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose svc/spark-drools' 
+     'oc expose svc/spark-drools-headless' 
+    Run 'oc status' to view your app.
+
+...
 ----
 
-+
-[source,text]
-----
-$ export NAKED_CATALOG_ROUTE=http://$(oc get route catalog-unsecured -o template --template='{{.spec.host}}' -n $OCP_PROJECT)
-----
-
-. Via the catalog route, retrieve the pre-seeded data in the Mongo database:
-+
------
-$ curl -X GET "$NAKED_CATALOG_ROUTE/products"
------
-+
 .Sample Output
 -----
 ...
