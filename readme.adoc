@@ -223,30 +223,21 @@ Your lab assets consist of a mix of OpenShift _Deployment_ and _DeploymentConfig
 
 The _Deployment_ construct is a more recent Kubernetes equivalent of what has always been in OpenShift:  _DeploymentConfig_.
 
-The _istioctl_ utility (introduced later in this lab) of Istio requires the use of the Kubernetes _Deployment_ resource.
-Subsequently, for the purpose of this lab, we'll use the Kubernetes _Deployment_ type (instead of DeploymentConfig) for most of the functionality.
-One exception to this is the MongoDB.
 
-The CoolStore catalog service included in your lab environment connects to a MongoDB database.
-This MongoDB database is managed by Kubernetes using an OpenShift DeploymentConfig instead of a Kubernetes Deployment.
-The reason for this is that the OpenShift _DeploymentConfig_ provides more features than a Kubernetes _Deployment_.
-In particular, the MongoDB that supports this lab makes use of _life-cycle_ hooks that are only available in a DeploymentConfig.
-The life-cycle hooks are used to pre-seed the data in the MongoDB.
-This _post deployment_ life-cycle hook is simply ignored if added to a Kubernetes Deployment.
+=== Spark Drools Project
+
+This Project will show how to use the spark job to fire the rules.
+Simple Credit Approval logic, if the Applicant Credit score is greater than 600, fire the rules (approve the loan). 
+Approval.drl (drool file) holds the business logic.
+Project can be easily imported as an Maven Project and fitted to be running in any ide.
 
 
-If you interested in learning more about the differences between Kubernetes _Deployments_ and OCP _DeploymentConfigurations_, please see
-link:https://docs.openshift.com/container-platform/3.10/dev_guide/deployments/kubernetes_deployments.html#kubernetes-deployments-vs-deployment-configurations[this documentation].
 
-=== CoolStore Catalog Service
+==== Deployment in Openshift - Oshinko Cluster
 
-
-==== OpenShift objects
-
-. Review DeploymentConfig
 +
 -----
-$ oc get dc -n $OCP_PROJECT
+$ oc new-project  -n $OCP_PROJECT
 
 ...
 
@@ -257,25 +248,43 @@ catalog-mongodb   1          1         1         config,image(mongodb:3.4)
 . Review Deployment
 +
 -----
-$ oc get deploy -n $OCP_PROJECT
+$ oc create -f https://raw.githubusercontent.com/Pkrish15/spark-drools/master/resources.yaml 
 
 ...
 
-NAME              DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-catalog-service   1         1         1            1           4m
+serviceaccount "oshinko" created
+rolebinding "oshinko-edit" created
+template "oshinko-python-spark-build-dc" created
+template "oshinko-java-spark-build-dc" created
+template "oshinko-scala-spark-build-dc" created
+template "oshinko-webui-secure" created
+template "oshinko-webui" created
+
 -----
 
 . Review running pods -n $OCP_PROJECT
 +
 -----
-$ oc get pods
+$ oc new-app oshinko-webui 
 
 ...
+--> Deploying template "rhte-mw-rules-user1/oshinko-webui" to project rhte-mw-rules-user1
 
-NAME                          READY     STATUS      RESTARTS   AGE
-catalog-mongodb-1-clsz4       1/1       Running     0          11m
-catalog-service-1-dqb28       1/1       Running     0          11m
+     * With parameters:
+        * SPARK_DEFAULT=
+        * OSHINKO_WEB_NAME=oshinko-web
+        * OSHINKO_WEB_IMAGE=radanalyticsio/oshinko-webui:stable
+        * OSHINKO_WEB_ROUTE_HOSTNAME=
+        * OSHINKO_REFRESH_INTERVAL=5
 
+--> Creating resources ...
+    service "oshinko-web-proxy" created
+    service "oshinko-web" created
+    route "oshinko-web" created
+    deploymentconfig "oshinko-web" created
+--> Success
+    Access your application via route 'oshinko-web-rhte-mw-rules-user1.apps.6d13.openshift.opentlc.com' 
+    Run 'oc status' to view your app.
 ...
 -----
 
