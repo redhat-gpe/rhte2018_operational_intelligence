@@ -70,30 +70,19 @@ In regards to Apache Spark , the following are related community initiatives tha
 ==== Scala Programming Language
  
 Scala is an Excellent functional programming JVM Language which is currently used in wide spread.
-Subsequently, this allows community apicast to participate in distributed tracing.
-
-Also available in the open-source community is the _all-in-one_ community Jaeger that includes a jaeger-agent, jaeger-collector and jaeger-collector.
-link:https://medium.com/@jmprusi_49013/adding-opentracing-support-to-apicast-api-gateway-a8e0a38347d2[This tutorial] very nicely details the use of opentracing enabled apicast with the _all-in-one_ community Jaeger.
-
-
-As an alternative to the _all-in-one_ standalone Jaeger, Istio also now comes included with Jaeger. 
-In this lab, this Jaeger based tracing functionality provided by Istio is utilized instead of a standalone Jaeger installation.
+However we will cover the basic topics in Scala.
  
-==== 3scale mixer adapter
+==== Python Programming Language
 
-The Red Hat 3scale engineering team is actively working on an Istio _mixer_.
-This Istio _mixer_ will allow 3scale API Management policies to be applied directly to the _service mesh_ . 
+Python is an Excellent Language which currently dominates the data analytics world.
+However we will cover the basic topics in Python and Machine Learning Libraries in Python.
 
 
-==== Istio API Management Working Group
+==== Zeppelin Notebook
 
-Istio activity is organized into _working groups_.
+Since we use Zeppelin Notebook for data visualization. Advanced Interpretor and their installation in Zeppelin notebook is not covered.
 
-One of this Istio working groups is on link:https://github.com/istio/community/blob/master/WORKING-GROUPS.md#api-management[API Management].
-
-Members of the  Red Hat engineering team are currently participating in this Istio API Management working group.
-
-Outcomes of this working group may potentially guide the development and roadmap of future releases of the Red Hat 3scale API Management product.
+Outcomes of this working group may potentially guide the development and roadmap of future releases of the RadAnalytics product.
  
 == Lab Asset Overview
 
