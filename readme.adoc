@@ -419,8 +419,8 @@ WIP
 === OpenShift Console URL (Oshinko Cluster Environment)
 
 WIP
-
-# Data Discovery Phase  - First Phase (Medium Level Project)
+------------------------------------------------End of Lab 1----------------------------------------------------------------
+# Data Discovery Phase  - First Phase (Medium Level Project - Lab 2)
 # Analytics using the Data Model - Second Phase 
 It use Spark Streaming and Rules Implementation.WIP <br>
 # Where do we get these DataSets? <br>
