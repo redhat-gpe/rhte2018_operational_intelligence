@@ -505,13 +505,14 @@ Output, Cluster Centers are displayed on the Google Map
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/5.png[uberstream5]
 
 Further Analysis of cluster
+
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream6]
 
 ===  What are the Analysis Questions? 
 
-===  Which hour of the day and which cluster had highest number of pickups?
+****  Which hour of the day and which cluster had highest number of pickups?
 
-===  How many pickups occured in each cluster?
+**** How many pickups occured in each cluster?
 
 ==== Deployment in Openshift - Oshinko Cluster
 
@@ -585,8 +586,13 @@ oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apa
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
 
-. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
+. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
+
+. Execute the cell at very stages and you can visualize the data, upon each query.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png
 
 endif::showscript[]
 
