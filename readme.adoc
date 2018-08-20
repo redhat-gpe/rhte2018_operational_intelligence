@@ -652,11 +652,11 @@ date/time, latitude,longitude,base
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture3.png[uber12]
 
-
+Data will be enriched are in JSON Format which is given below.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture4.png[berstream13]
 
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
 
 
 
