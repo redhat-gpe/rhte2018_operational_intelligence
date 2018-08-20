@@ -418,14 +418,15 @@ WIP
 
 === OpenShift Console URL (Oshinko Cluster Environment)
 
-WIP <br> <br>
-------------------------------------------------End of Lab 1----------------------------------------------------------------<br>
-== Overview (Medium Exercise - Lab 2)
+WIP 
+------------------------------------------------End of Lab 1----------------------------------------------------------------
+
+===  Overview (Medium Exercise - Lab 2)
 
 This Project shows how Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
 The purpose of this lab is to apply usage of Zeppelin Notebook and Apache Spark deployment on Oshinko Cluster.
 
-== Why do we need this Medium Exercise Lab and how the students get benefitted by this lab?
+===  Why do we need this Medium Exercise Lab and how the students get benefitted by this lab?
 This Lab helps the students to get to know the basics of interactive notebook usage in the current big data scenario.
 
 Basic deployment of spark jobs on Oshinko cluster amd connectivity of zeppelin notebook to the Spark Oshinko Cluster.
@@ -434,37 +435,17 @@ SparkSQL - Excellent API for structured streaming and it is an advanced concept 
 
 === Background
 
-Apache Spark Performs sequences of Operations like Inputting the data -> Filter the data -> Tag the Data (Business Logics like loan defaulters ) -> Model -> as the useful business data. Hence huge amount of Java Code (rule logic)in tagging the data for writing/cleansing the data for different transactions and scenarios which is not necessary.
+According to Gartner, by 2020, a quarter of a billion connected cars will form a major element of the Internet of Things. Connected vehicles are projected to generate 25GB of data per hour, which can be analyzed to provide real-time monitoring and apps, and will lead to new concepts of mobility and vehicle usage. One of the 10 major areas in which big data is currently being used to excellent advantage is in improving cities. For example, the analysis of GPS car data can allow cities to optimize traffic flows based on real-time traffic information.
 
-Instead you can use the RedHatDecisionManager which completes the seperates the business logic with the application scope and make the clear abstractions with business rules and application logic. Developer can easily maintain these rules in RedHatDecision Manager.
+Uber is using big data to perfect its processes, from calculating Uber’s pricing, to finding the optimal positioning of cars to maximize profits. In this series of blog posts, we are going to use public Uber trip data to discuss building a real-time example for analysis and monitoring of car GPS data. There are typically two phases in machine learning with real-time data:
 
-Apart from these Spark Provides several performance benefits by handling and parallelly processing huge amount of data and also in near-realtime transactions.
+Data Discovery: The first phase involves analysis on historical data to build the machine learning model.
 
-=== Reference
+Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)
 
-. Youtube video https://www.redhat.com/en/about/videos/red-hat-consulting-decision-manager-and-apache-spark-integration. 
+building the model
 
-=== Alternatives
-
-In regards to Apache Spark , the following are related community initiatives that are not covered in this lab.
-
-==== Scala Programming Language
- 
-Scala is an Excellent functional programming JVM Language which is currently used in wide spread.
-However we will cover the basic topics in Scala.
- 
-==== Python Programming Language
-
-Python is an Excellent Language which currently dominates the data analytics world.
-However we will cover the basic topics in Python and Machine Learning Libraries in Python.
-
-
-==== Zeppelin Notebook
-
-Since we use Zeppelin Notebook for data visualization. Advanced Interpretor and their installation in Zeppelin notebook is not covered.
-
-Outcomes of this working group may potentially guide the development and roadmap of future releases of the RadAnalytics product.
- 
+In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
 
 # Data Discovery Phase  - First Phase (Medium Level Project - Lab 2)
 # Analytics using the Data Model - Second Phase 
