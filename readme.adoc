@@ -44,6 +44,7 @@ Speakers at each Tech Exchange are TBD
 ** `PIP Install` utility
 ** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
+** `git` command basics
 
 = How is this Lab Structured?
 * Basic of Data Analytics.
