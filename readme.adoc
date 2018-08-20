@@ -616,6 +616,26 @@ The first project discussed creating a machine learning model using Apache Spark
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture1.png[uberstream10]
 
+=== Pod Requirment
+Since it involves Kafka Streaming as well 1 Dedicated pod required for putting the messages in Kafka Queue.
+1 Pod required for Spark Oshinko Cluster
+1 Pod required for Zeppelin Notebook Visualization
+1 Pod required for HBase for Storing the structured streaming data (But this optional, If we need to visualize the data using API's using Vert.x or Spring Boot or AngularJS this pod is required.
+In conclusion 3 Pods are compulsory and 1 is being Optional.
+
+=== Data Pipeline
+Uber trip data is published to a MapR Streams topic using the Kafka API
+A Spark streaming application subscribed to the first topic:
+Ingests a stream of uber trip events
+Identifies the location cluster corresponding to the latitude and longitude of the uber trip
+Adds the cluster location to the event and publishes the results in JSON format to another topic
+A Spark streaming application subscribed to the second topic:
+Analyzes the uber trip location clusters that are popular by date and time
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png
+
+
+
 
 endif::showscript[]
 
