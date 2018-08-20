@@ -601,9 +601,11 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[ube
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
 
-. Execute the cell at very stages and you can visualize the data, upon each query.
+. Execute the cell at very stages and you can visualize the data, upon each query
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
+
+
 
 endif::showscript[]
 
