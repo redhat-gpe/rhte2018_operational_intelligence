@@ -625,14 +625,20 @@ In conclusion 3 Pods are compulsory and 1 is being Optional.
 
 === Data Pipeline
 Uber trip data is published to a MapR Streams topic using the Kafka API
-A Spark streaming application subscribed to the first topic:
-Ingests a stream of uber trip events
-Identifies the location cluster corresponding to the latitude and longitude of the uber trip
-Adds the cluster location to the event and publishes the results in JSON format to another topic
-A Spark streaming application subscribed to the second topic:
-Analyzes the uber trip location clusters that are popular by date and time
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png
+A Spark streaming application subscribed to the first topic:
+
+Ingests a stream of uber trip events
+
+Identifies the location cluster corresponding to the latitude and longitude of the uber trip.
+
+Adds the cluster location to the event and publishes the results in JSON format to another topic.
+
+A Spark streaming application subscribed to the second topic:
+
+Analyzes the uber trip location clusters that are popular by date and time.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
 
 
 
