@@ -466,6 +466,7 @@ https://developer.uber.com/docs/businesses/data-automation/data-download
 
 ===  Why this phase is needed? 
    This phase is needed to study about the historical data, and observe the pattern recognition of the uber system which is needed. Based on this we can arrive a conclusion for better decision making and predictions.
+   
 ===  What is analytics using the model?
    This is the second phase of the project,uses the model in production on live events, it still needed to do an analyis of historical data.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
@@ -510,7 +511,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream
 
 ===  What are the Analysis Questions? 
 
-****  Which hour of the day and which cluster had highest number of pickups?
+**** Which hour of the day and which cluster had highest number of pickups?
 
 **** How many pickups occured in each cluster?
 
@@ -592,7 +593,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.p
 
 . Execute the cell at very stages and you can visualize the data, upon each query.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
 
 endif::showscript[]
 
