@@ -716,7 +716,7 @@ SparkKafkaConsumerWriteHBaseDStream -Line 59
 
 
 
-
+This Section is still WIP will be completed by tommorrow.
 
 
 endif::showscript[]
