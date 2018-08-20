@@ -702,6 +702,19 @@ Use the above instructions for Spark Oshinko Cluster.
 Instructions for Creating Kakfa Pod (To be Discussed with Nandan and Completed)
 
 
+Code Changes 
+
+KafkaProducerExample - Line 59
+   val kafkaBrokers = "localhost:9092" to be replaced 
+
+SparkKafkaConsumer  - Line 41
+   val brokers = "localhost:9092" // To be tested with Nandan's Kafka broker 
+   
+SparkKafkaConsumerWriteHBaseDStream -Line 59
+
+   Replace localhost:9092 with Nandan's Kafka Broker.
+
+
 
 
 
