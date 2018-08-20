@@ -608,6 +608,13 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis
 
 = Uber Kafka Streaming (Complex Project)
 
+=== Background
+This is the second part in a series where we will build a real-time example for analysis and monitoring of Uber car GPS trip data. 
+
+The first project discussed creating a machine learning model using Apache Spark’s K-means algorithm to cluster Uber data based on location. This complex project will discuss using the saved K-means model with streaming data to do real-time analysis of where and when Uber cars are clustered.
+
+
+
 
 
 endif::showscript[]
