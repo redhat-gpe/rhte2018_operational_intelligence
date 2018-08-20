@@ -660,6 +660,38 @@ Spark Kafka Producer Consumer Code with Enriched Data
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
 
+=== Perform these steps on the code or in Zeppelin Notebook
+
+Parse the DataSet Records (Uber case class)
+Load the KMeans model
+=== Spark Streaming Code
+
+These are the basic steps for the Spark Streaming Consumer Producer code:
+
+Configure Kafka Consumer Producer properties.
+
+Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
+
+Apply transformations (which create new DStreams).
+
+Write messages from the transformed DStream to a Topic.
+
+Start receiving data and processing. Wait for the processing to be stopped.
+
+We will go through each of these steps with the example application code.
+
+=== Configure Spark Kafka Consumer Producer Properties
+
+The first step is to set the KafkaConsumer and KafkaProducer configuration properties, which will be used later to create a DStream for receiving/sending messages to topics. You need to set the following paramters:
+
+
+Key and value deserializers: for deserializing the message.
+
+Auto offset reset: to start reading from the earliest or latest message.
+
+Bootstrap servers: this can be set to a dummy host:port since the broker address is Strimzi Kafka POD
+
+
 
 
 
