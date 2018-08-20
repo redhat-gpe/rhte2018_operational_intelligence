@@ -618,9 +618,13 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture1.png[ube
 
 === Pod Requirment
 Since it involves Kafka Streaming as well 1 Dedicated pod required for putting the messages in Kafka Queue.
-1 Pod required for Spark Oshinko Cluster
-1 Pod required for Zeppelin Notebook Visualization
+
+1 Pod required for Spark Oshinko Cluster.
+
+1 Pod required for Zeppelin Notebook Visualization.
+
 1 Pod required for HBase for Storing the structured streaming data (But this optional, If we need to visualize the data using API's using Vert.x or Spring Boot or AngularJS this pod is required.
+
 In conclusion 3 Pods are compulsory and 1 is being Optional.
 
 === Data Pipeline
@@ -639,6 +643,24 @@ A Spark streaming application subscribed to the second topic:
 Analyzes the uber trip location clusters that are popular by date and time.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
+
+=== Data Flow in Detail
+The example data set is Uber trip data, which you can read more about in part 1 of this series. The incoming data is in CSV format, an example is shown below , with the header:
+
+date/time, latitude,longitude,base
+2014-08-01 00:00:00,40.729,-73.9422,B02598
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture3.png[uber12]
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture4.png[berstream13]
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14
+
+
+
+
 
 
 
