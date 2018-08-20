@@ -441,9 +441,10 @@ Uber is using big data to perfect its processes, from calculating Uber’s prici
 
 Data Discovery: The first phase involves analysis on historical data to build the machine learning model.
 
-Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)
+Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
 
-building the model
+![alt text](https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg)<br>
+
 
 In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
 
