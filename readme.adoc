@@ -28,7 +28,16 @@ Speakers at each Tech Exchange are TBD
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages.
 ** Basic Knowledge of Apache Spark.
+** Knowledge of Git Commands.
 ** Knowledge on OpenShift Deployments
+** GIT Clone of the Source code into Student's Desktop.
+
+
+.GitHUB URL's
+https://github.com/gpe-mw-training/operational_intelligence/tree/master/spark-drools - For Simple Project
+https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis - For Medium Project
+https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-kafka-streaming  - For Complex Project
+
 * Tools
 ** `curl` utility
 ** `sed` utility
