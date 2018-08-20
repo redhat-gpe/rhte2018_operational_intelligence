@@ -694,6 +694,13 @@ Bootstrap servers: this can be set to a dummy host:port since the broker address
 
 
 
+=== Deployment in OpenShift
+Use the above instructions for Zeppelin NoteBook
+
+Use the above instructions for Spark Oshinko Cluster.
+
+Instructions for Creating Kakfa Pod (To be Discussed with Nandan and Completed)
+
 
 
 
