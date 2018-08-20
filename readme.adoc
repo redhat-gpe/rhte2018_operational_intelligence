@@ -466,8 +466,7 @@ https://developer.uber.com/docs/businesses/data-automation/data-download
 
 ===  Why this phase is needed? 
    This phase is needed to study about the historical data, and observe the pattern recognition of the uber system which is needed. Based on this we can arrive a conclusion for better decision making and predictions.
- 
- ===  What is analytics using the model?
+===  What is analytics using the model?
    This is the second phase of the project,uses the model in production on live events, it still needed to do an analyis of historical data.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
 
@@ -584,16 +583,11 @@ oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apa
 ----
 . Once the data copied, Open the Zeppelin URL
 
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
 
- === References 
- https://mapr.com/blog/monitoring-real-time-uber-data-using-spark-machine-learning-streaming-and-kafka-api-part-1/ 
- 
- https://mapr.com/blog/monitoring-real-time-uber-data-using-spark-machine-learning-streaming-and-kafka-api-part-2/ 
- 
- https://www.youtube.com/watch?v=52zTo7bznXw 
- 
- https://www.youtube.com/watch?v=nncxYGD6m7E 
- 
+. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
+
 endif::showscript[]
 
 
