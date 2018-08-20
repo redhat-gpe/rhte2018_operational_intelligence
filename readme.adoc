@@ -418,8 +418,54 @@ WIP
 
 === OpenShift Console URL (Oshinko Cluster Environment)
 
-WIP
-------------------------------------------------End of Lab 1----------------------------------------------------------------
+WIP <br> <br>
+------------------------------------------------End of Lab 1----------------------------------------------------------------<br>
+== Overview (Medium Exercise - Lab 2)
+
+This Project shows how Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
+The purpose of this lab is to apply usage of Zeppelin Notebook and Apache Spark deployment on Oshinko Cluster.
+
+== Why do we need this Medium Exercise Lab and how the students get benefitted by this lab?
+This Lab helps the students to get to know the basics of interactive notebook usage in the current big data scenario.
+
+Basic deployment of spark jobs on Oshinko cluster amd connectivity of zeppelin notebook to the Spark Oshinko Cluster.
+
+SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+
+=== Background
+
+Apache Spark Performs sequences of Operations like Inputting the data -> Filter the data -> Tag the Data (Business Logics like loan defaulters ) -> Model -> as the useful business data. Hence huge amount of Java Code (rule logic)in tagging the data for writing/cleansing the data for different transactions and scenarios which is not necessary.
+
+Instead you can use the RedHatDecisionManager which completes the seperates the business logic with the application scope and make the clear abstractions with business rules and application logic. Developer can easily maintain these rules in RedHatDecision Manager.
+
+Apart from these Spark Provides several performance benefits by handling and parallelly processing huge amount of data and also in near-realtime transactions.
+
+=== Reference
+
+. Youtube video https://www.redhat.com/en/about/videos/red-hat-consulting-decision-manager-and-apache-spark-integration. 
+
+=== Alternatives
+
+In regards to Apache Spark , the following are related community initiatives that are not covered in this lab.
+
+==== Scala Programming Language
+ 
+Scala is an Excellent functional programming JVM Language which is currently used in wide spread.
+However we will cover the basic topics in Scala.
+ 
+==== Python Programming Language
+
+Python is an Excellent Language which currently dominates the data analytics world.
+However we will cover the basic topics in Python and Machine Learning Libraries in Python.
+
+
+==== Zeppelin Notebook
+
+Since we use Zeppelin Notebook for data visualization. Advanced Interpretor and their installation in Zeppelin notebook is not covered.
+
+Outcomes of this working group may potentially guide the development and roadmap of future releases of the RadAnalytics product.
+ 
+
 # Data Discovery Phase  - First Phase (Medium Level Project - Lab 2)
 # Analytics using the Data Model - Second Phase 
 It use Spark Streaming and Rules Implementation.WIP <br>
