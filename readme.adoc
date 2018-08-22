@@ -589,6 +589,7 @@ apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com     
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
 
 
+. Attach it to the Pod.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
 
@@ -599,23 +600,28 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
 
 
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
-
-
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocdelete.png[uber11]
 
 
 
 
 
-. Copy the Local Data to the Pod Directory using Rsync Command 
+
+. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
 +
 ----
 oc rsync src directory pod directory:/data
 for Example
 oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data 
 ----
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
+
+
+
+. Delete the unwanted files (this step is optional).
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocdelete.png[uber11]
+
+
 . Once the data copied, Open the Zeppelin URL
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
