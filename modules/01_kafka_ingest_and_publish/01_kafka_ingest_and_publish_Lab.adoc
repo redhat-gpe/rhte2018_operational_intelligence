@@ -1,0 +1,192 @@
+:noaudio:
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+
+= Kafka ingest and publish lab
+
+.Goals
+* Create a Kafka publisher and consumer on a pre-built Kafka deployment
+* Create a Kafka connector configured for reading the Uber data file
+* Verify that the contents are published on the configured topic using a MsgConsumer
+
+.Prerequisite
+* Skills
+** 
+** 
+* Tools
+** `curl` utility
+** `oc` version 3.9 utility
+
+:numbered:
+
+== Overview
+
+
+=== Background
+
+
+=== Reference
+
+
+. Kafka on Openshift:
+.. link:https://strimzi.io[Project]
++
+Includes the OpenTracing specification as well as the OpenTracing client libraries for many languages.
+
+
+ 
+== Lab Asset Overview
+
+=== Environment Variables
+
+Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
+
+
+-----
+######  Instructor will provide the values to these environment variables #######
+
+$ export REGION=<provided by your instructor>
+$ export GUID=<provided by your instructor>
+$ export OCP_PASSWD=<provided by your instructor>
+$ export API_ADMIN_ACCESS_TOKEN=<provided by your instructor>
+
+
+
+#  Using above variables, copy & paste the following in same terminal #
+
+
+$ export OCP_USERNAME=user$GUID
+$ export OCP_PROJECT=rhte-op-int-$GUID
+-----
+
+ifdef::showscript[]
+
+endif::showscript[]
+
+=== Kafka access
+
+Your lab environment includes access to a Kafka installation.
+
+
+=== OpenShift access
+
+You lab environment is built on Red Hat's OpenShift Container Platform.
+
+Access to your OCP resources can be gained via both the `oc` utility as well as the OCP web console.
+
+. Log into OpenShift
++
+-----
+$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
+-----
+
+. Ensure that your `oc` client is the same minor release version as the server:
++
+-----
+$ oc version
+
+oc v3.9.30
+kubernetes v1.9.1+a0ce1bc657
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+Server https://master.a4ec.openshift.opentlc.com:443
+openshift v3.9.31
+kubernetes v1.9.1+a0ce1bc657
+-----
+
+.. In the above example, notice that version of the `oc` client is of the same minor release (v3.9.30) of the OpenShift server (v3.9.31)
+.. There a known subtle problems with using a version of the `oc` client that is different from your target OpenShift server.
+
+. View existing projects:
++
+-----
+$ oc get projects
+
+... 
+
+user2-kafka-project                                     Active
+-----
+
+. Switch to your  OpenShift project
++
+-----
+$ oc project $OCP_PROJECT
+-----
+
+. Log into OpenShift Web Console
+.. Many OpenShift related tasks found in this lab can be completed in the Web Console (as an alternative to using the `oc` utility`.
+.. To access, point to your browser to the output of the following:
++
+-----
+$ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
+-----
+
+.. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
+
+
+[[dvsdc]]
+=== Deployment vs DeploymentConfig 
+
+
+==== Create Kafka connector
+
+. Configure Kafka Connect deployment
+
+Add to the resources/kafka-connect/kafka-connect.yaml, under the spec object,
++
+[source,text]
+----
+  config:
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false
+----
+
+. Copy input file to the Kafka Connect pod using scp
+. Create a topic that Kafka Connect uses to publish to the Kafka broker
+
+Skip this test since the topic has already been created.
+
+. Create the configuration for the file source
++
+[source,json]
+----
+% cat <<EOF >> /tmp/source-plugin.json
+{
+  "name": "source-test",
+  "config": {
+    "connector.class": "FileStreamSource",
+    "tasks.max": "3",
+    "topic": "my-topic",
+    "file": "/tmp/my-data-file.txt"
+  }
+}
+EOF
+----
+
+. Create a connector that will read the TXT file and push its cotnent into Kafka
++
+[source,text]
+----
+% curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
+----
+
+. Verify the contents are being published to the message consumer configured.
++
+2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
+
+== Conclusions
+
+
+
+== Questions
+
+TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+
+== Appendix
+ifdef::showscript[]
+
+endif::showscript[]
