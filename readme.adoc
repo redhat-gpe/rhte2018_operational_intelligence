@@ -586,6 +586,29 @@ apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com     
 
 . Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB.
 
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
+
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocdelete.png[uber11]
+
+
+
+
+
 . Copy the Local Data to the Pod Directory using Rsync Command 
 +
 ----
