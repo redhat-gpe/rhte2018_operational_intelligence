@@ -618,9 +618,13 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture1.png[ube
 
 === Pod Requirment
 Since it involves Kafka Streaming as well 1 Dedicated pod required for putting the messages in Kafka Queue.
-1 Pod required for Spark Oshinko Cluster
-1 Pod required for Zeppelin Notebook Visualization
+
+1 Pod required for Spark Oshinko Cluster.
+
+1 Pod required for Zeppelin Notebook Visualization.
+
 1 Pod required for HBase for Storing the structured streaming data (But this optional, If we need to visualize the data using API's using Vert.x or Spring Boot or AngularJS this pod is required.
+
 In conclusion 3 Pods are compulsory and 1 is being Optional.
 
 === Data Pipeline
@@ -640,7 +644,79 @@ Analyzes the uber trip location clusters that are popular by date and time.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
 
+=== Data Flow in Detail
+The example data set is Uber trip data, which you can read more about in part 1 of this series. The incoming data is in CSV format, an example is shown below , with the header:
 
+date/time, latitude,longitude,base
+2014-08-01 00:00:00,40.729,-73.9422,B02598
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture3.png[uber12]
+
+Data will be enriched are in JSON Format which is given below
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture4.png[berstream13]
+
+Spark Kafka Producer Consumer Code with Enriched Data
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
+
+=== Perform these steps on the code or in Zeppelin Notebook
+
+Parse the DataSet Records (Uber case class)
+Load the KMeans model
+=== Spark Streaming Code
+
+These are the basic steps for the Spark Streaming Consumer Producer code:
+
+Configure Kafka Consumer Producer properties.
+
+Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
+
+Apply transformations (which create new DStreams).
+
+Write messages from the transformed DStream to a Topic.
+
+Start receiving data and processing. Wait for the processing to be stopped.
+
+We will go through each of these steps with the example application code.
+
+=== Configure Spark Kafka Consumer Producer Properties
+
+The first step is to set the KafkaConsumer and KafkaProducer configuration properties, which will be used later to create a DStream for receiving/sending messages to topics. You need to set the following paramters:
+
+
+Key and value deserializers: for deserializing the message.
+
+Auto offset reset: to start reading from the earliest or latest message.
+
+Bootstrap servers: this can be set to a dummy host:port since the broker address is Strimzi Kafka POD
+
+
+
+
+=== Deployment in OpenShift
+Use the above instructions for Zeppelin NoteBook
+
+Use the above instructions for Spark Oshinko Cluster.
+
+Instructions for Creating Kakfa Pod (To be Discussed with Nandan and Completed)
+
+
+=== Code Changes 
+
+KafkaProducerExample - Line 59
+   val kafkaBrokers = "localhost:9092" to be replaced 
+
+SparkKafkaConsumer  - Line 41
+   val brokers = "localhost:9092" // To be tested with Nandan's Kafka broker 
+   
+SparkKafkaConsumerWriteHBaseDStream -Line 59
+
+   Replace localhost:9092 with Nandan's Kafka Broker.
+
+
+
+This Section is still WIP will be completed by tommorrow.
 
 
 endif::showscript[]
