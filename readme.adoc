@@ -617,6 +617,10 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[ube
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
 
+. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppelin.png[data-placeholder]
+
 . Execute the cell at very stages and you can visualize the data, upon each query
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
