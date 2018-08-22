@@ -110,9 +110,9 @@ Outcomes of this working group may potentially guide the development and roadmap
 Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
 
 ifdef::showscript[]
-If student lab environment and Oshinko Cluster were provisioned using the ocp-workload-rhte-mw-api-mesh ansible role, then student details can be found in:
+If student lab environment and Oshinko Cluster were provisioned using the ocp-workload-rhte-mw-api-user1 ansible role, then student details can be found in:
 
-/tmp/user_info_file.txt
+
 
 endif::showscript[]
 
@@ -591,19 +591,12 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[ub
 
 . Attach it to the Pod.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
-
-
-
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
 
 
 
 
-
-
-
-
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
 
 
 . Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
@@ -618,7 +611,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber
 
 
 
-. Delete the unwanted files (this step is optional).
+. Delete the unwanted files (this step is optional)
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocdelete.png[uber11]
 
 
