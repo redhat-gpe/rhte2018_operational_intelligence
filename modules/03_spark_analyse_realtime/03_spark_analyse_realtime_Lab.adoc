@@ -4,19 +4,21 @@
 :toc2:
 :linkattrs:
 
-= Spark Analysis of Historical Data
+= Spark Analysis of Realtime Data
 
 .Goals
-* Apache Spark Deployment on Oshinko cluster
-* Uber Historical Data Analysis using Advanced Concept of Spark (SparkSQL)
+* Apache Spark Deployment and Kafka Streaming.
+* Uber Realtime Data Analysis using Advanced Concept of Spark (SparkSQL)
 * Usage of Interactive NoteBooks like Apache Zeppelin
 
 
 .Prerequisite
 * Skills
+** Don't clean up the Lab1 Environment, As we are going to use the Kafka Cluster to do the Realtime data streaming
 ** Programming Knowledge of Python, Scala and Java Languages
 ** Knowledge of GIT Commands
 ** Knowledge on OpenShift Deployments
+** Knowledge of Messaging system and Messaging Architecture
 ** Basic Knowledge of Cluster Computing and Distributed Architetcures
 ** GIT Clone of the Source code into Student's Desktop
 
@@ -63,14 +65,8 @@ $ export OCP_PASSWD=<provided by your instructor>
 #  Using above variables, copy & paste the following in same terminal #
 
 $ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=uber-data-analysis
+$ export OCP_PROJECT=uber-realtimedata-analysis
 -----
-
-=== Oshinko Cluster access
-
-Basics of Apache Spark 2.3.1 (Spark-Shell, Actions and Transformations, Jobs).
-
-Your lab environment also includes access to a Oshinko Cluster installation.
 
 === OpenShift access
 
@@ -108,7 +104,7 @@ $ oc get projects
 
 ... 
 
-user3-uber-data-analysis                                     Active
+user3-uber-realtimedata-analysis                                     Active
 -----
 
 . Switch to your  OpenShift project
@@ -145,7 +141,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[clus
 
 -----
 $ oc new-project  -n $OCP_PROJECT
-  oc new-project uber-data-analysis
+  oc new-project uber-realtimedata-analysis
 -----
 
 . Create Deployment Objects using Template
@@ -170,7 +166,7 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
  
 
 ...
---> Deploying template "uber-data/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data-analysis
+--> Deploying template "uber-realtimedata/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data-analysis
 
      * With parameters:
         * Application Name=apache-zeppelin
@@ -196,7 +192,7 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
 ...
 
  NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
-apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+apache-zeppelin   apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 ...
 -----
 
@@ -256,12 +252,12 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitec
 [root@localhost ~]# oc login -u user5 -p r3dh4t1! https://master.6d13.openshift.opentlc.com/
 Login successful.
 
-You have one project on this server: "uber-data-user5"
+You have one project on this server: "uber-realtimedata-analysis-user5"
 
 Using project "uber-data-user5".
 [root@localhost ~]# oc get routes
 NAME              HOST/PORT                                                         PATH      SERVICES          PORT       TERMINATION   WILDCARD
-apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+apache-zeppelin   apache-zeppelin-uber-realtimedata-analysis-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 ...
 ----
 
