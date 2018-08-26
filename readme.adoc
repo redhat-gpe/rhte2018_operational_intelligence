@@ -45,7 +45,7 @@ Speakers at each Tech Exchange are TBD
 ** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
 ** `git` command basics
-
+ 
 = How is this Lab Structured?
 * Basic of Data Analytics.
 * Apache Spark Deployment on Oshinko cluster (Simple Exercise)
