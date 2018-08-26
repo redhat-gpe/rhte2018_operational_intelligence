@@ -4,12 +4,13 @@
 :toc2:
 :linkattrs:
 
-= Kafka ingest and publish lab
+= Spark Analysis of Historical Data
 
 .Goals
-* Create a Kafka publisher and consumer on a pre-built Kafka deployment
-* Create a Kafka connector configured for reading the Uber data file
-* Verify that the contents are published on the configured topic using a MsgConsumer
+* Apache Spark Deployment on Oshinko cluster
+* Uber Historical Data Analysis using Advanced Concept of Spark (SparkSQL)
+* Usage of Interactive NoteBooks like Apache Zeppelin
+
 
 .Prerequisite
 * Skills
