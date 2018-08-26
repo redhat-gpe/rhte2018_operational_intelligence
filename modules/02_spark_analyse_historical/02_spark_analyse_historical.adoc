@@ -141,7 +141,65 @@ The Deployment construct is a more recent Kubernetes equivalent of what has alwa
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[cluster]
 
 
-. Review the Kafka Connect deployment
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
+
+-----
+$ oc new-project  -n $OCP_PROJECT
+  oc new-project uber-data-analysis
+...
+
+-----
+
+. Create Deployment Objects using Template
++
+-----
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml 
+
+...
+template "apache-zeppelin-openshift" created
+-----
+
+. Apply the zeppelin template, and the intepreters can be set as a parameters
+
++
+-----
+$ oc new-app --template=$namespace/apache-zeppelin-openshift \
+--param=APPLICATION_NAME=apache-zeppelin \
+--param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
+--param=ZEPPELIN_INTERPRETERS=md 
+ 
+
+...
+--> Deploying template "uber-data/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data
+
+     * With parameters:
+        * Application Name=apache-zeppelin
+        * Git Repository URL=https://github.com/rimolive/zeppelin-notebooks.git
+        * Zeppelin Interpreters=md
+
+--> Creating resources ...
+    deploymentconfig "apache-zeppelin" created
+    service "apache-zeppelin" created
+    route "apache-zeppelin" created
+    buildconfig "apache-zeppelin" created
+    imagestream "apache-zeppelin" created
+    imagestream "zeppelin-openshift" created
+--> Success
+    Access your application via route 'apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com' 
+    Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
+    Run 'oc status' to view your app.
+...
+-----
+
+. Get the Routes and Access the URL.
+-----
+...
+ NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+
+...
+-----
+
 
 In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration.
 
