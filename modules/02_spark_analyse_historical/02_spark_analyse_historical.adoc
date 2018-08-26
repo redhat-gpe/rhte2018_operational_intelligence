@@ -282,11 +282,13 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zep
 
 
 . Click OK on the ModalWindow.
+
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
 
 
 
 . Restart the Interpreter, till the Error Goes.
+
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
 
 
@@ -295,6 +297,12 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.
 . After Restarting, proceed to execute code cell by cell.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
+
+== Still Running on the Problem?
+
+If you are still facing exception, Currently the data size 35MB and Quering 3LAKH rows, Reduce the size to 2-3MB and keep the Row count to 1500-2000 Rows and execute the cell by cell analysis.  In a real time scenario, you won't face these kind of exceptions.
+
+To Reduce the size of the records to 1500-2000 rows, you have to repeat the steps of oc rsync command and upload the reduced data in the pod.
 
 
 == How to connect with the Oshinko Cluster?
