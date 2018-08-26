@@ -108,7 +108,7 @@ $ oc get projects
 
 ... 
 
-user2-kafka-project                                     Active
+user3-uber-data-analysis                                     Active
 -----
 
 . Switch to your  OpenShift project
