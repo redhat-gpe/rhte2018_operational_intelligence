@@ -135,7 +135,10 @@ Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig re
 
 The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
 
-==== Create Kafka connector
+==== OpenShift Console URL (Oshinko Cluster Environment)
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.jpg[uberstream]
+
 
 . Review the Kafka Connect deployment
 
