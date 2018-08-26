@@ -305,10 +305,10 @@ If you are still facing exception, Currently the data size 35MB and Quering 3LAK
 To Reduce the size of the records to 1500-2000 rows, you have to repeat the steps of oc rsync command and upload the reduced data in the pod.
 
 
-== How to connect with the Oshinko Cluster?
-
 
 == Conclusions
+
+Finally you have learned the concepts of Spark Cluster, Actions, Transformations, Spark SQL and NoteBook Deployment.
 
 
 == Questions
