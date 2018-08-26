@@ -239,7 +239,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis
 
 
 
-== Common Issues and How to trouble Shoot?
+== How to connect with Kafka Cluster?
 
 You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Error.This is because at the backend the zeppelin executes the Spark Job which is Built-in (i.e) embedded with Zeppelin. In a real time scenario, this will never happen as we will have adequate amount of memory and execellent cluster configuration. Basic Architecture Diagram of Zeppelin will explain on how it works.
 
