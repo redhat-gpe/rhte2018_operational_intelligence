@@ -141,7 +141,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[clus
 
 -----
 $ oc new-project  -n $OCP_PROJECT
-  oc new-project uber-realtimedata-analysis
+  oc new-project user3-uber-realtimedata-analysis
 -----
 
 . Create Deployment Objects using Template
@@ -166,7 +166,7 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
  
 
 ...
---> Deploying template "uber-realtimedata/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data-analysis
+--> Deploying template "user3-uber-realtimedata-analysis/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project user3-uber-realtimedata-analysis
 
      * With parameters:
         * Application Name=apache-zeppelin
@@ -181,7 +181,7 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
     imagestream "apache-zeppelin" created
     imagestream "zeppelin-openshift" created
 --> Success
-    Access your application via route 'apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc.com' 
+    Access your application via route 'apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com' 
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 ...
