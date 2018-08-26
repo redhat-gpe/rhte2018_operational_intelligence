@@ -131,22 +131,9 @@ $ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
 [[dvsdc]]
 === Deployment vs DeploymentConfig 
 
-==== Deploy Kafka producer and consumer
+Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig resources.
 
-. Deploy the Hello World producer and consumer
-
-[source,text]
-----
-% oc apply -f examples/hello-world/deployment.yaml
-----
-
-. Check the producer and consumer logs to verify that they are working
-
-[source,text]
-----
-oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
-oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
-----
+The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
 
 ==== Create Kafka connector
 
