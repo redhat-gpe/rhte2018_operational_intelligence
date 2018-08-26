@@ -241,51 +241,6 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppeli
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
 
-
-
-In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration.
-
-[source,text]
-----
-  config:
-    key.converter: org.apache.kafka.connect.storage.StringConverter
-    value.converter: org.apache.kafka.connect.storage.StringConverter
-    key.converter.schemas.enable: false
-    value.converter.schemas.enable: false
-----
-
-. Open a terminal in the Kakfa connect pod and verify that the input file has been copied to the /opt/kafka directory.
-
-. A topic (file-publish) that Kafka Connect uses to publish to the Kafka broker has been created for you
-
-. Create the configuration for the file source
-+
-[source,json]
-----
-% cat <<EOF >> /tmp/source-plugin.json
-{
-  "name": "source-test",
-  "config": {
-    "connector.class": "FileStreamSource",
-    "tasks.max": "3",
-    "topic": "file-topic",
-    "file": "/tmp/uber.csv"
-  }
-}
-EOF
-----
-
-. Create a connector that will read the TXT file and push its cotnent into Kafka
-+
-[source,text]
-----
-% curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
-----
-
-. Verify the contents are being published to the message consumer configured.
-+
-2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
-
 == Conclusions
 
 
