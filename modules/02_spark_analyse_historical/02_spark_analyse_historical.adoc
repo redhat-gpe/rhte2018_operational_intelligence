@@ -266,18 +266,32 @@ apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.co
 ----
 
 . Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
+*** If You Notice thrift Exception Like this
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.png[zepp]
 
 
 . Restart the Interpreter.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
+
+
 
 
 . After Restarting, proceed to execute code cell by cell.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
 
 
 == How to connect with the Oshinko Cluster?
