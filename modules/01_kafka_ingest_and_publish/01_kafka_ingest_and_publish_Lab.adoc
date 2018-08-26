@@ -50,20 +50,12 @@ Before getting started, you'll want to open a terminal window and set the follow
 $ export REGION=<provided by your instructor>
 $ export GUID=<provided by your instructor>
 $ export OCP_PASSWD=<provided by your instructor>
-$ export API_ADMIN_ACCESS_TOKEN=<provided by your instructor>
-
-
 
 #  Using above variables, copy & paste the following in same terminal #
 
-
 $ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=rhte-op-int-$GUID
+$ export OCP_PROJECT=kafka-project
 -----
-
-ifdef::showscript[]
-
-endif::showscript[]
 
 === Kafka access
 
@@ -129,13 +121,29 @@ $ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
 [[dvsdc]]
 === Deployment vs DeploymentConfig 
 
+==== Deploy Kafka producer and consumer
+
+. Deploy the Hello World producer and consumer
+
+[source,text]
+----
+% oc apply -f examples/hello-world/deployment.yaml
+----
+
+. Check the producer and consumer logs to verify that they are working
+
+[source,text]
+----
+oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
+oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+----
 
 ==== Create Kafka connector
 
-. Configure Kafka Connect deployment
+. Review the Kafka Connect deployment
 
-Add to the resources/kafka-connect/kafka-connect.yaml, under the spec object,
-+
+In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration.
+
 [source,text]
 ----
   config:
@@ -145,10 +153,9 @@ Add to the resources/kafka-connect/kafka-connect.yaml, under the spec object,
     value.converter.schemas.enable: false
 ----
 
-. Copy input file to the Kafka Connect pod using scp
-. Create a topic that Kafka Connect uses to publish to the Kafka broker
+. Open a terminal in the Kakfa connect pod and verify that the input file has been copied to the /opt/kafka directory.
 
-Skip this test since the topic has already been created.
+. A topic (file-publish) that Kafka Connect uses to publish to the Kafka broker has been created for you
 
 . Create the configuration for the file source
 +
@@ -160,8 +167,8 @@ Skip this test since the topic has already been created.
   "config": {
     "connector.class": "FileStreamSource",
     "tasks.max": "3",
-    "topic": "my-topic",
-    "file": "/tmp/my-data-file.txt"
+    "topic": "file-topic",
+    "file": "/tmp/uber.csv"
   }
 }
 EOF
@@ -179,7 +186,6 @@ EOF
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
 
 == Conclusions
-
 
 
 == Questions
