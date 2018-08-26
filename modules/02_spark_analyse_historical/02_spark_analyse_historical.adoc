@@ -63,13 +63,14 @@ $ export OCP_PASSWD=<provided by your instructor>
 #  Using above variables, copy & paste the following in same terminal #
 
 $ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=kafka-project
+$ export OCP_PROJECT=uber-data-analysis
 -----
 
-=== Kafka access
+=== Oshinko Cluster access
 
-Your lab environment includes access to a Kafka installation.
+Basics of Apache Spark 2.3.1 (Spark-Shell, Actions and Transformations, Jobs).
 
+Your lab environment also includes access to a Oshinko Cluster installation.
 
 === OpenShift access
 
@@ -80,7 +81,7 @@ Access to your OCP resources can be gained via both the `oc` utility as well as 
 . Log into OpenShift
 +
 -----
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
+$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $ r3dh4t1!
 -----
 
 . Ensure that your `oc` client is the same minor release version as the server:
