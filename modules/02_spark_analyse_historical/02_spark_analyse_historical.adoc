@@ -14,11 +14,19 @@
 
 .Prerequisite
 * Skills
-** 
-** 
+** Programming Knowledge of Python, Scala and Java Languages
+** Knowledge of GIT Commands
+** Knowledge on OpenShift Deployments
+** Basic Knowledge of Cluster Computing and Distributed Architetcures
+** GIT Clone of the Source code into Student's Desktop
+
 * Tools
 ** `curl` utility
+** `sed` utility
 ** `oc` version 3.9 utility
+** `Interactive Notebooks - Jupyter and Zeppelin`
+** `git` command basics
+
 
 :numbered:
 
