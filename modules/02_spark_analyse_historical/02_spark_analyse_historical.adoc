@@ -197,8 +197,8 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
 apache-zeppelin   apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 
 ...
-
-. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB, Click Add Storage.
+-----
+. Get the Routes and Access the URL.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
 
