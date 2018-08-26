@@ -241,9 +241,14 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis
 
 == How to connect with Kafka Cluster?
 
-You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Error.This is because at the backend the zeppelin executes the Spark Job which is Built-in (i.e) embedded with Zeppelin. In a real time scenario, this will never happen as we will have adequate amount of memory and execellent cluster configuration. Basic Architecture Diagram of Zeppelin will explain on how it works.
+In the OpenShift Web URL,Navigate to Services to get the Cluster IP of the Kafka Broker as shown in the below figure.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+Cluster IP is 172.30.218.203	9092
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/Kafka-BootStrap.png[kafka]
+
+Create a topic as provided in the Instructions Lab1
+
 
 === TroubleShoot of Thrift Exception and Broken Pipe Exception.
 ----
