@@ -243,6 +243,10 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis
 
 
 
+== Common Issues and How to trouble Shoot.
+
+
+== How to connect with the Oshinko Cluster?
 
 
 == Conclusions
