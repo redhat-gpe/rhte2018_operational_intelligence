@@ -354,17 +354,6 @@ http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
 https://developer.uber.com/docs/businesses/data-automation/data-download 
 
 
-===  Detailed Explaination of the Data Discovery Phase
-
-===  Why this phase is needed?
-
-   This phase is needed to study about the historical data, and observe the pattern recognition of the uber system which is needed. Based on this we can arrive a conclusion for better decision making and predictions.
-   
-===  What is analytics using the model?
-
-   This is the second phase of the project,uses the model in production on live events, it still needed to do an analyis of historical data.
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
-
 ===  What Algorithm choosed suitable for Data Analytics?
 
 Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance. K-means is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
