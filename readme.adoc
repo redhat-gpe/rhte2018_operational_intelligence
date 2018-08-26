@@ -110,9 +110,9 @@ Outcomes of this working group may potentially guide the development and roadmap
 Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
 
 ifdef::showscript[]
-If student lab environment and Oshinko Cluster were provisioned using the ocp-workload-rhte-mw-api-mesh ansible role, then student details can be found in:
+If student lab environment and Oshinko Cluster were provisioned using the ocp-workload-rhte-mw-api-user1 ansible role, then student details can be found in:
 
-/tmp/user_info_file.txt
+
 
 endif::showscript[]
 
@@ -584,15 +584,31 @@ apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com     
 ...
 -----
 
-. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB.
+. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB, Click Add Storage
 
-. Copy the Local Data to the Pod Directory using Rsync Command 
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
+
+
+. Attach it to the Pod.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
+
+
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
+
+
+. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
 +
 ----
 oc rsync src directory pod directory:/data
 for Example
 oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data 
 ----
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
+
 . Once the data copied, Open the Zeppelin URL
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
@@ -600,6 +616,10 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[ube
 . Import the JSON File given the GitHub URL in the Zeppelin Notebook
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
+
+. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppelin.png[data-placeholder]
 
 . Execute the cell at very stages and you can visualize the data, upon each query
 
