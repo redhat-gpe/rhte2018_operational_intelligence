@@ -249,7 +249,35 @@ You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Erro
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
 
+=== TroubleShoot of Thrift Exception and Broken Pipe Exception.
+----
+...
 
+[root@localhost ~]# oc login -u user5 -p r3dh4t1! https://master.6d13.openshift.opentlc.com/
+Login successful.
+
+You have one project on this server: "uber-data-user5"
+
+Using project "uber-data-user5".
+[root@localhost ~]# oc get routes
+NAME              HOST/PORT                                                         PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+...
+----
+
+. Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+
+
+. Restart the Interpreter.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+
+
+. After Restarting, proceed to execute code cell by cell.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
 
 
 == How to connect with the Oshinko Cluster?
