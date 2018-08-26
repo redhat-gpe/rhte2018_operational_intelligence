@@ -4,20 +4,29 @@
 :toc2:
 :linkattrs:
 
-= Kafka ingest and publish lab
+= Spark Analysis of Historical Data
 
 .Goals
-* Create a Kafka publisher and consumer on a pre-built Kafka deployment
-* Create a Kafka connector configured for reading the Uber data file
-* Verify that the contents are published on the configured topic using a MsgConsumer
+* Apache Spark Deployment on Oshinko cluster
+* Uber Historical Data Analysis using Advanced Concept of Spark (SparkSQL)
+* Usage of Interactive NoteBooks like Apache Zeppelin
+
 
 .Prerequisite
 * Skills
-** 
-** 
+** Programming Knowledge of Python, Scala and Java Languages
+** Knowledge of GIT Commands
+** Knowledge on OpenShift Deployments
+** Basic Knowledge of Cluster Computing and Distributed Architetcures
+** GIT Clone of the Source code into Student's Desktop
+
 * Tools
 ** `curl` utility
+** `sed` utility
 ** `oc` version 3.9 utility
+** `Interactive Notebooks - Jupyter and Zeppelin`
+** `git` command basics
+
 
 :numbered:
 
@@ -54,13 +63,14 @@ $ export OCP_PASSWD=<provided by your instructor>
 #  Using above variables, copy & paste the following in same terminal #
 
 $ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=kafka-project
+$ export OCP_PROJECT=uber-data-analysis
 -----
 
-=== Kafka access
+=== Oshinko Cluster access
 
-Your lab environment includes access to a Kafka installation.
+Basics of Apache Spark 2.3.1 (Spark-Shell, Actions and Transformations, Jobs).
 
+Your lab environment also includes access to a Oshinko Cluster installation.
 
 === OpenShift access
 
@@ -71,7 +81,7 @@ Access to your OCP resources can be gained via both the `oc` utility as well as 
 . Log into OpenShift
 +
 -----
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
+$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $ r3dh4t1!
 -----
 
 . Ensure that your `oc` client is the same minor release version as the server:
@@ -98,7 +108,7 @@ $ oc get projects
 
 ... 
 
-user2-kafka-project                                     Active
+user3-uber-data-analysis                                     Active
 -----
 
 . Switch to your  OpenShift project
@@ -121,71 +131,184 @@ $ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
 [[dvsdc]]
 === Deployment vs DeploymentConfig 
 
-==== Deploy Kafka producer and consumer
+Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig resources.
 
-. Deploy the Hello World producer and consumer
+The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
 
-[source,text]
-----
-% oc apply -f examples/hello-world/deployment.yaml
-----
+==== OpenShift Console URL -Oshinko Cluster Environment
 
-. Check the producer and consumer logs to verify that they are working
 
-[source,text]
-----
-oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
-oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
-----
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[cluster]
 
-==== Create Kafka connector
 
-. Review the Kafka Connect deployment
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
 
-In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration.
+-----
+$ oc new-project  -n $OCP_PROJECT
+  oc new-project uber-data-analysis
+-----
 
-[source,text]
-----
-  config:
-    key.converter: org.apache.kafka.connect.storage.StringConverter
-    value.converter: org.apache.kafka.connect.storage.StringConverter
-    key.converter.schemas.enable: false
-    value.converter.schemas.enable: false
-----
-
-. Open a terminal in the Kakfa connect pod and verify that the input file has been copied to the /opt/kafka directory.
-
-. A topic (file-publish) that Kafka Connect uses to publish to the Kafka broker has been created for you
-
-. Create the configuration for the file source
+. Create Deployment Objects using Template
 +
-[source,json]
+-----
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml 
+
+...
+template "apache-zeppelin-openshift" created
+-----
+
+. Apply the zeppelin template, and the intepreters can be set as a parameters
+
++
+-----
+...
+
+$ oc new-app --template=$namespace/apache-zeppelin-openshift \
+--param=APPLICATION_NAME=apache-zeppelin \
+--param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
+--param=ZEPPELIN_INTERPRETERS=md 
+ 
+
+...
+--> Deploying template "uber-data/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data-analysis
+
+     * With parameters:
+        * Application Name=apache-zeppelin
+        * Git Repository URL=https://github.com/rimolive/zeppelin-notebooks.git
+        * Zeppelin Interpreters=md
+
+--> Creating resources ...
+    deploymentconfig "apache-zeppelin" created
+    service "apache-zeppelin" created
+    route "apache-zeppelin" created
+    buildconfig "apache-zeppelin" created
+    imagestream "apache-zeppelin" created
+    imagestream "zeppelin-openshift" created
+--> Success
+    Access your application via route 'apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc.com' 
+    Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
+    Run 'oc status' to view your app.
+...
+:numbered:
+-----
+. Get the Routes and Access the URL.
+-----
+...
+
+ NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+...
+-----
+
+. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB, Click Add Storage
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
+
+
+. Attach it to the Pod.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
+
+
+. Mount the Volume as shown below.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
+
+
+. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
++
 ----
-% cat <<EOF >> /tmp/source-plugin.json
-{
-  "name": "source-test",
-  "config": {
-    "connector.class": "FileStreamSource",
-    "tasks.max": "3",
-    "topic": "file-topic",
-    "file": "/tmp/uber.csv"
-  }
-}
-EOF
+oc rsync src directory pod directory:/data
+for Example
+oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data 
 ----
 
-. Create a connector that will read the TXT file and push its cotnent into Kafka
-+
-[source,text]
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
+
+. Once the data copied, Open the Zeppelin URL
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
+
+. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
+
+. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppelin.png[data-placeholder]
+
+. Execute the cell at very stages and you can visualize the data, upon each query
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
+
+
+
+== Common Issues and How to trouble Shoot?
+
+You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Error.This is because at the backend the zeppelin executes the Spark Job which is Built-in (i.e) embedded with Zeppelin. In a real time scenario, this will never happen as we will have adequate amount of memory and execellent cluster configuration. Basic Architecture Diagram of Zeppelin will explain on how it works.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+
+=== TroubleShoot of Thrift Exception and Broken Pipe Exception.
 ----
-% curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
+...
+
+[root@localhost ~]# oc login -u user5 -p r3dh4t1! https://master.6d13.openshift.opentlc.com/
+Login successful.
+
+You have one project on this server: "uber-data-user5"
+
+Using project "uber-data-user5".
+[root@localhost ~]# oc get routes
+NAME              HOST/PORT                                                         PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+...
 ----
 
-. Verify the contents are being published to the message consumer configured.
-+
-2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
+. Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
+*** If You Notice thrift Exception Like this
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.png[zepp]
+
+
+. Restart the Interpreter.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
+
+
+. Increase the Memory settings from 1G to 2G and Save the settings.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
+
+
+. Click OK on the ModalWindow.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
+
+
+
+. Restart the Interpreter, till the Error Goes.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
+
+
+
+
+. After Restarting, proceed to execute code cell by cell.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
+
+== Still Running on the Problem?
+
+If you are still facing exception, Currently the data size 35MB and Quering 3LAKH rows, Reduce the size to 2-3MB and keep the Row count to 1500-2000 Rows and execute the cell by cell analysis.  In a real time scenario, you won't face these kind of exceptions.
+
+To Reduce the size of the records to 1500-2000 rows, you have to repeat the steps of oc rsync command and upload the reduced data in the pod.
+
+
 
 == Conclusions
+
+Finally you have learned the concepts of Spark Cluster, Actions, Transformations, Spark SQL and NoteBook Deployment.
 
 
 == Questions
@@ -193,6 +316,88 @@ EOF
 TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
 
 == Appendix
+
+===  Overview 
+
+So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
+
+===  Why do we need this Medium Exercise Lab and how the students get benefitted by this lab?
+This Lab helps the students to get to know the basics of interactive notebook usage in the current big data scenario.
+
+Basic deployment of spark jobs on Oshinko cluster amd connectivity of zeppelin notebook to the Spark Oshinko Cluster.
+
+SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+
+=== Background
+
+According to Gartner, by 2020, a quarter of a billion connected cars will form a major element of the Internet of Things. Connected vehicles are projected to generate 25GB of data per hour, which can be analyzed to provide real-time monitoring and apps, and will lead to new concepts of mobility and vehicle usage. One of the 10 major areas in which big data is currently being used to excellent advantage is in improving cities. For example, the analysis of GPS car data can allow cities to optimize traffic flows based on real-time traffic information.
+
+Uber is using big data to perfect its processes, from calculating Uber’s pricing, to finding the optimal positioning of cars to maximize profits. In this series of blog posts, we are going to use public Uber trip data to discuss building a real-time example for analysis and monitoring of car GPS data. There are typically two phases in machine learning with real-time data:
+
+Data Discovery: The first phase involves analysis on historical data to build the machine learning model.
+
+Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
+
+
+In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
+
+=== Where do we get these DataSets?
+
+http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml 
+
+http://www.nyc.gov/html/tlc/downloads/pdf/data_dictionary_trip_records_green.pdf 
+
+http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014 
+
+https://developer.uber.com/docs/businesses/data-automation/data-download 
+
+
+===  What Algorithm choosed suitable for Data Analytics?
+
+Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance. K-means is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
+
+===  What is in the data set?
+
+The Data Set Schema
+Date/Time: The date and time of the Uber pickup
+Lat: The latitude of the Uber pickup
+Lon: The longitude of the Uber pickup
+Base: The TLC base company affiliated with the Uber pickup
+​​The Data Records are in CSV format. An example line is shown below:
+
+2014-08-01 00:00:00,40.729,-73.9422,B02598 
+
+===  How do we do it?
+
+Load the data into a Spark Data Frame
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/2.png[uberstream2]
+
+Define Features Array
+In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column. <br>
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/3.png[uberstream3]
+
+Create a KMeans Object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters and then we fit our model to the input data.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/4.png[uberstream4]
+
+Output, Cluster Centers are displayed on the Google Map
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/5.png[uberstream5]
+
+Further Analysis of cluster
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream6]
+
+===  What are the Analysis Questions? 
+
+**** Which hour of the day and which cluster had highest number of pickups?
+
+**** How many pickups occured in each cluster?
+
 ifdef::showscript[]
 
 endif::showscript[]
