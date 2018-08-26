@@ -209,6 +209,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[ub
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
 
 
+. Mount the Pod.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
 
