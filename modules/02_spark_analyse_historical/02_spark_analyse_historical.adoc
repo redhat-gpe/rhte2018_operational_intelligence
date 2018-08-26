@@ -146,8 +146,6 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[clus
 -----
 $ oc new-project  -n $OCP_PROJECT
   oc new-project uber-data-analysis
-...
-
 -----
 
 . Create Deployment Objects using Template
@@ -163,6 +161,8 @@ template "apache-zeppelin-openshift" created
 
 +
 -----
+...
+
 $ oc new-app --template=$namespace/apache-zeppelin-openshift \
 --param=APPLICATION_NAME=apache-zeppelin \
 --param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
@@ -189,16 +189,17 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 ...
------
+----
 
 . Get the Routes and Access the URL.
+-----
 ...
  NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
 apache-zeppelin   apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 
 ...
 -----
-. Get the Routes and Access the URL.
+. Create a PVC of 50MB.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
 
@@ -214,11 +215,13 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.pn
 
 
 . Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below).
-+
+
 ----
+...
 oc rsync src directory pod directory:/data
 for Example
 oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data 
+...
 ----
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
