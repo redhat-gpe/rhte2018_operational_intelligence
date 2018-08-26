@@ -356,10 +356,12 @@ https://developer.uber.com/docs/businesses/data-automation/data-download
 
 ===  Detailed Explaination of the Data Discovery Phase
 
-===  Why this phase is needed? 
+===  Why this phase is needed?
+
    This phase is needed to study about the historical data, and observe the pattern recognition of the uber system which is needed. Based on this we can arrive a conclusion for better decision making and predictions.
    
 ===  What is analytics using the model?
+
    This is the second phase of the project,uses the model in production on live events, it still needed to do an analyis of historical data.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
 
