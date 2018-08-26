@@ -200,7 +200,7 @@ apache-zeppelin   apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc
 ...
 -----
 
-. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB, Click Add Storage
+. Create a PVC of 50MB from the Openshift UI, As our Uber-Data is restricted to 25MB, Click Add Storage.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
 
@@ -215,7 +215,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
 
 
-. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
+. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below).
 +
 ----
 oc rsync src directory pod directory:/data
@@ -229,15 +229,15 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
 
-. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
 
-. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+. You can change the directory structure in zeppelin notebook pointing to the data directory in POD.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppelin.png[data-placeholder]
 
-. Execute the cell at very stages and you can visualize the data, upon each query
+. Execute the cell at very stages and you can visualize the data, upon each query.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
 
