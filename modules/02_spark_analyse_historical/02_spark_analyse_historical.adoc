@@ -276,14 +276,17 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
 
 
+. Increase the Memory settings from 1G to 2G and Save the settings.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
 
 
+. Click OK on the ModalWindow.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
 
 
 
+. Restart the Interpreter, till the Error Goes.
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
 
 
