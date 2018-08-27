@@ -149,7 +149,7 @@ Zeppelin has a built in Scala and Python Intepretor, it is as good as you type i
 For your understanding, Below here an example for scala shell. A simple word count application.
 
 ----
-...
+
 [root@localhost bin]# spark-shell
 2018-08-27 14:38:03 WARN  Utils:66 - Your hostname, localhost.localdomain resolves to a loopback address: 127.0.0.1; using 192.168.0.2 instead (on interface wlp58s0)
 2018-08-27 14:38:03 WARN  Utils:66 - Set SPARK_LOCAL_IP if you need to bind to another address
@@ -188,8 +188,26 @@ scala> wc.saveAsTextFile("README.count1")
 scala> 
 
 
-...
+
 ----
+
+. Output can be viewed here
+
+----
+root@localhost bin]# ls
+beeline          derby.log             find-spark-home.cmd  load-spark-env.sh  pyspark2.cmd  README.count1  run-example.cmd   spark-class.cmd  sparkR.cmd        spark-shell.cmd  spark-sql.cmd      spark-submit.cmd
+beeline.cmd      docker-image-tool.sh  input                metastore_db       pyspark.cmd   Readme.md      spark-class       sparkR           spark-shell       spark-sql        spark-submit
+com.redhat.gpte  find-spark-home       load-spark-env.cmd   pyspark            Readme.count  run-example    spark-class2.cmd  sparkR2.cmd      spark-shell2.cmd  spark-sql2.cmd   spark-submit2.cmd
+[root@localhost bin]# cd README.count1/
+[root@localhost README.count1]# ls
+part-00000  part-00001  _SUCCESS
+[root@localhost README.count1]# ls -lt README.count1
+ls: cannot access 'README.count1': No such file or directory
+[root@localhost README.count1]# view part-00000
+[root@localhost README.count1]# 
+
+----
+
 ==== OpenShift Console URL -Oshinko Cluster Environment
 
 
