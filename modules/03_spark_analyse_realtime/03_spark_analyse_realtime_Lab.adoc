@@ -294,39 +294,6 @@ apache-zeppelin   apache-zeppelin-uber-realtimedata-analysis-user5.apps.6d13.ope
 ...
 ----
 
-. Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
-*** If You Notice thrift Exception Like this
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.png[zepp]
-
-
-. Restart the Interpreter.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
-
-
-. Increase the Memory settings from 1G to 2G and Save the settings.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
-
-
-. Click OK on the ModalWindow.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
-
-
-
-. Restart the Interpreter, till the Error Goes.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
-
-
-
-
-. After Restarting, proceed to execute code cell by cell.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
-
 == Zeppelin Configuration Changes to run the code
 
 This is one of the most critical steps, Please follow the screen shot's carefully. Missing a single step will lead to unexpected results and exceptions.
