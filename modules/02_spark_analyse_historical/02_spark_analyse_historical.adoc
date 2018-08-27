@@ -207,6 +207,11 @@ ls: cannot access 'README.count1': No such file or directory
 [root@localhost README.count1]# 
 
 ----
+. Output of the Main.scala program ran from IDE, is uploaded in our GitHub.
+
+https://github.com/gpe-mw-training/operational_intelligence/blob/master/output/output.log
+
+
 
 ==== OpenShift Console URL -Oshinko Cluster Environment
 
