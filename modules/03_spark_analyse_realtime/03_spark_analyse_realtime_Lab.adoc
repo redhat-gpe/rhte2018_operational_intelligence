@@ -328,7 +328,7 @@ Make Changes in Spark.Memory Parameters to 5G
 
 zeppelin Dependency Local Repo as shown in the Figure
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinUIChangesLab3.png[zepp5]Ui
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinUIChangesLab3.png[zepp5ui]
 
 
 == Conclusions
