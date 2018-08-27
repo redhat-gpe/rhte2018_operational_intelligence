@@ -138,7 +138,7 @@ The Deployment construct is a more recent Kubernetes equivalent of what has alwa
 === GiTHub URL and Justification of the usage of Notebooks in Today's Data Analysis Prod World
 
 The below link is the GitHub URL for this code. Main.scala is the program is applied on the Zeppelin Notebook.
-Since we have used SparkSQL, we can keep on querying the data with difficult results to get different statistics. This is how the NoteBook Environments like Jupyter or Zeppelin is drawn attention and used popularly in most of the production deployments. We can interactive visualize the results and change the query plan according to our convenience, accuracy level and perfection. 
+Since we have used SparkSQL, we can keep on querying the data with different results to get different statistics. This is how the NoteBook Environments like Jupyter or Zeppelin is drawn attention and used popularly in most of the production deployments. We can interactive visualize the results and change the query plan according to our convenience, accuracy level and perfection. 
 
 https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis
 
@@ -146,7 +146,7 @@ Zeppelin has a support for Multiple Interpretors like Scala, Python, Kotlin, HBa
 
 Zeppelin has a built in Scala and Python Intepretor, it is as good as you type in Scala shell or Python Shell gives the exact same result. But with zeppelin you will get the visualization benefits and notebook advantage.
 
-For your understanding, Below here an example for scala shell. A simple word count application.
+For your understanding, Below here an example for scala shell. A simple word count application and it can be run on Zeppelin NoteBook as well.
 
 ----
 
