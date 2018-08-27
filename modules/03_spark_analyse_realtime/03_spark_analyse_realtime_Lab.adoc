@@ -239,7 +239,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis
 
 
 
-== How to connect with Kafka Cluster?
+== Kafka Cluster and GitHub Code Information
 
 In the OpenShift Web URL,Navigate to Services to get the Cluster IP of the Kafka Broker as shown in the below figure.
 
@@ -369,12 +369,41 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
 
-== Still Running on the Problem?
+== Zeppelin Configuration Changes to run the code
 
-If you are still facing exception, Currently the data size 35MB and Quering 3LAKH rows, Reduce the size to 2-3MB and keep the Row count to 1500-2000 Rows and execute the cell by cell analysis.  In a real time scenario, you won't face these kind of exceptions.
+This is one of the most critical steps, Please follow the screen shot's carefully. Missing a single step will lead to unexpected results and exceptions.
 
-To Reduce the size of the records to 1500-2000 rows, you have to repeat the steps of oc rsync command and upload the reduced data in the pod.
+----
+...
+$ oc get pods
 
+$ oc rsh apache-zeppelin-2-dr8s6
+
+sh-4.2$ cd /opt/zeppelin/conf/
+
+sh-4.2$ ls
+configuration.xsl  log4j_yarn_cluster.properties  zeppelin-site.xml
+interpreter-list   shiro.ini.template		  zeppelin-site.xml.template
+interpreter.json   zeppelin-env.cmd.template
+log4j.properties   zeppelin-env.sh.template
+
+sh-4.2$ mv zeppelin-env.sh template zeppelin-env.sh
+
+sh-4.2$ vi zeppelin-env.sh
+
+export SPARK_SUBMIT_OPTIONS="--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0"
+
+sh-4.2$ esc+wq!
+
+...
+----
+== Zeppelin UI Changes to Run the Code
+
+Make Changes in Spark.Memory Parameters to 5G
+
+zeppelin Dependency Local Repo as shown in the Figure
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinUIChangesLab3.png[zepp5]Ui
 
 
 == Conclusions
@@ -390,84 +419,8 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 ===  Overview 
 
-So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
+So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Uber RealTime Data.
 
-===  Why do we need this Medium Exercise Lab and how the students get benefitted by this lab?
-This Lab helps the students to get to know the basics of interactive notebook usage in the current big data scenario.
-
-Basic deployment of spark jobs on Oshinko cluster amd connectivity of zeppelin notebook to the Spark Oshinko Cluster.
-
-SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
-
-=== Background
-
-According to Gartner, by 2020, a quarter of a billion connected cars will form a major element of the Internet of Things. Connected vehicles are projected to generate 25GB of data per hour, which can be analyzed to provide real-time monitoring and apps, and will lead to new concepts of mobility and vehicle usage. One of the 10 major areas in which big data is currently being used to excellent advantage is in improving cities. For example, the analysis of GPS car data can allow cities to optimize traffic flows based on real-time traffic information.
-
-Uber is using big data to perfect its processes, from calculating Uber’s pricing, to finding the optimal positioning of cars to maximize profits. In this series of blog posts, we are going to use public Uber trip data to discuss building a real-time example for analysis and monitoring of car GPS data. There are typically two phases in machine learning with real-time data:
-
-Data Discovery: The first phase involves analysis on historical data to build the machine learning model.
-
-Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
-
-
-In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
-
-=== Where do we get these DataSets?
-
-http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml 
-
-http://www.nyc.gov/html/tlc/downloads/pdf/data_dictionary_trip_records_green.pdf 
-
-http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014 
-
-https://developer.uber.com/docs/businesses/data-automation/data-download 
-
-
-===  What Algorithm choosed suitable for Data Analytics?
-
-Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance. K-means is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
-
-===  What is in the data set?
-
-The Data Set Schema
-Date/Time: The date and time of the Uber pickup
-Lat: The latitude of the Uber pickup
-Lon: The longitude of the Uber pickup
-Base: The TLC base company affiliated with the Uber pickup
-​​The Data Records are in CSV format. An example line is shown below:
-
-2014-08-01 00:00:00,40.729,-73.9422,B02598 
-
-===  How do we do it?
-
-Load the data into a Spark Data Frame
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/2.png[uberstream2]
-
-Define Features Array
-In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column. <br>
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/3.png[uberstream3]
-
-Create a KMeans Object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters and then we fit our model to the input data.
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/4.png[uberstream4]
-
-Output, Cluster Centers are displayed on the Google Map
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/5.png[uberstream5]
-
-Further Analysis of cluster
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream6]
-
-===  What are the Analysis Questions? 
-
-**** Which hour of the day and which cluster had highest number of pickups?
-
-**** How many pickups occured in each cluster?
 
 ifdef::showscript[]
 
