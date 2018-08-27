@@ -45,7 +45,7 @@ Speakers at each Tech Exchange are TBD
 ** `Interactive Notebooks - Jupyter and Zeppelin`
 ** `oc` version 3.9 utility
 ** `git` command basics
-
+ 
 = How is this Lab Structured?
 * Basic of Data Analytics.
 * Apache Spark Deployment on Oshinko cluster (Simple Exercise)
@@ -648,7 +648,6 @@ Since it involves Kafka Streaming as well 1 Dedicated pod required for putting t
 In conclusion 3 Pods are compulsory and 1 is being Optional.
 
 === Data Pipeline
-Uber trip data is published to a MapR Streams topic using the Kafka API
 
 A Spark streaming application subscribed to the first topic:
 

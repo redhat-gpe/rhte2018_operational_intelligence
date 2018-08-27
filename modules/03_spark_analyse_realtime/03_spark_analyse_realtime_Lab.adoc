@@ -1,0 +1,352 @@
+:noaudio:
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+
+= Spark Analysis of Realtime Data
+
+.Goals
+* Apache Spark Deployment and Kafka Streaming.
+* Uber Realtime Data Analysis using Advanced Concept of Spark (SparkSQL)
+* Usage of Interactive NoteBooks like Apache Zeppelin
+
+
+.Prerequisite
+* Skills
+** Don't clean up the Lab1 Environment, As we are going to use the Kafka Cluster to do the Realtime data streaming
+** Programming Knowledge of Python, Scala and Java Languages
+** Knowledge of GIT Commands
+** Knowledge on OpenShift Deployments
+** Knowledge of Messaging system and Messaging Architecture
+** Basic Knowledge of Cluster Computing and Distributed Architetcures
+** GIT Clone of the Source code into Student's Desktop
+
+* Tools
+** `curl` utility
+** `sed` utility
+** `oc` version 3.9 utility
+** `Interactive Notebooks - Jupyter and Zeppelin`
+** `git` command basics
+
+
+:numbered:
+
+== Overview
+
+
+=== Background
+
+
+=== Reference
+
+
+. Kafka on Openshift:
+.. link:https://strimzi.io[Project]
++
+Includes the OpenTracing specification as well as the OpenTracing client libraries for many languages.
+
+
+ 
+== Lab Asset Overview
+
+=== Environment Variables
+
+Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
+
+
+-----
+######  Instructor will provide the values to these environment variables #######
+
+$ export REGION=<provided by your instructor>
+$ export GUID=<provided by your instructor>
+$ export OCP_PASSWD=<provided by your instructor>
+
+#  Using above variables, copy & paste the following in same terminal #
+
+$ export OCP_USERNAME=user$GUID
+$ export OCP_PROJECT=uber-realtimedata-analysis
+-----
+
+=== OpenShift access
+
+You lab environment is built on Red Hat's OpenShift Container Platform.
+
+Access to your OCP resources can be gained via both the `oc` utility as well as the OCP web console.
+
+. Log into OpenShift
++
+-----
+$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $ r3dh4t1!
+-----
+
+. Ensure that your `oc` client is the same minor release version as the server:
++
+-----
+$ oc version
+
+oc v3.9.30
+kubernetes v1.9.1+a0ce1bc657
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+Server https://master.a4ec.openshift.opentlc.com:443
+openshift v3.9.31
+kubernetes v1.9.1+a0ce1bc657
+-----
+
+.. In the above example, notice that version of the `oc` client is of the same minor release (v3.9.30) of the OpenShift server (v3.9.31)
+.. There a known subtle problems with using a version of the `oc` client that is different from your target OpenShift server.
+
+. View existing projects:
++
+-----
+$ oc get projects
+
+... 
+
+user3-uber-realtimedata-analysis                                     Active
+-----
+
+. Switch to your  OpenShift project
++
+-----
+$ oc project $OCP_PROJECT
+-----
+
+. Log into OpenShift Web Console
+.. Many OpenShift related tasks found in this lab can be completed in the Web Console (as an alternative to using the `oc` utility`.
+.. To access, point to your browser to the output of the following:
++
+-----
+$ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
+-----
+
+.. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
+
+
+[[dvsdc]]
+=== Deployment vs DeploymentConfig 
+
+Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig resources.
+
+The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
+
+==== OpenShift Console URL -Oshinko Cluster Environment
+
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[cluster]
+
+
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
+
+-----
+$ oc new-project  -n $OCP_PROJECT
+  oc new-project user3-uber-realtimedata-analysis
+-----
+
+. Create Deployment Objects using Template
++
+-----
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml 
+
+...
+template "apache-zeppelin-openshift" created
+-----
+
+. Apply the zeppelin template, and the intepreters can be set as a parameters
+
++
+-----
+...
+
+$ oc new-app --template=$namespace/apache-zeppelin-openshift \
+--param=APPLICATION_NAME=apache-zeppelin \
+--param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
+--param=ZEPPELIN_INTERPRETERS=md 
+ 
+
+...
+--> Deploying template "user3-uber-realtimedata-analysis/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project user3-uber-realtimedata-analysis
+
+     * With parameters:
+        * Application Name=apache-zeppelin
+        * Git Repository URL=https://github.com/rimolive/zeppelin-notebooks.git
+        * Zeppelin Interpreters=md
+
+--> Creating resources ...
+    deploymentconfig "apache-zeppelin" created
+    service "apache-zeppelin" created
+    route "apache-zeppelin" created
+    buildconfig "apache-zeppelin" created
+    imagestream "apache-zeppelin" created
+    imagestream "zeppelin-openshift" created
+--> Success
+    Access your application via route 'apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com' 
+    Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
+    Run 'oc status' to view your app.
+...
+:numbered:
+-----
+. Get the Routes and Access the URL.
+-----
+...
+
+ NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+...
+-----
+
+
+== Kafka Cluster and GitHub Code Information
+
+In the OpenShift Web URL,Navigate to Services to get the Cluster IP of the Kafka Broker as shown in the below figure.
+
+Cluster IP is 172.30.218.203	9092
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/Kafka-BootStrap.png[kafka]
+
+Create a topic as provided in the Instructions Lab1
+
+
+=== Code Analysis of Lab 3
+
+https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-kafka-streaming
+
+There are 6 main programs in the GitHub, We can individually deploy as a Spark Job or Can execute in the Zeppelin Notebook.
+Entire Flow is with KafkaProducerConsumer.scala. Hence we analyse with this code and apply in the zeppelin notebook.
+
+=== Data Pipeline
+
+A Spark streaming application subscribed to the first topic:
+
+Ingests a stream of uber trip events
+
+Identifies the location cluster corresponding to the latitude and longitude of the uber trip.
+
+Adds the cluster location to the event and publishes the results in JSON format to another topic.
+
+A Spark streaming application subscribed to the second topic:
+
+Analyzes the uber trip location clusters that are popular by date and time.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
+
+=== Data Flow in Detail
+The example data set is Uber trip data, which you can read more about in part 1 of this series. The incoming data is in CSV format, an example is shown below , with the header:
+
+date/time, latitude,longitude,base
+2014-08-01 00:00:00,40.729,-73.9422,B02598
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture3.png[uber12]
+
+Data will be enriched are in JSON Format which is given below
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture4.png[berstream13]
+
+Spark Kafka Producer Consumer Code with Enriched Data
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
+
+=== Perform these steps on the code or in Zeppelin Notebook
+
+Parse the DataSet Records (Uber case class)
+Load the KMeans model
+=== Spark Streaming Code
+
+These are the basic steps for the Spark Streaming Consumer Producer code:
+
+Configure Kafka Consumer Producer properties.
+
+Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
+
+Apply transformations (which create new DStreams).
+
+Write messages from the transformed DStream to a Topic.
+
+Start receiving data and processing. Wait for the processing to be stopped.
+
+We will go through each of these steps with the example application code.
+
+=== Configure Spark Kafka Consumer Producer Properties
+
+The first step is to set the KafkaConsumer and KafkaProducer configuration properties, which will be used later to create a DStream for receiving/sending messages to topics. You need to set the following paramters:
+
+
+Key and value deserializers: for deserializing the message.
+
+Auto offset reset: to start reading from the earliest or latest message.
+
+Bootstrap servers: this can be set to a dummy host:port since the broker address is Strimzi Kafka POD
+
+
+----
+...
+
+[root@localhost ~]# oc login -u user5 -p r3dh4t1! https://master.6d13.openshift.opentlc.com/
+Login successful.
+
+You have one project on this server: "uber-realtimedata-analysis-user5"
+
+Using project "uber-data-user5".
+[root@localhost ~]# oc get routes
+NAME              HOST/PORT                                                         PATH      SERVICES          PORT       TERMINATION   WILDCARD
+apache-zeppelin   apache-zeppelin-uber-realtimedata-analysis-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
+...
+----
+
+== Zeppelin Configuration Changes to run the code
+
+This is one of the most critical steps, Please follow the screen shot's carefully. Missing a single step will lead to unexpected results and exceptions.
+
+----
+...
+$ oc get pods
+
+$ oc rsh apache-zeppelin-2-dr8s6
+
+sh-4.2$ cd /opt/zeppelin/conf/
+
+sh-4.2$ ls
+configuration.xsl  log4j_yarn_cluster.properties  zeppelin-site.xml
+interpreter-list   shiro.ini.template		  zeppelin-site.xml.template
+interpreter.json   zeppelin-env.cmd.template
+log4j.properties   zeppelin-env.sh.template
+
+sh-4.2$ mv zeppelin-env.sh template zeppelin-env.sh
+
+sh-4.2$ vi zeppelin-env.sh
+
+export SPARK_SUBMIT_OPTIONS="--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0"
+
+sh-4.2$ esc+wq!
+
+...
+----
+== Zeppelin UI Changes to Run the Code
+
+Make Changes in Spark.Memory Parameters to 5G
+
+zeppelin Dependency Local Repo as shown in the Figure
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinUIChangesLab3.png[zepp5ui]
+
+
+== Conclusions
+
+Finally you have learned the concepts of Spark Cluster, Actions, Transformations, Spark SQL and NoteBook Deployment.
+
+
+== Questions
+
+TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+
+== Appendix
+
+===  Overview 
+
+So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Uber RealTime Data.
+
+
+ifdef::showscript[]
+
+endif::showscript[]
