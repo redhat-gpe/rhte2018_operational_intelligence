@@ -116,6 +116,25 @@ $ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
 -----
 
 .. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
++
+-----
+$ oc login https://master.6d13.openshift.opentlc.com -u user2 -p r3dh4t1!
+-----
+
+.. Clone the github repo
++
+-----
+$ git clone https://github.com/scholzj/strimzi-training.git
+$  cd strimzi-training/
+-----
+
+.. Create the SA, role
++
+-----
+$ oc apply -f examples/install/cluster-operator/01-ServiceAccount-strimzi-cluster-operator.yaml 
+$ oc apply -f examples/install/cluster-operator/01-ServiceAccount-strimzi-cluster-operator.yaml 
+$ oc apply -f examples/install/cluster-operator/05-Deployment-strimzi-cluster-operator.yaml 
+-----
 
 
 [[dvsdc]]
