@@ -135,6 +135,61 @@ Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig re
 
 The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
 
+=== GiTHub URL and Justification of the usage of Notebooks in Today's Data Analysis Prod World
+
+The below link is the GitHub URL for this code. Main.scala is the program is applied on the Zeppelin Notebook.
+Since we have used SparkSQL, we can keep on querying the data with difficult results to get different statistics. This is how the NoteBook Environments like Jupyter or Zeppelin is drawn attention and used popularly in most of the production deployments. We can interactive visualize the results and change the query plan according to our convenience, accuracy level and perfection. 
+
+https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis
+
+Zeppelin has a support for Multiple Interpretors like Scala, Python, Kotlin, HBase (DataBase), It is OpenSource and other visualization tools like Tableau, R, QlikSense (which used for statistical analysis) bears licensing cost.
+
+Zeppelin has a built in Scala and Python Intepretor, it is as good as you type in Scala shell or Python Shell gives the exact same result. But with zeppelin you will get the visualization benefits and notebook advantage.
+
+For your understanding, Below here an example for scala shell. A simple word count application.
+
+----
+...
+[root@localhost bin]# spark-shell
+2018-08-27 14:38:03 WARN  Utils:66 - Your hostname, localhost.localdomain resolves to a loopback address: 127.0.0.1; using 192.168.0.2 instead (on interface wlp58s0)
+2018-08-27 14:38:03 WARN  Utils:66 - Set SPARK_LOCAL_IP if you need to bind to another address
+2018-08-27 14:38:03 WARN  SparkConf:66 - The configuration key 'spark.executor.port' has been deprecated as of Spark 2.0.0 and may be removed in the future. Not used any more
+2018-08-27 14:38:04 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2018-08-27 14:38:04 WARN  SparkConf:66 - The configuration key 'spark.executor.port' has been deprecated as of Spark 2.0.0 and may be removed in the future. Not used any more
+2018-08-27 14:38:09 WARN  SparkConf:66 - The configuration key 'spark.executor.port' has been deprecated as of Spark 2.0.0 and may be removed in the future. Not used any more
+2018-08-27 14:38:09 WARN  SparkConf:66 - The configuration key 'spark.executor.port' has been deprecated as of Spark 2.0.0 and may be removed in the future. Not used any more
+Spark context Web UI available at http://192.168.0.2:4040
+Spark context available as 'sc' (master = local[*], app id = local-1535360890347).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.3.0
+      /_/
+         
+Using Scala version 2.11.8 (OpenJDK 64-Bit Server VM, Java 1.8.0_181)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> val lines = sc.textFile("Readme.md")
+lines: org.apache.spark.rdd.RDD[String] = Readme.md MapPartitionsRDD[1] at textFile at <console>:24
+
+scala> val words = lines.flatMap(_.split("\\s+"))
+words: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[2] at flatMap at <console>:25
+
+scala> val wc = words.map(w => (w, 1)).reduceByKey(_ + _)
+wc: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at reduceByKey at <console>:25
+
+scala> wc.saveAsTextFile("README.count1")
+
+scala> 
+
+
+...
+----
 ==== OpenShift Console URL -Oshinko Cluster Environment
 
 
