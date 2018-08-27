@@ -191,7 +191,7 @@ scala>
 
 ----
 
-. Output can be viewed here
+. Output can be viewed here which is equivalent to write the code on Zeppelin or Juypter Notebook.
 
 ----
 root@localhost bin]# ls
