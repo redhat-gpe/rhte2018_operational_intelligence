@@ -34,179 +34,22 @@
 
 == Overview
 
+We will build a real-time example for analysis and monitoring of Uber car GPS trip data. 
+
+The first project discussed creating a machine learning model using Apache Spark’s K-means algorithm to cluster Uber data based on location. This complex project will discuss using the saved K-means model with streaming data to do real-time analysis of where and when Uber cars are clustered
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture1.png[uberstream10]
 
 === Background
 
 
 === Reference
 
-
-. Kafka on Openshift:
-.. link:https://strimzi.io[Project]
-+
-Includes the OpenTracing specification as well as the OpenTracing client libraries for many languages.
-
-
- 
 == Lab Asset Overview
 
 === Environment Variables
 
-Before getting started, you'll want to open a terminal window and set the following environment variables that will be used throughout the duration of this lab.
-
-
------
-######  Instructor will provide the values to these environment variables #######
-
-$ export REGION=<provided by your instructor>
-$ export GUID=<provided by your instructor>
-$ export OCP_PASSWD=<provided by your instructor>
-
-#  Using above variables, copy & paste the following in same terminal #
-
-$ export OCP_USERNAME=user$GUID
-$ export OCP_PROJECT=uber-realtimedata-analysis
------
-
 === OpenShift access
-
-You lab environment is built on Red Hat's OpenShift Container Platform.
-
-Access to your OCP resources can be gained via both the `oc` utility as well as the OCP web console.
-
-. Log into OpenShift
-+
------
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $ r3dh4t1!
------
-
-. Ensure that your `oc` client is the same minor release version as the server:
-+
------
-$ oc version
-
-oc v3.9.30
-kubernetes v1.9.1+a0ce1bc657
-features: Basic-Auth GSSAPI Kerberos SPNEGO
-
-Server https://master.a4ec.openshift.opentlc.com:443
-openshift v3.9.31
-kubernetes v1.9.1+a0ce1bc657
------
-
-.. In the above example, notice that version of the `oc` client is of the same minor release (v3.9.30) of the OpenShift server (v3.9.31)
-.. There a known subtle problems with using a version of the `oc` client that is different from your target OpenShift server.
-
-. View existing projects:
-+
------
-$ oc get projects
-
-... 
-
-user3-uber-realtimedata-analysis                                     Active
------
-
-. Switch to your  OpenShift project
-+
------
-$ oc project $OCP_PROJECT
------
-
-. Log into OpenShift Web Console
-.. Many OpenShift related tasks found in this lab can be completed in the Web Console (as an alternative to using the `oc` utility`.
-.. To access, point to your browser to the output of the following:
-+
------
-$ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
------
-
-.. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
-
-
-[[dvsdc]]
-=== Deployment vs DeploymentConfig 
-
-Your lab assets consist of a mix of OpenShift Deployment and DeploymentConfig resources.
-
-The Deployment construct is a more recent Kubernetes equivalent of what has always been in OpenShift: DeploymentConfig.
-
-==== OpenShift Console URL -Oshinko Cluster Environment
-
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinko.png[cluster]
-
-
-. Log into OpenShift Environment using OC Client Tool to your Lab Region
-
------
-$ oc new-project  -n $OCP_PROJECT
-  oc new-project user3-uber-realtimedata-analysis
------
-
-. Create Deployment Objects using Template
-+
------
-$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml 
-
-...
-template "apache-zeppelin-openshift" created
------
-
-. Apply the zeppelin template, and the intepreters can be set as a parameters
-
-+
------
-...
-
-$ oc new-app --template=$namespace/apache-zeppelin-openshift \
---param=APPLICATION_NAME=apache-zeppelin \
---param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
---param=ZEPPELIN_INTERPRETERS=md 
- 
-
-...
---> Deploying template "user3-uber-realtimedata-analysis/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project user3-uber-realtimedata-analysis
-
-     * With parameters:
-        * Application Name=apache-zeppelin
-        * Git Repository URL=https://github.com/rimolive/zeppelin-notebooks.git
-        * Zeppelin Interpreters=md
-
---> Creating resources ...
-    deploymentconfig "apache-zeppelin" created
-    service "apache-zeppelin" created
-    route "apache-zeppelin" created
-    buildconfig "apache-zeppelin" created
-    imagestream "apache-zeppelin" created
-    imagestream "zeppelin-openshift" created
---> Success
-    Access your application via route 'apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com' 
-    Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
-    Run 'oc status' to view your app.
-...
-:numbered:
------
-. Get the Routes and Access the URL.
------
-...
-
- NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
-apache-zeppelin   apache-zeppelin-user3-uber-realtimedata-analysis.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
-...
------
-
-
-== Kafka Cluster and GitHub Code Information
-
-In the OpenShift Web URL,Navigate to Services to get the Cluster IP of the Kafka Broker as shown in the below figure.
-
-Cluster IP is 172.30.218.203	9092
-
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/Kafka-BootStrap.png[kafka]
-
-Create a topic as provided in the Instructions Lab1
-
 
 === Code Analysis of Lab 3
 

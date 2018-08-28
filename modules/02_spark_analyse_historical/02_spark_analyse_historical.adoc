@@ -35,7 +35,7 @@ Apache Spark is a fast, easy-to-use and general engine for big data processing t
 
 MLlib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
 
-Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark. Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server. As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available. 
+Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark. Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server. As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available. Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
 
 The Spark Notebook is the open source notebook aimed at enterprise environments, providing Data Scientists and Data Engineers with an interactive web-based editor that can combine Scala code, SQL queries, Markup and JavaScript in a collaborative manner to explore, analyse and learn from massive data sets.
 
@@ -54,7 +54,6 @@ Since we have used SparkSQL, we can keep on querying the data with different res
 
 https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis
 
-Zeppelin has a support for Multiple Interpretors like Scala, Python, Kotlin, HBase (DataBase), It is OpenSource and other visualization tools like Tableau, R, QlikSense (which used for statistical analysis) bears licensing cost.
 
 Zeppelin has a built in Scala and Python Intepretor which can visualize the data.
 
@@ -110,6 +109,7 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
 :numbered:
 -----
 . Get the Routes and Access the URL.
++
 -----
 ...
 
