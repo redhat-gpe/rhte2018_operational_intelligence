@@ -31,6 +31,20 @@
 
 === Background
 
+Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
+
+MLlib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
+
+Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark. Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server. As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available. 
+
+The Spark Notebook is the open source notebook aimed at enterprise environments, providing Data Scientists and Data Engineers with an interactive web-based editor that can combine Scala code, SQL queries, Markup and JavaScript in a collaborative manner to explore, analyse and learn from massive data sets.
+
+Spark SQL is a Spark module for structured data processing. It enables unmodified Hadoop Hive queries to run up to 100x faster on existing deployments and data. It also provides powerful integration with the rest of the Spark ecosystem (e.g., integrating SQL query processing with machine learning).
+
+Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. It is an immutable distributed collection of objects. Each dataset in RDD is divided into logical partitions, which may be computed on different nodes of the cluster. Spark Actions are RDD operations that produce non-RDD values. They materialize a value in a Spark program. In other words, a RDD operation returns a value of any type.
+
+SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
+
 === Reference
  
 === Github project for the analysis and the use of notebooks
@@ -232,7 +246,7 @@ You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Erro
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
 
-=== TroubleShoot of Thrift Exception and Broken Pipe Exception.
+=== TroubleShooting the Thrift Exception and Broken Pipe Exception.
 ----
 ...
 
@@ -250,38 +264,30 @@ apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.co
 
 . Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
 *** If You Notice thrift Exception Like this
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.png[zepp]
 
-
 . Restart the Interpreter.
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
 
-
 . Increase the Memory settings from 1G to 2G and Save the settings.
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
 
-
 . Click OK on the ModalWindow.
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
 
-
-
 . Restart the Interpreter, till the Error Goes.
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
 
-
-
-
 . After Restarting, proceed to execute code cell by cell.
-
++
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
 
-== Still Running on the Problem?
+==== Still Running on the Problem?
 
 If you are still facing exception, Currently the data size 35MB and Quering 3LAKH rows, Reduce the size to 2-3MB and keep the Row count to 1500-2000 Rows and execute the cell by cell analysis.  In a real time scenario, you won't face these kind of exceptions.
 
