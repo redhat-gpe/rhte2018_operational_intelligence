@@ -29,13 +29,10 @@
 
 === Reference
 
-
 . Kafka on Openshift:
 .. link:https://strimzi.io[Project]
 +
-Includes the OpenTracing specification as well as the OpenTracing client libraries for many languages.
-
-
+Kafka on Openshift functionality is provided by the Strimzi project (link above).
  
 == Lab Asset Overview
 
@@ -47,8 +44,6 @@ Before getting started, you'll want to open a terminal window and set the follow
 -----
 ######  Instructor will provide the values to these environment variables #######
 
-$ export REGION=<provided by your instructor>
-$ export GUID=<provided by your instructor>
 $ export OCP_PASSWD=<provided by your instructor>
 
 #  Using above variables, copy & paste the following in same terminal #
@@ -59,8 +54,7 @@ $ export OCP_PROJECT=kafka-project
 
 === Kafka access
 
-Your lab environment includes access to a Kafka installation.
-
+Your lab environment includes access to a Kafka installation. To find your environment GUID, refer to https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc. The GUID Grabber response will also specify a username of lab-user and the password. Once you have the GUID, you can navigate to the master at https://master.{$GUID}.openshift.opentlc.com.
 
 === OpenShift access
 
