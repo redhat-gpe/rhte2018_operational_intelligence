@@ -34,9 +34,8 @@ Speakers at each Tech Exchange are TBD
 
 
 .GitHUB URL's
-. https://github.com/gpe-mw-training/operational_intelligence/tree/master/spark-drools - For Simple Project
 . https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis - For Medium Project
-. https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-kafka-streaming  - For Complex Project
+. https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-realtime-spark-stream-analysis  - For Complex Project
 
 * Tools
 ** `curl` utility
@@ -255,7 +254,7 @@ $ oc new-project  -n $OCP_PROJECT
 . Create Deployment Objects using Template
 +
 -----
-$ oc create -f https://raw.githubusercontent.com/Pkrish15/spark-drools/master/resources.yaml 
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/resources.yaml 
 
 ...
 
