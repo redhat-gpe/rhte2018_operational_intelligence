@@ -124,6 +124,10 @@ apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com     
 
 === Understand the Uber historical data
 
+==== JSON data
+
+==== CSV data
+
 === Inject Uber historical data into Zeppelin
 
 . Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen. 
