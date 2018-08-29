@@ -115,6 +115,8 @@ $ echo -en "\n\nhttps://master.$REGION.openshift.opentlc.com\n\n"
 $ oc login https://master.6d13.openshift.opentlc.com -u user2 -p r3dh4t1!
 -----
 
+== Lab instructions
+
 .. Clone the github repo
 +
 -----
@@ -139,7 +141,7 @@ oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadat
 oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ----
 
-==== Configure Kafka connector
+=== Configure Kafka connector
 
 . In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration
 +
@@ -185,7 +187,6 @@ EOF
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
 
 == Conclusions
-
 
 == Questions
 

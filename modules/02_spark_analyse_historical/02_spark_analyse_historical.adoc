@@ -65,6 +65,8 @@ Zeppelin has a built in Scala and Python Intepretor which can visualize the data
 $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
+== Lab Instructions
+
 . Create Deployment Objects using Template
 +
 -----

@@ -58,24 +58,14 @@ https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-rea
 There are 6 main programs in the GitHub, We can individually deploy as a Spark Job or Can execute in the Zeppelin Notebook.
 Entire Flow is with KafkaProducerConsumer.scala. Hence we analyse with this code and apply in the zeppelin notebook.
 
-=== Data Pipeline
+==== Data Pipeline
 
-A Spark streaming application subscribed to the first topic:
-
-Ingests a stream of uber trip events
-
-Identifies the location cluster corresponding to the latitude and longitude of the uber trip.
-
-Adds the cluster location to the event and publishes the results in JSON format to another topic.
-
-A Spark streaming application subscribed to the second topic:
-
-Analyzes the uber trip location clusters that are popular by date and time.
+A Spark streaming application subscribed to the topic UberInput ingests a stream of uber trip events. It identifies the location cluster corresponding to the latitude and longitude of the uber trip. It adds the cluster location to the data tuple and publishes the results in JSON format to the UberRealTime topic. A Spark streaming application subscribed to the UberRealTime topic analyzes the uber trip location clusters that are popular by date and time.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
 
-=== Data Flow in Detail
-The example data set is Uber trip data, which you can read more about in part 1 of this series. The incoming data is in CSV format, an example is shown below , with the header:
+==== Data Flow in Detail
+The Uber trip data is in the following format
 
 date/time, latitude,longitude,base
 2014-08-01 00:00:00,40.729,-73.9422,B02598
@@ -90,23 +80,19 @@ Spark Kafka Producer Consumer Code with Enriched Data
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
 
-=== Perform these steps on the code or in Zeppelin Notebook
+==== Code flow
 
 Parse the DataSet Records (Uber case class)
 Load the KMeans model
-=== Spark Streaming Code
+
+===== Spark Streaming Code
 
 These are the basic steps for the Spark Streaming Consumer Producer code:
-
-Configure Kafka Consumer Producer properties.
-
-Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
-
-Apply transformations (which create new DStreams).
-
-Write messages from the transformed DStream to a Topic.
-
-Start receiving data and processing. Wait for the processing to be stopped.
+. Configure Kafka Consumer Producer properties.
+. Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
+. Apply transformations (which create new DStreams).
+. Write messages from the transformed DStream to a Topic.
+. Start receiving data and processing. Wait for the processing to be stopped.
 
 We will go through each of these steps with the example application code.
 
