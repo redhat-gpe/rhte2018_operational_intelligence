@@ -122,6 +122,14 @@ apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com     
 ...
 -----
 
+=== Modify Zeppelin Interpreter JVM settings
+
+What is the Zeppelin Interpreter ?
+
+What port(s) and protocols is it listening on ?
+
+Step-by-step explanation on how to bump up memory settings.
+
 === Understand the Uber historical data
 
 ==== JSON data
