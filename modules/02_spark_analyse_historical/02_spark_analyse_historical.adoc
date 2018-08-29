@@ -67,6 +67,8 @@ $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP
 
 == Lab Instructions
 
+=== Provision Zeppelin
+
 . Create Deployment Objects using Template
 +
 -----
@@ -119,6 +121,8 @@ $ oc new-app --template=apache-zeppelin-openshift \
 apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 ...
 -----
+
+=== Inject Uber historical data into Zeppelin
 
 . Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen. 
 +
