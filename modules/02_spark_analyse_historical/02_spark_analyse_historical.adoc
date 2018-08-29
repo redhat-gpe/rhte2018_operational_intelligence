@@ -83,7 +83,7 @@ template "apache-zeppelin-openshift" created
 ...
 
 $ oc new-app --template=apache-zeppelin-openshift \
---param=APPLICATION_NAME=apache-zeppelin \
+--param=APPLICATION_NAME=$OCP_USERNAME-apache-zeppelin \
 --param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
 --param=ZEPPELIN_INTERPRETERS=md 
  
