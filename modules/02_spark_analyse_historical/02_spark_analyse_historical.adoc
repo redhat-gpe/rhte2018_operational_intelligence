@@ -68,6 +68,8 @@ $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP
 
 == Lab Instructions
 
+=== Provision Zeppelin
+
 . Create Deployment Objects using Template
 +
 -----
@@ -83,8 +85,8 @@ template "apache-zeppelin-openshift" created
 -----
 ...
 
-$ oc new-app --template=$namespace/apache-zeppelin-openshift \
---param=APPLICATION_NAME=apache-zeppelin \
+$ oc new-app --template=apache-zeppelin-openshift \
+--param=APPLICATION_NAME=$OCP_USERNAME-apache-zeppelin \
 --param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
 --param=ZEPPELIN_INTERPRETERS=md 
  
@@ -120,6 +122,22 @@ $ oc new-app --template=$namespace/apache-zeppelin-openshift \
 apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 ...
 -----
+
+=== Modify Zeppelin Interpreter JVM settings
+
+What is the Zeppelin Interpreter ?
+
+What port(s) and protocols is it listening on ?
+
+Step-by-step explanation on how to bump up memory settings.
+
+=== Understand the Uber historical data
+
+==== JSON data
+
+==== CSV data
+
+=== Inject Uber historical data into Zeppelin
 
 . Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen. 
 +
