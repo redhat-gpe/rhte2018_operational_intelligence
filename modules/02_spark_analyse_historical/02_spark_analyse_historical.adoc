@@ -54,6 +54,7 @@ Since we have used SparkSQL, we can keep on querying the data with different res
 
 https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis
 
+https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
 
 Zeppelin has a built in Scala and Python Intepretor which can visualize the data.
 
@@ -297,5 +298,7 @@ To Reduce the size of the records to 1500-2000 rows, you have to repeat the step
 
 
 ifdef::showscript[]
+
+
 
 endif::showscript[]

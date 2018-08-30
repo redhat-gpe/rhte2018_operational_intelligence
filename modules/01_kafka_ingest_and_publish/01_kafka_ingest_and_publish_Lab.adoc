@@ -126,7 +126,7 @@ $ cd strimzi-training/
 
 === Deploy Kafka producer and consumer
 
-. Deploy the Hello World producer and consumer
+. Deploy the Kafka producer and consumer
 
 [source,text]
 ----
@@ -139,6 +139,88 @@ $ cd strimzi-training/
 ----
 oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
 oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+----
+
+. Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
+
+[source,text]
+----
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer-2
+  name: kafka-consumer-2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer-2
+    spec:
+      containers:
+      - name: kafka-consumer-2
+        image: strimzici/hello-world-consumer:support-training
+----
+
+. Deploy the new consumer
+
+[source,text]
+----
+% oc apply -f examples/hello-world/deployment-new.yaml
+----
+
+. Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
+
+[source,text]
+----
+2018-08-30 18:31:58 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:31:58 INFO  KafkaConsumerExample:25 - 	     partition: 0
+2018-08-30 18:31:58 INFO  KafkaConsumerExample:26 - 	     offset: 137772
+2018-08-30 18:31:58 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 103
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:25 - 	     partition: 1
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:26 - 	     offset: 137766
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 105
+2018-08-30 18:32:01 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:01 INFO  KafkaConsumerExample:25 - 	     partition: 0
+2018-08-30 18:32:01 INFO  KafkaConsumerExample:26 - 	     offset: 137773
+2018-08-30 18:32:01 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 106
+2018-08-30 18:32:03 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:03 INFO  KafkaConsumerExample:25 - 	     partition: 1
+2018-08-30 18:32:03 INFO  KafkaConsumerExample:26 - 	     offset: 137767
+2018-08-30 18:32:03 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 108
+2018-08-30 18:32:04 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:04 INFO  KafkaConsumerExample:25 - 	     partition: 0
+2018-08-30 18:32:04 INFO  KafkaConsumerExample:26 - 	     offset: 137774
+2018-08-30 18:32:04 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 109
+2018-08-30 18:32:06 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:06 INFO  KafkaConsumerExample:25 - 	     partition: 1
+2018-08-30 18:32:06 INFO  KafkaConsumerExample:26 - 	     offset: 137768
+2018-08-30 18:32:06 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 111
+2018-08-30 18:32:07 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:07 INFO  KafkaConsumerExample:25 - 	     partition: 0
+2018-08-30 18:32:07 INFO  KafkaConsumerExample:26 - 	     offset: 137775
+2018-08-30 18:32:07 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 112
+----
+
+and
+
+[source,text]
+----
+2018-08-30 18:24:42 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:24:42 INFO  KafkaConsumerExample:25 - 	     partition: 2
+2018-08-30 18:24:42 INFO  KafkaConsumerExample:26 - 	     offset: 137630
+2018-08-30 18:24:42 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 674
+2018-08-30 18:24:45 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:24:45 INFO  KafkaConsumerExample:25 - 	     partition: 2
+2018-08-30 18:24:45 INFO  KafkaConsumerExample:26 - 	     offset: 137631
+2018-08-30 18:24:45 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 677
+2018-08-30 18:24:48 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:24:48 INFO  KafkaConsumerExample:25 - 	     partition: 2
+2018-08-30 18:24:48 INFO  KafkaConsumerExample:26 - 	     offset: 137632
+2018-08-30 18:24:48 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 677
 ----
 
 === Configure Kafka connector
