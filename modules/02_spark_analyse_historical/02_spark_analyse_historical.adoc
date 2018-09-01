@@ -137,6 +137,8 @@ Step-by-step explanation on how to bump up memory settings.
 
 ==== CSV data
 
+=== Deployment Topology Diagram
+
 === Inject Uber historical data into Zeppelin
 
 . Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen. 
