@@ -67,6 +67,56 @@ $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP
 -----
 
 == Lab Instructions
+=== Provision Oshinko Cluster - Spark Cluster
+. Create Deployment Objects using Template
+----
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/resources.yaml
+...
+[root@localhost ~]# oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/resources.yaml
+serviceaccount "oshinko" created
+rolebinding "oshinko-edit" created
+configmap "oshinko-py36-conf" created
+template "oshinko-python-spark-build-dc" created
+template "oshinko-python36-spark-build-dc" created
+template "oshinko-java-spark-build-dc" created
+template "oshinko-scala-spark-build-dc" created
+template "oshinko-webui-secure" created
+template "oshinko-webui" created
+template "radanalytics-jupyter-notebook" created
+
+
+[root@localhost ~]# oc new-app oshinko-webui
+
+--> Deploying template "user3-uber-data-history/oshinko-webui" to project user3-uber-data-history
+
+     * With parameters:
+        * SPARK_DEFAULT=
+        * OSHINKO_WEB_NAME=oshinko-web
+        * OSHINKO_WEB_IMAGE=radanalyticsio/oshinko-webui:stable
+        * OSHINKO_WEB_ROUTE_HOSTNAME=
+        * OSHINKO_REFRESH_INTERVAL=5
+
+--> Creating resources ...
+    service "oshinko-web-proxy" created
+    service "oshinko-web" created
+    route "oshinko-web" created
+    deploymentconfig "oshinko-web" created
+--> Success
+    Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com' 
+    Run 'oc status' to view your app.
+
+[root@localhost ~]# oc get routes
+NAME                HOST/PORT                                                             PATH      SERVICES                            PORT            TERMINATION   WILDCARD
+oshinko-web         oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
+oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /proxy    oshinko-web-proxy                   oc-proxy-port                 None
+...
+----
+=== Provision Oshinko Cluster
+. Access the route url http://oshinko-web-user3-uber-data-history.apps.6d13.openshift.opentlc.com/webui/#/clusters
+
+Click Deploy Button and to Add the Cluster as shown in the Below figure.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinkoCluster.png[oshinko]
 
 === Provision Zeppelin
 
