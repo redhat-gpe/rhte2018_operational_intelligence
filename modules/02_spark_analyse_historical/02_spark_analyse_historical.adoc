@@ -189,6 +189,10 @@ What is the Zeppelin Interpreter ?
 
 What port(s) and protocols is it listening on ?
 
+Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png[portzepp]
+
 Step-by-step explanation on how to bump up memory settings.
 
 === Understand the Uber historical data
