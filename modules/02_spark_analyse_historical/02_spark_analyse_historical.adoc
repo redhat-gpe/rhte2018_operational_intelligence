@@ -139,7 +139,7 @@ Step-by-step explanation on how to bump up memory settings.
 
 === Deployment Topology Diagram
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinDeploymentTopology.odg[zeppelinTopo]
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/DeploymentTopology.png[zeppelinTopo]
 
 
 === Inject Uber historical data into Zeppelin
