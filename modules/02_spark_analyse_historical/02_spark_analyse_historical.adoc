@@ -111,8 +111,16 @@ oshinko-web         oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com 
 oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /proxy    oshinko-web-proxy                   oc-proxy-port                 None
 ...
 ----
-=== Provision Oshinko Cluster
-. Access the route url http://oshinko-web-user3-uber-data-history.apps.6d13.openshift.opentlc.com/webui/#/clusters
+=== Oshinko Cluster
+The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+
+With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
+
+To begin your exploration, we recommend starting with the oshinko-webui application. The oshinko-webui is a self-contained deployment of the Oshinko technologies. An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser. Through the browser interface you will be able to manage Apache Spark clusters within your project.
+
+Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
+
+. Access the route url http://oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com/webui/#/clusters
 
 Click Deploy Button and to Add the Cluster as shown in the Below figure.
 
@@ -135,29 +143,27 @@ template "apache-zeppelin-openshift" created
 -----
 ...
 
-$ oc new-app --template=apache-zeppelin-openshift \
---param=APPLICATION_NAME=$OCP_USERNAME-apache-zeppelin \
---param=GIT_URI=https://github.com/rimolive/zeppelin-notebooks.git \
---param=ZEPPELIN_INTERPRETERS=md 
- 
-
-...
---> Deploying template "uber-data/apache-zeppelin-openshift" for "/apache-zeppelin-openshift" to project uber-data-analysis
+oc new-app --template=apache-zeppelin-openshift \
+> --param=APPLICATION_NAME=apache-zeppelin \
+> --param=GIT_URI=https://github.com/gpe-mw-training/operational_intelligence.git \
+> --param=ZEPPELIN_INTERPRETERS=md 
+--> Deploying template "user3-uber-data-history/apache-zeppelin-openshift" to project user3-uber-data
 
      * With parameters:
         * Application Name=apache-zeppelin
-        * Git Repository URL=https://github.com/rimolive/zeppelin-notebooks.git
+        * Git Repository URL=https://github.com/gpe-mw-training/operational_intelligence.git
         * Zeppelin Interpreters=md
 
 --> Creating resources ...
     deploymentconfig "apache-zeppelin" created
     service "apache-zeppelin" created
+    service "apache-zeppelin-headless" created
     route "apache-zeppelin" created
     buildconfig "apache-zeppelin" created
     imagestream "apache-zeppelin" created
     imagestream "zeppelin-openshift" created
 --> Success
-    Access your application via route 'apache-zeppelin-uber-data-analysis.apps.na39.openshift.opentlc.com' 
+    Access your application via route 'apache-zeppelin-user3-uber-data.apps.6d13.openshift.opentlc.com' 
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 ...
@@ -167,9 +173,13 @@ $ oc new-app --template=apache-zeppelin-openshift \
 +
 -----
 ...
+[root@localhost ~]# oc get routes
+NAME                         HOST/PORT                                                                            PATH      SERVICES                            PORT            TERMINATION   WILDCARD
+apache-zeppelin              apache-zeppelin-user3-uber-data-apps.6d13.openshift.opentlc.com                        apache-zeppelin                     8080-tcp                      None
+oshinko-web                  oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com                  /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
+oshinko-web-proxy            oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com                  /proxy    oshinko-web-proxy                   oc-proxy-port                 None
+uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d13.openshift.opentlc.com             uber-data-cluster-ui                <all>                         None
 
- NAME              HOST/PORT                                                   PATH      SERVICES          PORT       TERMINATION   WILDCARD
-apache-zeppelin   apache-zeppelin-uber-data.apps.na39.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
 ...
 -----
 
