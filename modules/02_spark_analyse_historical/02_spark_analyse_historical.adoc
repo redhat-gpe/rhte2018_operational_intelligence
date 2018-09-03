@@ -30,7 +30,7 @@
 == Overview
 
 === Background
- 
+
 Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
 
 MLlib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
@@ -46,7 +46,7 @@ Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. I
 SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
 
 === Reference
- 
+
 === Github project for the analysis and the use of notebooks
 
 The below link is the GitHub URL for this code. Main.scala is the code applied to the Zeppelin Notebook to analyse the data.
@@ -102,7 +102,7 @@ template "radanalytics-jupyter-notebook" created
     route "oshinko-web" created
     deploymentconfig "oshinko-web" created
 --> Success
-    Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com' 
+    Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
 [root@localhost ~]# oc get routes
@@ -131,7 +131,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinkoCluster.p
 . Create Deployment Objects using Template
 +
 -----
-$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml 
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml
 
 ...
 template "apache-zeppelin-openshift" created
@@ -146,7 +146,7 @@ template "apache-zeppelin-openshift" created
 oc new-app --template=apache-zeppelin-openshift \
 > --param=APPLICATION_NAME=apache-zeppelin \
 > --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
-> --param=ZEPPELIN_INTERPRETERS=md 
+> --param=ZEPPELIN_INTERPRETERS=md
 --> Deploying template "user3-uber-data/apache-zeppelin-openshift" to project user3-uber-data
 
      * With parameters:
@@ -163,7 +163,7 @@ oc new-app --template=apache-zeppelin-openshift \
     imagestream "apache-zeppelin" created
     imagestream "zeppelin-openshift" created
 --> Success
-    Access your application via route 'apache-zeppelin-user3-uber-data.apps.6d13.openshift.opentlc.com' 
+    Access your application via route 'apache-zeppelin-user3-uber-data.apps.6d13.openshift.opentlc.com'
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 ...
@@ -195,7 +195,8 @@ When you click the +Create button in the interpreter page, the interpreter drop-
 
 Below Figure Explain's the configuration of Zeppelin
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinNewSettings.png[portzepp]
+
+image::images/ZeppelinNewSettings.png[]
 
 -----
 ...
@@ -239,7 +240,7 @@ If you specify a memory limit, you can constrain the amount of memory the contai
 
 === Inject Uber historical data into Zeppelin
 
-. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen. 
+. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
 
@@ -256,7 +257,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.pn
 ----
 oc rsync src directory pod directory:/data
 for Example
-oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data 
+oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data
 ----
 +
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
@@ -288,7 +289,7 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 == Appendix
 
-===  Overview 
+===  Overview
 So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
 
 ===  What did we learn?
@@ -315,7 +316,7 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 
 === Where do we get these DataSets?
 
-http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014 
+http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
 
 ===  What algorithm is suitable for Data Analytics?
 
@@ -330,7 +331,7 @@ Lon: The longitude of the Uber pickup
 Base: The TLC base company affiliated with the Uber pickup
 ​​The Data Records are in CSV format. An example line is shown below:
 
-2014-08-01 00:00:00,40.729,-73.9422,B02598 
+2014-08-01 00:00:00,40.729,-73.9422,B02598
 
 ===  How do we do it?
 
@@ -355,7 +356,7 @@ Further Analysis of cluster
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream6]
 
-===  What are the Analysis Questions? 
+===  What are the Analysis Questions?
 
 **** Which hour of the day and which cluster had highest number of pickups?
 
