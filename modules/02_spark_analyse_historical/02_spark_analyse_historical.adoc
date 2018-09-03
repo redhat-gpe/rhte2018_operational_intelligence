@@ -29,65 +29,169 @@
 
 == Overview
 
-=== Background
+=== Lab Goals
 
+[red]#TODO#
+
+=== Technical Background
+
+==== Apache Spark
+. *Apache Spark*
++
 Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
 
-MLlib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
+. *MLlib*
++
+MLib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
 
-Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark. Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server. As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available. Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
+. *Apache Zeppelin*
++
+Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
+Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server.
+As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available.
+Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
+Zeppelin has a built in Scala and Python Intepretors.
+These interpreters can be utilized to visualize raw historical data.
 
+. *Spark Notebook*
++
 The Spark Notebook is the open source notebook aimed at enterprise environments, providing Data Scientists and Data Engineers with an interactive web-based editor that can combine Scala code, SQL queries, Markup and JavaScript in a collaborative manner to explore, analyse and learn from massive data sets.
 
+. *Spark SQL*
++
 Spark SQL is a Spark module for structured data processing. It enables unmodified Hadoop Hive queries to run up to 100x faster on existing deployments and data. It also provides powerful integration with the rest of the Spark ecosystem (e.g., integrating SQL query processing with machine learning).
 
+. *Resilient Distributed Datasets*
++
 Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. It is an immutable distributed collection of objects. Each dataset in RDD is divided into logical partitions, which may be computed on different nodes of the cluster. Spark Actions are RDD operations that produce non-RDD values. They materialize a value in a Spark program. In other words, a RDD operation returns a value of any type.
 
+. *SparkContext*
++
 SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
+
+==== Oshinko
+
+[red]#TODO:  Elaborate ... who, when, what, where#
 
 === Reference
 
-=== Github project for the analysis and the use of notebooks
+[red]#TODO:  Praveen's list of his favorite Apache Spark related blogs, tutorials, etc#
 
-The below link is the GitHub URL for this code. Main.scala is the code applied to the Zeppelin Notebook to analyse the data.
-Since we have used SparkSQL, we can keep on querying the data with different results to get different statistics. We can alter the queries and take different views of the data.
 
-https://github.com/gpe-mw-training/operational_intelligence/tree/master/uber-data-analysis
 
-https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
 
-Zeppelin has a built in Scala and Python Intepretor which can visualize the data.
 
 == Lab Asset Overview
 
-. Log into OpenShift Environment using OC Client Tool to your Lab Region
+In a previous lab of this course, you should have already cloned the lab assets.
 
+The following depicts the assets specific to this lab:
+
+-----
+├── templates
+│   ├── oshinko-cluster.yaml
+│   └── zeppelin-openshift.yaml
+├── uber-data-analysis
+│   ├── notebooks
+│   │   └── Uber.json
+│   ├── pom.xml
+│   ├── README.md
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── com
+│           │       └── redhat
+│           │           └── gpte
+│           │               └── Main.scala
+│           └── resources
+│               └── data
+│                   └── uber.csv
+-----
+
+
+Several key assets to review before executing this lab are as follows:
+
+. *pom.xml*
++
+Notice that community Apache Spark and community Scala packages are being utilized.
+At this time, Red Hat does not intend to provide supported versions of these packages.
+
+. *Raw Uber historical Data*
++
+.. Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
+.. [red]#TODO:  Elaborate ... who, when, what, where .... what will the student do with this file ?#
+
+. *Main.scala*
++
+Main.scala is the code applied to the Zeppelin Notebook to analyse the data.
+
+.. This file is provided to you as background and context only.
+For the purpose of this lab, you will not be modifying or compiling this Main.scala.
+Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
+
+.. [red]#TODO:  Elaborate ... who, when, what, where#
+
+. *Uber.json*
++
+.. [red]#TODO:  Elaborate ... who, when, what, where#
+
+. *templates*
+
+.. *oshinko-cluster.yaml*
++
+[red]#TODO:  Elaborate ... who, when, what, where#
+
+.. *zeppelin-openshift.yaml*
++
+[red]#TODO:  Elaborate ... who, when, what, where#
+
+
+== Provision Oshinko Cluster
+
+Oshinko is the project focused on providing a Spark cluster on OpenShift Container Platform.
+In this section of the lab, you will provision Oshinko.
+
+
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
++
 -----
 $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
-== Lab Instructions
-=== Provision Oshinko Cluster - Spark Cluster
-. Create Deployment Objects using Template
-----
-$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/resources.yaml
-...
-[root@localhost ~]# oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/resources.yaml
-serviceaccount "oshinko" created
-rolebinding "oshinko-edit" created
-configmap "oshinko-py36-conf" created
-template "oshinko-python-spark-build-dc" created
-template "oshinko-python36-spark-build-dc" created
-template "oshinko-java-spark-build-dc" created
-template "oshinko-scala-spark-build-dc" created
-template "oshinko-webui-secure" created
-template "oshinko-webui" created
-template "radanalytics-jupyter-notebook" created
+. Switch to the OCP project specific to this lab:
++
+-----
+$ oc project $OCP_USERNAME-uber-data
+-----
 
+. In your OpenShift namespace, create needed Oshinko templates:
++
+-----
+$ oc create \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/oshinko-cluster.yaml \
+     -n $OCP_USERNAME-uber-data
+-----
 
-[root@localhost ~]# oc new-app oshinko-webui
+. Review the templates that have been created:
++
+-----
+$ oc get templates -n $OCP_USERNAME-uber-data
 
---> Deploying template "user3-uber-data/oshinko-webui" to project user3-uber-data-history
+TODO
+-----
+
+. Provision the Oshinko web-ui
++
+-----
+$ oc new-app oshinko-webui -n $OCP_USERNAME-uber-data > /tmp/oshinko-web.txt
+-----
+.. Review the output found in `/tmp/oshinko-web.txt`
++
+-----
+
+....
+
+--> Deploying template "user3-uber-data/oshinko-webui" to project user3-uber-data
 
      * With parameters:
         * SPARK_DEFAULT=
@@ -105,13 +209,43 @@ template "radanalytics-jupyter-notebook" created
     Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
-[root@localhost ~]# oc get routes
+-----
+
+. Review the routes to the Oshinko web UI that have been automatically created:
++
+-----
+
+$ oc get routes
+
+...
+
 NAME                HOST/PORT                                                             PATH      SERVICES                            PORT            TERMINATION   WILDCARD
 oshinko-web         oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
 oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /proxy    oshinko-web-proxy                   oc-proxy-port                 None
-...
-----
-=== Oshinko Cluster
+
+-----
+
+.. *oshinko-web*
++
+[red]#TODO:  Elaborate#
+
+.. *oshinko-web-proxy*
++
+[red]#TODO:  Elaborate#
+
+. Log into the Oshinko web UI
+.. Point your browser to the output of the following command:
++
+-----
+$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)"\n\n"
+-----
+
+.. At this time, the Oshinko web UI is not secured.
++
+Subsequently, you should be able to access the UI without authenticating.
+
+
+== Oshinko Cluster
 The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
 
 With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
@@ -126,7 +260,7 @@ Click Deploy Button and to Add the Cluster as shown in the Below figure.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinkoCluster.png[oshinko]
 
-=== Provision Zeppelin
+== Provision Zeppelin
 
 . Create Deployment Objects using Template
 +
