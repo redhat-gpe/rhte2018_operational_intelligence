@@ -182,7 +182,7 @@ uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d1
 ...
 -----
 
-=== Modify Zeppelin Interpreter JVM settings
+=== Modifications in Zeppelin Interpreter settings
 
 == What is the Zeppelin Interpreter ?
 
