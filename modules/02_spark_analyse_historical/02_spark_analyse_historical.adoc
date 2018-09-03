@@ -187,8 +187,27 @@ uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d1
 
 What is the Zeppelin Interpreter ?
 
+Zeppelin Interpreter is a plug-in which enables Zeppelin users to use a specific language/data-processing-backend. For example, to use Scala code in Zeppelin, you need %spark interpreter.
+
+When you click the +Create button in the interpreter page, the interpreter drop-down list box will show all the available interpreters on your server.
+
+
 What port(s) and protocols is it listening on ?
 
+Below Figure Explain's the configuration of Zeppelin
+
+image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinNewSettings.png[portzepp]
+
+-----
+...
+Please add these properties in the zeppelin Intepreter settings
+
+spark.driver.bindAddress	                            0.0.0.0
+spark.driver.host	                                   apache-zeppelin
+spark.driver.blockManager.port	                     	42100
+spark.driver.port	                                   42000
+...
+-----
 Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png[portzepp]
