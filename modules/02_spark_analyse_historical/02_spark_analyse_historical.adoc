@@ -167,7 +167,6 @@ oc new-app --template=apache-zeppelin-openshift \
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 ...
-:numbered:
 -----
 . Get the Routes and Access the URL.
 +
@@ -185,14 +184,14 @@ uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d1
 
 === Modify Zeppelin Interpreter JVM settings
 
-What is the Zeppelin Interpreter ?
+== What is the Zeppelin Interpreter ?
 
 Zeppelin Interpreter is a plug-in which enables Zeppelin users to use a specific language/data-processing-backend. For example, to use Scala code in Zeppelin, you need %spark interpreter.
 
 When you click the +Create button in the interpreter page, the interpreter drop-down list box will show all the available interpreters on your server.
 
 
-What port(s) and protocols is it listening on ?
+== What port(s) and protocols is it listening on ?
 
 Below Figure Explain's the configuration of Zeppelin
 
@@ -211,14 +210,6 @@ spark.driver.port	                                   42000
 Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png[portzepp]
-
-Step-by-step explanation on how to bump up memory settings.
-
-=== Understand the Uber historical data
-
-==== JSON data
-
-==== CSV data
 
 === Deployment Topology Diagram
 
