@@ -215,6 +215,81 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/DeploymentTopology.png[zeppelinTopo]
 
+=== Importance of ClusterQuota and Limit Ranges
+A limit range, defined by a LimitRange object, enumerates compute resource constraints in a project at the pod, container, image, image stream, and persistent volume claim level, and specifies the amount of resources that a pod, container, image, image stream, or persistent volume claim can consume.
+
+All resource create and modification requests are evaluated against each LimitRange object in the project. If the resource violates any of the enumerated constraints, then the resource is rejected. If the resource does not set an explicit value, and if the constraint supports a default value, then the default value is applied to the resource.
+
+Viewing Limit Ranges
+You can view any limit ranges defined in a project by navigating in the web console to the project’s Quota page.
+
+You can also use the CLI to view limit range details:
+
+First, get the list of limit ranges defined in the project. For example, for a project called demoproject:
+
+$ oc get limits -n demoproject
+NAME              AGE
+resource-limits   6d
+Then, describe the limit range you are interested in, for example the resource-limits limit range:
+
+$ oc describe limits resource-limits -n demoproject
+Name:                           resource-limits
+Namespace:                      demoproject
+Type                            Resource                Min     Max     Default Request Default Limit   Max Limit/Request Ratio
+----                            --------                ---     ---     --------------- -------------   -----------------------
+Pod                             cpu                     200m    2       -               -               -
+Pod                             memory                  6Mi     1Gi     -               -               -
+Container                       cpu                     100m    2       200m            300m            10
+Container                       memory                  4Mi     1Gi     100Mi           200Mi           -
+openshift.io/Image              storage                 -       1Gi     -               -               -
+openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
+openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
+Full limit range definitions can be viewed by running oc export on the object. The following shows an example limit range definition:
+
+Core Limit Range Object Definition
+apiVersion: "v1"
+kind: "LimitRange"
+metadata:
+  name: "core-resource-limits" 
+spec:
+  limits:
+    - type: "Pod"
+      max:
+        cpu: "2" 
+        memory: "1Gi" 
+      min:
+        cpu: "200m" 
+        memory: "6Mi" 
+    - type: "Container"
+      max:
+        cpu: "2" 
+        memory: "1Gi" 
+      min:
+        cpu: "100m" 
+        memory: "4Mi" 
+      default:
+        cpu: "300m" 
+        memory: "200Mi" 
+      defaultRequest:
+        cpu: "200m" 
+        memory: "100Mi" 
+      maxLimitRequestRatio:
+        cpu: "10" 
+The name of the limit range object.
+The maximum amount of CPU that a pod can request on a node across all containers.
+The maximum amount of memory that a pod can request on a node across all containers.
+The minimum amount of CPU that a pod can request on a node across all containers.
+The minimum amount of memory that a pod can request on a node across all containers.
+The maximum amount of CPU that a single container in a pod can request.
+The maximum amount of memory that a single container in a pod can request.
+The minimum amount of CPU that a single container in a pod can request.
+The minimum amount of memory that a single container in a pod can request.
+The default amount of CPU that a container will be limited to use if not specified.
+The default amount of memory that a container will be limited to use if not specified.
+The default amount of CPU that a container will request to use if not specified.
+The default amount of memory that a container will request to use if not specified.
+The maximum amount of CPU burst that a container can make as a ratio of its limit over request.
+
 
 === Inject Uber historical data into Zeppelin
 
