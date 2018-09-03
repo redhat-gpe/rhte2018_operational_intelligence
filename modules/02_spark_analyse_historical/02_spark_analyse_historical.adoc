@@ -145,13 +145,13 @@ template "apache-zeppelin-openshift" created
 
 oc new-app --template=apache-zeppelin-openshift \
 > --param=APPLICATION_NAME=apache-zeppelin \
-> --param=GIT_URI=https://github.com/gpe-mw-training/operational_intelligence.git \
+> --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
 > --param=ZEPPELIN_INTERPRETERS=md 
---> Deploying template "user3-uber-data-history/apache-zeppelin-openshift" to project user3-uber-data
+--> Deploying template "user3-uber-data/apache-zeppelin-openshift" to project user3-uber-data
 
      * With parameters:
         * Application Name=apache-zeppelin
-        * Git Repository URL=https://github.com/gpe-mw-training/operational_intelligence.git
+        * Git Repository URL=https://github.com/rimolive/zeppelin-openshift.git
         * Zeppelin Interpreters=md
 
 --> Creating resources ...
@@ -361,59 +361,11 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream
 
 **** How many pickups occured in each cluster?
 
-== Common Issues and How to trouble Shoot?
+== Basic Architecture Diagram of Zeppelin
 
-You might have notice Zeppelin Always gets Broken Pipe Exception and Thrift Error.This is because at the backend the zeppelin executes the Spark Job which is Built-in (i.e) embedded with Zeppelin. In a real time scenario, this will never happen as we will have adequate amount of memory and execellent cluster configuration. Basic Architecture Diagram of Zeppelin will explain on how it works.
+ Basic Architecture Diagram of Zeppelin will explain on how it works.
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
-
-=== TroubleShooting the Thrift Exception and Broken Pipe Exception.
-----
-...
-
-[root@localhost ~]# oc login -u user5 -p r3dh4t1! https://master.6d13.openshift.opentlc.com/
-Login successful.
-
-You have one project on this server: "uber-data-user5"
-
-Using project "uber-data-user5".
-[root@localhost ~]# oc get routes
-NAME              HOST/PORT                                                         PATH      SERVICES          PORT       TERMINATION   WILDCARD
-apache-zeppelin   apache-zeppelin-uber-data-user5.apps.6d13.openshift.opentlc.com             apache-zeppelin   8080-tcp                 None
-...
-----
-
-. Open the Zeppelin Route (URL) and Do the Configuration changes as per the given below figure.
-*** If You Notice thrift Exception Like this
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ThriftException.png[zepp]
-
-. Restart the Interpreter.
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppMemory2G.png[zepp1]
-
-. Increase the Memory settings from 1G to 2G and Save the settings.
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppSave.png[zepp2]
-
-. Click OK on the ModalWindow.
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinModalWindowRestart.png[zepp3]
-
-. Restart the Interpreter, till the Error Goes.
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinRestart.png[zepp4]
-
-. After Restarting, proceed to execute code cell by cell.
-+
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[zepp5]
-
-==== Still Running on the Problem?
-
-If you are still facing exception, Currently the data size 35MB and Quering 3LAKH rows, Reduce the size to 2-3MB and keep the Row count to 1500-2000 Rows and execute the cell by cell analysis.  In a real time scenario, you won't face these kind of exceptions.
-
-To Reduce the size of the records to 1500-2000 rows, you have to repeat the steps of oc rsync command and upload the reduced data in the pod.
-
 
 ifdef::showscript[]
 
