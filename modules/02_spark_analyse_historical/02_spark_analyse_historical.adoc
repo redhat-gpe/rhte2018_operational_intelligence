@@ -87,7 +87,7 @@ template "radanalytics-jupyter-notebook" created
 
 [root@localhost ~]# oc new-app oshinko-webui
 
---> Deploying template "user3-uber-data-history/oshinko-webui" to project user3-uber-data-history
+--> Deploying template "user3-uber-data/oshinko-webui" to project user3-uber-data-history
 
      * With parameters:
         * SPARK_DEFAULT=
@@ -215,7 +215,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png
 
 image::https://github.com/Pkrish15/uber-datanalysis/blob/master/DeploymentTopology.png[zeppelinTopo]
 
-=== Importance of ClusterQuota
+=== Importance of ClusterQuota and Limit Range
 
 ==== Cluster Quota
 A resource quota, defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that may be consumed by resources in that project.
