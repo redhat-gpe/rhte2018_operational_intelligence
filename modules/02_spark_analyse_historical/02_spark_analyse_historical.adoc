@@ -75,14 +75,16 @@ SparkContext is the heart of a Spark application. Once a SparkContext is created
 
 === Reference
 
-[red]# http://spark.apache.org/
-     # http://spark.apache.org/examples.html
-     # http://spark.apache.org/mllib/
-     # https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
-     # https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
-     # https://spark.apache.org/sql/
-     # https://www.youtube.com/watch?v=zHbxbb2ye3E
-     
+:numbered:
+
+       http://spark.apache.org/
+       http://spark.apache.org/examples.html
+       http://spark.apache.org/mllib/
+       https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
+       https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
+       https://spark.apache.org/sql/
+       https://www.youtube.com/watch?v=zHbxbb2ye3E
+
 
 
 == Lab Asset Overview
@@ -231,11 +233,13 @@ oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com 
 
 .. *oshinko-web*
 +
-[red]#TODO:  Elaborate#
+This project provides a solution for deploying and managing Apache Spark clusters in an OpenShift environment. The oshinko-webui is deployed into a project within OpenShift, and then can create, update, and destroy Apache Spark clusters in that project. Once installed, it consists of a Node.JS application that is contained within a Pod and provides a web browser based user interface for controlling the lifecycle of Spark clusters.
+
+
 
 .. *oshinko-web-proxy*
 +
-[red]#TODO:  Elaborate#
+This Enables you to login into Oshinko webui through a secured port. It uses oAuth Proxy and exposed to the port 8443.
 
 . Log into the Oshinko web UI
 .. Point your browser to the output of the following command:
@@ -244,7 +248,7 @@ oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com 
 $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)"\n\n"
 -----
 
-.. At this time, the Oshinko web UI is not secured.
+.. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
 +
 Subsequently, you should be able to access the UI without authenticating.
 
