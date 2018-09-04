@@ -6,11 +6,6 @@
 
 = Spark Analysis of Historical Data
 
-.Goals
-* Apache Spark Deployment using Apache Zeppelin
-* Uber Historical Data Analysis using SparkSQL
-* Usage of Interactive NoteBooks like Apache Zeppelin
-
 .Prerequisite
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages
@@ -31,7 +26,10 @@
 
 === Lab Goals
 
-[red]#TODO#
+* Apache Spark Deployment using Apache Zeppelin
+* Uber Historical Data Analysis using SparkSQL
+* Usage of Interactive NoteBooks like Apache Zeppelin
+
 
 === Technical Background
 
@@ -40,7 +38,7 @@
 +
 Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
 
-. *MLlib*
+. *Spark MLlib*
 +
 MLib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
 
@@ -71,7 +69,17 @@ SparkContext is the heart of a Spark application. Once a SparkContext is created
 
 ==== Oshinko
 
-[red]#TODO:  Elaborate ... who, when, what, where#
+==== What is Oshinko?
+
+The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+
+==== How Oshinko is Related to our Lab?
+
+This Lab demonstrates the usage of Oshinko Cluster and the Spark Application (i.e Zeppelin Notebook Application) will be deployed in Oshinko Cluster.
+
+==== Who will deploy the Oshinko Cluster?
+
+The students are expected to deploy the Oshinko Cluster in the OpenShift Environment with their assigned userId. Detailed instructions are provided in this lab.
 
 === Reference
 
@@ -152,11 +160,19 @@ Compiling the Main.scala has already been done for you and the output being the 
 [red]#TODO:  Elaborate ... who, when, what, where#
 
 
-== Provision Oshinko Cluster
+== Oshinko Cluster
+=== Overview
 
 Oshinko is the project focused on providing a Spark cluster on OpenShift Container Platform.
 In this section of the lab, you will provision Oshinko.
+The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
+To begin your exploration, we recommend starting with the oshinko-webui application. The oshinko-webui is a self-contained deployment of the Oshinko technologies. An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser. Through the browser interface you will be able to manage Apache Spark clusters within your project.
+Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
 
+
+
+=== Provision
 
 . Log into OpenShift Environment using OC Client Tool to your Lab Region
 +
@@ -253,42 +269,75 @@ $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spe
 Subsequently, you should be able to access the UI without authenticating.
 
 
-== Oshinko Cluster
-The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+== Zeppelin
 
-With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
+=== Overview
+A completely open web-based notebook that enables interactive data analytics. Apache Zeppelin is a new and incubating multi-purposed web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
 
-To begin your exploration, we recommend starting with the oshinko-webui application. The oshinko-webui is a self-contained deployment of the Oshinko technologies. An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser. Through the browser interface you will be able to manage Apache Spark clusters within your project.
+Interactive browser-based notebooks enable data engineers, data analysts and data scientists to be more productive by developing, organizing, executing, and sharing data code and visualizing results without referring to the command line or needing the cluster details. Notebooks allow these users not only allow to execute but to interactively work with long workflows.  There are a number of notebooks available with Spark. iPython remains a mature choice and great example of a data science notebook.  The Hortonworks Gallery provides an Ambari stack definition to help our customers quickly set up iPython on their Hadoop clusters.  
 
-Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
+Apache Zeppelin is a new and upcoming web-based notebook which brings data exploration, visualization, sharing and collaboration features to Spark.   It support Python, but also a growing list of programming languages such as Scala, Hive, SparkSQL, shell and markdown. 
 
-. Access the route url http://oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com/webui/#/clusters
+=== Architecture
+=== [Red-Todo Image]
 
-Click Deploy Button and to Add the Cluster as shown in the Below figure.
+Frontend: This provides UI and shells to interact with humans and a display system to show data in tabular, graphical form, and export iframe.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/oshinkoCluster.png[oshinko]
+Zeppelin Server: This provides web sockets and the REST API to interact with the UI and access service remotely. There are two types of API calls—a REST API for notebooks and an Interpreter API for interpreters. The Notebook REST API is to interact with notebooks—creating paragraph, submitting paragraph job in batch, adding cron jobs, and so on. The Interpreter REST API is to change the configuration properties and restart the interpreter.
 
-== Provision Zeppelin
+Pluggable Interpreter System: This is to interact with different interpreters such as Spark, Shell, Markdown, AngularJS, Hive, Ignite, Flink, and others.
 
-. Create Deployment Objects using Template
+Interpreters: Each interpreter runs in a separate JVM to provide the functionality needed by the user.
+
+=== Provision
+
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
 +
 -----
-$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml
-
-...
-template "apache-zeppelin-openshift" created
+$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
-. Apply the zeppelin template, and the intepreters can be set as a parameters
-
+. Switch to the OCP project specific to this lab:
 +
 -----
-...
+$ oc project $OCP_USERNAME-uber-data
+-----
 
+. In your OpenShift namespace, create needed zeppelin templates:
++
+-----
+$ oc create \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml \
+
+
+     ...
+     template "apache-zeppelin-openshift" created
+     
+-----
+
+. Review the templates that have been created:
++
+-----
+$ oc get templates -n $OCP_USERNAME-uber-data
+
+
+-----
+
+. Provision the Zeppelin web-ui
++
+-----
 oc new-app --template=apache-zeppelin-openshift \
 > --param=APPLICATION_NAME=apache-zeppelin \
 > --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
 > --param=ZEPPELIN_INTERPRETERS=md
+> /tmp/zeppelin-web.txt
+-----
+.. Review the output found in `/tmp/zeppelin-web.txt`
++
+-----
+
+....
+
 --> Deploying template "user3-uber-data/apache-zeppelin-openshift" to project user3-uber-data
 
      * With parameters:
@@ -308,12 +357,13 @@ oc new-app --template=apache-zeppelin-openshift \
     Access your application via route 'apache-zeppelin-user3-uber-data.apps.6d13.openshift.opentlc.com'
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
-...
+
+
 -----
-. Get the Routes and Access the URL.
-+
+
+==== Get the Routes
 -----
-...
+
 [root@localhost ~]# oc get routes
 NAME                         HOST/PORT                                                                            PATH      SERVICES                            PORT            TERMINATION   WILDCARD
 apache-zeppelin              apache-zeppelin-user3-uber-data-apps.6d13.openshift.opentlc.com                        apache-zeppelin                     8080-tcp                      None
@@ -321,7 +371,6 @@ oshinko-web                  oshinko-web-user3-uber-data-apps.6d13.openshift.ope
 oshinko-web-proxy            oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com                  /proxy    oshinko-web-proxy                   oc-proxy-port                 None
 uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d13.openshift.opentlc.com             uber-data-cluster-ui                <all>                         None
 
-...
 -----
 
 === Modifications in Zeppelin Interpreter settings
@@ -335,7 +384,7 @@ When you click the +Create button in the interpreter page, the interpreter drop-
 
 == What port(s) and protocols is it listening on ?
 
-Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
+In Local Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
 
 Below Figure Explain's the configuration settings of Zeppelin UI.
 
@@ -354,11 +403,11 @@ spark.driver.port	                                   42000
 -----
 Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/PortZeppelin.png[portzepp]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/PortZeppelin.png[portzepp]
 
 === Deployment Topology Diagram
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/DeploymentTopology.png[zeppelinTopo]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/DeploymentTopology.png[zeppelinTopo]
 
 === Importance of ClusterQuota and Limit Range
 
@@ -386,15 +435,15 @@ If you specify a memory limit, you can constrain the amount of memory the contai
 
 . Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data.png[uber7]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data.png[uber7]
 
 . Attach it to the Pod.
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc.png[uber9]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc.png[uber9]
 
 . Mount the Volume as shown below.
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/uber-data-pvc.png[uber8]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data-pvc.png[uber8]
 
 . Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
 +
@@ -404,23 +453,23 @@ for Example
 oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data
 ----
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ocrsync.png[uber10]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/ocrsync.png[uber10]
 
 . Once the data copied, Open the Zeppelin URL
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelin.png[uberstream7]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelin.png[uberstream7]
 
 . Import the JSON File given the GitHub URL in the Zeppelin Notebook
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberDataImport.png[uberstream8]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberDataImport.png[uberstream8]
 
 . You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/pvc-data-zeppelin.png[data-placeholder]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc-data-zeppelin.png[data-placeholder]
 
 . Execute the cell at very stages and you can visualize the data, upon each query
 +
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/UberCellAnalysis.png[uberstream9]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberCellAnalysis.png[uberstream9]
 
 
 == Conclusions
@@ -453,7 +502,7 @@ Data Discovery: The first phase involves analysis on historical data to build th
 
 Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/1.jpg[uberstream]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/1.jpg[uberstream]
 
 
 In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
@@ -481,24 +530,24 @@ Base: The TLC base company affiliated with the Uber pickup
 
 Load the data into a Spark Data Frame
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/2.png[uberstream2]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/2.png[uberstream2]
 
 Define Features Array
 In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column. <br>
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/3.png[uberstream3]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/3.png[uberstream3]
 
 Create a KMeans Object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters and then we fit our model to the input data.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/4.png[uberstream4]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/4.png[uberstream4]
 
 Output, Cluster Centers are displayed on the Google Map
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/5.png[uberstream5]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/5.png[uberstream5]
 
 Further Analysis of cluster
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream6]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/6.png[uberstream6]
 
 ===  What are the Analysis Questions?
 
@@ -510,7 +559,7 @@ image::https://github.com/Pkrish15/uber-datanalysis/blob/master/6.png[uberstream
 
  Basic Architecture Diagram of Zeppelin will explain on how it works.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/zeppelinArchitecture.png[zepp]
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelinArchitecture.png[zepp]
 
 ifdef::showscript[]
 
