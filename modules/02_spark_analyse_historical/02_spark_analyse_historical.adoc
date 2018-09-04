@@ -335,7 +335,9 @@ When you click the +Create button in the interpreter page, the interpreter drop-
 
 == What port(s) and protocols is it listening on ?
 
-Below Figure Explain's the configuration of Zeppelin
+Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
+
+Below Figure Explain's the configuration settings of Zeppelin UI.
 
 
 image::images/ZeppelinNewSettings.png[]
@@ -346,7 +348,7 @@ Please add these properties in the zeppelin Intepreter settings
 
 spark.driver.bindAddress	                            0.0.0.0
 spark.driver.host	                                   apache-zeppelin
-spark.driver.blockManager.port	                     	42100
+spark.driver.blockManager.port	                     42100
 spark.driver.port	                                   42000
 ...
 -----
