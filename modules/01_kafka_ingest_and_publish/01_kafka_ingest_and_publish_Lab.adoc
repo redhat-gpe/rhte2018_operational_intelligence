@@ -51,7 +51,7 @@ This GUID will be used to access the lab environment.
 +
 image::images/gg1.png[GuidGrabber Landing Page]
 
-. From this page select the *Lab Code* :  _A1005_
+. From this page select the *Lab Code* :  _A1012_
 
 . Enter the *Activation Key* provided by the lab proctor.
 
