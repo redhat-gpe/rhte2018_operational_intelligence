@@ -133,7 +133,7 @@ At this time, Red Hat does not intend to provide supported versions of these pac
 . *Raw Uber historical Data*
 +
 .. Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
-.. [red]#TODO:  Elaborate ... who, when, what, where .... what will the student do with this file ?#
+.. It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
 . *Main.scala*
 +
@@ -143,21 +143,40 @@ Main.scala is the code applied to the Zeppelin Notebook to analyse the data.
 For the purpose of this lab, you will not be modifying or compiling this Main.scala.
 Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
 
-.. [red]#TODO:  Elaborate ... who, when, what, where#
+.. Main Program which is currently running on Zeppelin Notebook. Let us explore what it does.
+
+.. Load the Data (Uber.csv) into the DataFrame.
+
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/LoadData1.png[LoadData]
+
+.. Define Feature Array
+In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
+
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/CreateFeatureArray.png[FeatureArray]
+
+.. Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
+
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/KMeansModel.png[FeatureArray]
+
+.. Next, we use the model to get the clusters for test data in order to further analyze the clustering.
+
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/Predictions.png[Predictions]
+
+
 
 . *Uber.json*
 +
-.. [red]#TODO:  Elaborate ... who, when, what, where#
+.. Students are expected to analyze the Uber.json which is generated from SCALA IDE or Using Zeppelin Paragraph Cells Compilation.
+.. Students are expected to import this JSON File in the NoteBook and run the each paragraphs to generate the output.
 
 . *templates*
 
 .. *oshinko-cluster.yaml*
-+
-[red]#TODO:  Elaborate ... who, when, what, where#
+...  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
 
 .. *zeppelin-openshift.yaml*
-+
-[red]#TODO:  Elaborate ... who, when, what, where#
+
+... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
 
 == Oshinko Cluster
@@ -165,9 +184,12 @@ Compiling the Main.scala has already been done for you and the output being the 
 
 Oshinko is the project focused on providing a Spark cluster on OpenShift Container Platform.
 In this section of the lab, you will provision Oshinko.
+
 The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
 With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
+
 To begin your exploration, we recommend starting with the oshinko-webui application. The oshinko-webui is a self-contained deployment of the Oshinko technologies. An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser. Through the browser interface you will be able to manage Apache Spark clusters within your project.
+
 Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
 
 
@@ -199,7 +221,6 @@ $ oc create \
 -----
 $ oc get templates -n $OCP_USERNAME-uber-data
 
-TODO
 -----
 
 . Provision the Oshinko web-ui
@@ -274,12 +295,13 @@ Subsequently, you should be able to access the UI without authenticating.
 === Overview
 A completely open web-based notebook that enables interactive data analytics. Apache Zeppelin is a new and incubating multi-purposed web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
 
-Interactive browser-based notebooks enable data engineers, data analysts and data scientists to be more productive by developing, organizing, executing, and sharing data code and visualizing results without referring to the command line or needing the cluster details. Notebooks allow these users not only allow to execute but to interactively work with long workflows.  There are a number of notebooks available with Spark. iPython remains a mature choice and great example of a data science notebook.  The Hortonworks Gallery provides an Ambari stack definition to help our customers quickly set up iPython on their Hadoop clusters.  
+Interactive browser-based notebooks enable data engineers, data analysts and data scientists to be more productive by developing, organizing, executing, and sharing data code and visualizing results without referring to the command line or needing the cluster details. Notebooks allow these users not only allow to execute but to interactively work with long workflows.  There are a number of notebooks available with Spark. iPython remains a mature choice and great example of a data science notebook.  The Hortonworks Gallery provides an Ambari stack definition to help our customers quickly set up iPython on their Hadoop clusters.
 
-Apache Zeppelin is a new and upcoming web-based notebook which brings data exploration, visualization, sharing and collaboration features to Spark.   It support Python, but also a growing list of programming languages such as Scala, Hive, SparkSQL, shell and markdown. 
+Apache Zeppelin is a new and upcoming web-based notebook which brings data exploration, visualization, sharing and collaboration features to Spark.   It support Python, but also a growing list of programming languages such as Scala, Hive, SparkSQL, shell and markdown.
 
 === Architecture
-=== [Red-Todo Image]
+
+image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelinArchitecture.jpg[za]
 
 Frontend: This provides UI and shells to interact with humans and a display system to show data in tabular, graphical form, and export iframe.
 
@@ -312,7 +334,7 @@ $ oc create \
 
      ...
      template "apache-zeppelin-openshift" created
-     
+
 -----
 
 . Review the templates that have been created:
@@ -376,6 +398,7 @@ uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d1
 === Modifications in Zeppelin Interpreter settings
 
 == What is the Zeppelin Interpreter ?
+A finally, you can find the Zeppelin running by accessing the Route URL. Configuration changes has to be made in Zeppelin Interpreter for our use case.
 
 Zeppelin Interpreter is a plug-in which enables Zeppelin users to use a specific language/data-processing-backend. For example, to use Scala code in Zeppelin, you need %spark interpreter.
 
@@ -428,7 +451,6 @@ By default, a container is able to consume as much memory on the node as possibl
 
 ==== Memory Limits
 If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
-
 
 
 === Inject Uber historical data into Zeppelin
@@ -526,43 +548,7 @@ Base: The TLC base company affiliated with the Uber pickup
 
 2014-08-01 00:00:00,40.729,-73.9422,B02598
 
-===  How do we do it?
-
-Load the data into a Spark Data Frame
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/2.png[uberstream2]
-
-Define Features Array
-In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column. <br>
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/3.png[uberstream3]
-
-Create a KMeans Object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters and then we fit our model to the input data.
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/4.png[uberstream4]
-
-Output, Cluster Centers are displayed on the Google Map
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/5.png[uberstream5]
-
-Further Analysis of cluster
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/6.png[uberstream6]
-
-===  What are the Analysis Questions?
-
-**** Which hour of the day and which cluster had highest number of pickups?
-
-**** How many pickups occured in each cluster?
-
-== Basic Architecture Diagram of Zeppelin
-
- Basic Architecture Diagram of Zeppelin will explain on how it works.
-
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelinArchitecture.png[zepp]
 
 ifdef::showscript[]
-
-
 
 endif::showscript[]
