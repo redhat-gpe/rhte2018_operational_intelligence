@@ -75,10 +75,14 @@ SparkContext is the heart of a Spark application. Once a SparkContext is created
 
 === Reference
 
-[red]#TODO:  Praveen's list of his favorite Apache Spark related blogs, tutorials, etc#
-
-
-
+[red]# http://spark.apache.org/
+     # http://spark.apache.org/examples.html
+     # http://spark.apache.org/mllib/
+     # https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
+     # https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
+     # https://spark.apache.org/sql/
+     # https://www.youtube.com/watch?v=zHbxbb2ye3E
+     
 
 
 == Lab Asset Overview
