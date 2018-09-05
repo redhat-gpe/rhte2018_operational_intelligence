@@ -451,7 +451,9 @@ By default, a container is able to consume as much memory on the node as possibl
 If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
 
 
-=== Inject Uber historical data into Zeppelin
+=== Inject Uber historical data
+
+[red]#TODO:  Elaborate why this is needed.  Also, load data into config map rather than rsyncing into pod#
 
 .. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
@@ -474,6 +476,11 @@ oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apa
 ----
 +
 image::images/ocrsync.png[uber10]
+
+=== Import Uber _NoteBook_
+
+[red]#TODO:  Elaborate why this is needed.#
+
 .. Once the data copied, Open the Zeppelin URL
 +
 image::images/zeppelin.png[uberstream7]
@@ -484,9 +491,16 @@ image::images/UberDataImport.png[uberstream8]
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
 image::images/pvc-data-zeppelin.png[data-placeholder]
+
+=== Execute Uber _Paragraphs_
+
+[red]#TODO:  Elaborate why this is needed.#
+
 .. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
 +
 image::images/UberCellAnalysis.png[uberstream9]
+
+[red]#TODO:  Elaborate on each paragraph.   What does it do ?  WHy is it needed?  How does each paragraph contribute to the lab functional requirements ?#
 
 == Conclusions
 
