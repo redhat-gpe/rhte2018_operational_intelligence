@@ -393,19 +393,19 @@ uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d1
 
 -----
 
-=== Modifications in Zeppelin Interpreter settings
+== Zeppelin Interpreter
 
-== What is the Zeppelin Interpreter ?
-A finally, you can find the Zeppelin running by accessing the Route URL. Configuration changes has to be made in Zeppelin Interpreter for our use case.
+=== Overview
+Finally, you can find the Zeppelin running by accessing the Route URL. Configuration changes has to be made in Zeppelin Interpreter for our use case.
 
 Zeppelin Interpreter is a plug-in which enables Zeppelin users to use a specific language/data-processing-backend. For example, to use Scala code in Zeppelin, you need %spark interpreter.
 
 When you click the +Create button in the interpreter page, the interpreter drop-down list box will show all the available interpreters on your server.
 
 
-== What port(s) and protocols is it listening on ?
+=== Port(s) and protocols
 
-In Local Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
+In local Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
 
 Below Figure Explain's the configuration settings of Zeppelin UI.
 
@@ -430,7 +430,7 @@ image::images/PortZeppelin.png[portzepp]
 
 image::images/DeploymentTopology.png[zeppelinTopo]
 
-=== Importance of ClusterQuota and Limit Range
+=== ClusterQuota and Limit Range for Zeppelin Interpreter
 
 ==== Cluster Quota
 A resource quota, defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that may be consumed by resources in that project.
