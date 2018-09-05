@@ -147,21 +147,19 @@ Compiling the Main.scala has already been done for you and the output being the 
 
 .. Load the Data (Uber.csv) into the DataFrame.
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/LoadData1.png[LoadData]
+image::images/LoadData1.png[LoadData]
 
 .. Define Feature Array
 In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/CreateFeatureArray.png[FeatureArray]
-
+image::images/CreateFeatureArray.png[FeatureArray]
 .. Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/KMeansModel.png[FeatureArray]
+image::images/KMeansModel.png[FeatureArray]
 
 .. Next, we use the model to get the clusters for test data in order to further analyze the clustering.
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/Predictions.png[Predictions]
-
+image::images/Predictions.png[Predictions]
 
 
 . *Uber.json*
@@ -301,7 +299,7 @@ Apache Zeppelin is a new and upcoming web-based notebook which brings data explo
 
 === Architecture
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelinArchitecture.jpg[za]
+image::images/zeppelinArchitecture.jpg[za]
 
 Frontend: This provides UI and shells to interact with humans and a display system to show data in tabular, graphical form, and export iframe.
 
@@ -426,11 +424,11 @@ spark.driver.port	                                   42000
 -----
 Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/PortZeppelin.png[portzepp]
+image::images/PortZeppelin.png[portzepp]
 
 === Deployment Topology Diagram
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/DeploymentTopology.png[zeppelinTopo]
+image::images/DeploymentTopology.png[zeppelinTopo]
 
 === Importance of ClusterQuota and Limit Range
 
@@ -457,15 +455,15 @@ If you specify a memory limit, you can constrain the amount of memory the contai
 
 .. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data.png[uber7]
-
+image::images/uber-data.png[uber7]
 .. Attach it to the Pod.
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc.png[uber9]
+
+image::images/pvc.png[uber9]
 
 .. Mount the Volume as shown below.
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data-pvc.png[uber8]
+image::images/uber-data-pvc.png[uber8]
 
 .. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
 +
@@ -475,24 +473,20 @@ for Example
 oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data
 ----
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/ocrsync.png[uber10]
-
+image::images/ocrsync.png[uber10]
 .. Once the data copied, Open the Zeppelin URL
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelin.png[uberstream7]
-
+image::images/zeppelin.png[uberstream7]
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberDataImport.png[uberstream8]
+image::images/UberDataImport.png[uberstream8]
 
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc-data-zeppelin.png[data-placeholder]
-
+image::images/pvc-data-zeppelin.png[data-placeholder]
 .. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
 +
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberCellAnalysis.png[uberstream9]
-
+image::images/UberCellAnalysis.png[uberstream9]
 
 == Conclusions
 
@@ -524,8 +518,7 @@ Data Discovery: The first phase involves analysis on historical data to build th
 
 Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
 
-image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/1.jpg[uberstream]
-
+image:images/1.jpg[uberstream]
 
 In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
 
