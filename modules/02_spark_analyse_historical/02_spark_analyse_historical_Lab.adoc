@@ -455,19 +455,19 @@ If you specify a memory limit, you can constrain the amount of memory the contai
 
 === Inject Uber historical data into Zeppelin
 
-. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
+.. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data.png[uber7]
 
-. Attach it to the Pod.
+.. Attach it to the Pod.
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc.png[uber9]
 
-. Mount the Volume as shown below.
+.. Mount the Volume as shown below.
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/uber-data-pvc.png[uber8]
 
-. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
+.. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
 +
 ----
 oc rsync src directory pod directory:/data
@@ -477,19 +477,19 @@ oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apa
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/ocrsync.png[uber10]
 
-. Once the data copied, Open the Zeppelin URL
+.. Once the data copied, Open the Zeppelin URL
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/zeppelin.png[uberstream7]
 
-. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+.. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberDataImport.png[uberstream8]
 
-. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+.. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/pvc-data-zeppelin.png[data-placeholder]
 
-. Execute the cell at very stages and you can visualize the data, upon each query
+.. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
 +
 image::https://github.com/redhat-gpe/rhte_lab_06_operational_intelligence/blob/master/modules/02_spark_analyse_historical/images/UberCellAnalysis.png[uberstream9]
 
