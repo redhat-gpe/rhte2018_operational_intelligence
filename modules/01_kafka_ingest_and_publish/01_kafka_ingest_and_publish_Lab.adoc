@@ -211,19 +211,111 @@ $ cd strimzi-training/
 
 === Deploy Kafka producer and consumer
 
+. Create the deployment yaml with deployment sections for the producer and consumer:
+
+[source,text]
+----
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-producer
+  name: kafka-producer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - name: kafka-producer
+        image: strimzici/hello-world-producer:support-training
+        env:
+          - name: CA_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-cluster-cluster-ca-cert
+                key: ca.crt
+          - name: USER_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.crt
+          - name: USER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.key
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9093
+          - name: TOPIC
+            value: my-topic
+          - name: DELAY_MS
+            value: "1000"
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer
+  name: kafka-consumer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+      - name: kafka-consumer
+        image: strimzici/hello-world-consumer:support-training
+        env:
+          - name: CA_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-cluster-cluster-ca-cert
+                key: ca.crt
+          - name: USER_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.crt
+          - name: USER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.key
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9093
+          - name: TOPIC
+            value: my-topic
+          - name: GROUP_ID
+            value: my-group
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
+----
+
 . Deploy the Kafka producer and consumer
 
 [source,text]
 ----
-% oc apply -f examples/hello-world/deployment.yaml
+% oc apply -f deployment.yaml
 ----
 
 . Check the producer and consumer logs to verify that they are working
 
 [source,text]
 ----
-oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
-oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+oc logs $(oc get pod -l app=kafka-producer -o=jsonpath='{.items[0].metadata.name}') -f
+oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ----
 
 . Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
@@ -253,7 +345,7 @@ spec:
 
 [source,text]
 ----
-% oc apply -f examples/hello-world/deployment-new.yaml
+% oc apply -f deployment-new.yaml
 ----
 
 . Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
