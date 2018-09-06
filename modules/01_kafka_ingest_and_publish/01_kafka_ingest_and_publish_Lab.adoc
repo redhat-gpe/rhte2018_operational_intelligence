@@ -205,13 +205,13 @@ $ echo -en "\n\nhttps://master.$OCP_DOMAIN:8443\n\n"
 .. Clone the github repo
 +
 -----
-$ git clone https://github.com/scholzj/strimzi-training.git
-$ cd strimzi-training/
+$ git clone https:https://github.com/gpe-mw-training/rhte2018.git
+$ cd rhte2018
 -----
 
 === Deploy Kafka producer and consumer
 
-. Create the deployment yaml with deployment sections for the producer and consumer:
+. Create the deployment.yaml in a local directory with deployment sections for the producer and consumer:
 
 [source,text]
 ----
@@ -307,7 +307,7 @@ spec:
 
 [source,text]
 ----
-% oc apply -f deployment.yaml
+% oc apply -f <path_to_your_local_dir>/deployment.yaml
 ----
 
 . Check the producer and consumer logs to verify that they are working
