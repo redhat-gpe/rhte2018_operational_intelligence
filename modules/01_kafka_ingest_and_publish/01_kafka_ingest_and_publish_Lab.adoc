@@ -213,7 +213,6 @@ $ cd rhte2018
 
 . Create the deployment.yaml in a local directory with deployment sections for the producer and consumer:
 
-[source,text]
 ----
 ---
 apiVersion: extensions/v1beta1
@@ -305,14 +304,12 @@ spec:
 
 . Deploy the Kafka producer and consumer
 
-[source,text]
 ----
 % oc apply -f <path_to_your_local_dir>/deployment.yaml
 ----
 
 . Check the producer and consumer logs to verify that they are working
 
-[source,text]
 ----
 oc logs $(oc get pod -l app=kafka-producer -o=jsonpath='{.items[0].metadata.name}') -f
 oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
@@ -320,7 +317,6 @@ oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name
 
 . Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
 
-[source,text]
 ----
 ---
 apiVersion: extensions/v1beta1
@@ -343,14 +339,12 @@ spec:
 
 . Deploy the new consumer
 
-[source,text]
 ----
 % oc apply -f deployment-new.yaml
 ----
 
 . Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
 
-[source,text]
 ----
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:25 - 	     partition: 0
@@ -384,7 +378,6 @@ spec:
 
 and
 
-[source,text]
 ----
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:25 - 	     partition: 2
@@ -404,7 +397,6 @@ and
 
 . In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration
 +
-[source,text]
 ----
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
@@ -419,7 +411,6 @@ and
 
 . Create the configuration for the file source
 +
-[source,json]
 ----
 % cat <<EOF >> /tmp/source-plugin.json
 {
@@ -436,7 +427,6 @@ EOF
 
 . Create a connector that will read the TXT file and push its content into the Kafka broker
 +
-[source,text]
 ----
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
