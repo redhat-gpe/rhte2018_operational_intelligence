@@ -498,61 +498,54 @@ image::images/pvc-data-zeppelin.png[data-placeholder]
 .. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
 
 .. Import the Required Packages.
-
++
 image::images/Import.png[import]
 
 .. Define StructType
-
++
 image::images/StructuredSchema.png[ss]
 
 .. Load the Data into DataFrames.
-
++
 image::images/LoadCsv.png[ls]
 
 .. PrintStructuralSchema and Display the StructuralSchema.
-
++
 image::images/dfShow.png[df]
 
 
 .. Define Feature Array.
-   In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
-
++
+In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
++
 image::images/df2show.png[df2]
-
-
++
 image::images/df2business.png[dfb]
 
 .. Create a KMeans Object, Set the parameters to to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data.
-
++
 image::images/kmeans.png[km]
-
-
++
 image::images/TransformBusiness.png[tfb]
 
 .. Output of the ModelClusters.
-
++
 image::images/KMeansOutput.png[kmbo]
-
++
 image::images/KMeansBusinessFlow[kbf]
 
 .. Now we can ask questions like, "Which hours of the day and which cluster had the highest number of pickups?"
-
++
 image::images/Predictions.png[pd]
-
 .. How many Pickups occured in Each Cluster?
-
++
 image::images/PredictionResults.png[prg]
-
 .. With a Zeppelin notebook, we can also display query results in bar charts or graphs. Below the x axis is the hour, the y axis the count, and the colors are the different clusters.
-
++
 image::images/ZeppelinGraph.png[zg]
-
 .. You can register a DataFrame as a temporary table using a given name, for example: df.registerTempTable("uber") , and then run SQL statements using the SQL methods provided by sqlContext. An example is shown below in a Zeppelin notebook.
-
++
 image::images/TempTable.png[tt]
-
-
-
 +
 image::images/UberCellAnalysis.png[uberstream9]
 
