@@ -181,7 +181,7 @@ $ oc get projects
 
 ... 
 
-user2-kafka-project                                     Active
+developer-lab1-kafka-project                                     Active
 -----
 
 . Switch to your  OpenShift project
