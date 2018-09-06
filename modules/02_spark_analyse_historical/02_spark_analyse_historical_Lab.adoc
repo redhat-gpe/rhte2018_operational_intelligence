@@ -453,7 +453,7 @@ If you specify a memory limit, you can constrain the amount of memory the contai
 
 === Inject Uber historical data
 
-[red]#TODO:  Elaborate why this is needed.  Also, load data into config map rather than rsyncing into pod#
+Zeppelin Data (ie.uber.csv file) has to be localized to the deployment pod for faster retrievals and gives the spark jobs to have data locality benefit. It also, helps us for faster querying on the data on Memory and to perform data analytics operations over mulitple iterations.
 
 .. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
 +
@@ -479,7 +479,7 @@ image::images/ocrsync.png[uber10]
 
 === Import Uber _NoteBook_
 
-[red]#TODO:  Elaborate why this is needed.#
+It is the Source code and Output file that every students expected to Run and visualize the results.
 
 .. Once the data copied, Open the Zeppelin URL
 +
@@ -527,7 +527,7 @@ image::images/df2business.png[dfb]
 image::images/kmeans.png[km]
 
 
-image::images/kmeansbusiness.png[kmb]
+image::images/TransformBusiness.png[tfb]
 
 .. Output of the ModelClusters.
 
