@@ -91,7 +91,7 @@ echo "export OCP_WILDCARD_DOMAIN=apps.\$OCP_DOMAIN" >> ~/.bashrc
 source ~/.bashrc
 
 #  Using above variables, copy & paste the following in same terminal #
-$ export OCP_PROJECT=kafka-project
+$ export OCP_PROJECT=developer-lab1-kafka-project
 -----
 
 
@@ -181,10 +181,10 @@ $ oc get projects
 
 ... 
 
-user2-kafka-project                                     Active
+developer-lab1-kafka-project                                     Active
 -----
 
-. Switch to your  OpenShift project
+. Switch to your OpenShift project
 +
 -----
 $ oc project $OCP_PROJECT
@@ -195,7 +195,7 @@ $ oc project $OCP_PROJECT
 .. To access, point to your browser to the output of the following:
 +
 -----
-$ echo -en "\n\nhttps://master.$OCP_DOMAIN:8443\n\n"
+$ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 -----
 
 .. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
@@ -205,30 +205,118 @@ $ echo -en "\n\nhttps://master.$OCP_DOMAIN:8443\n\n"
 .. Clone the github repo
 +
 -----
-$ git clone https://github.com/scholzj/strimzi-training.git
-$ cd strimzi-training/
+$ git clone https://github.com/gpe-mw-training/rhte2018.git
+$ cd rhte2018
 -----
 
 === Deploy Kafka producer and consumer
 
+. Create the deployment.yaml in a local directory with deployment sections for the producer and consumer:
+
+----
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-producer
+  name: kafka-producer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - name: kafka-producer
+        image: strimzici/hello-world-producer:support-training
+        env:
+          - name: CA_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-cluster-cluster-ca-cert
+                key: ca.crt
+          - name: USER_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.crt
+          - name: USER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.key
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9093
+          - name: TOPIC
+            value: my-topic
+          - name: DELAY_MS
+            value: "1000"
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer
+  name: kafka-consumer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+      - name: kafka-consumer
+        image: strimzici/hello-world-consumer:support-training
+        env:
+          - name: CA_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-cluster-cluster-ca-cert
+                key: ca.crt
+          - name: USER_CRT
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.crt
+          - name: USER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: my-user
+                key: user.key
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9093
+          - name: TOPIC
+            value: my-topic
+          - name: GROUP_ID
+            value: my-group
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
+----
+
 . Deploy the Kafka producer and consumer
 
-[source,text]
 ----
-% oc apply -f examples/hello-world/deployment.yaml
+% oc apply -f <path_to_your_local_dir>/deployment.yaml
 ----
 
 . Check the producer and consumer logs to verify that they are working
 
-[source,text]
 ----
-oc logs $(oc get pod -l app=hello-world-producer -o=jsonpath='{.items[0].metadata.name}') -f
-oc logs $(oc get pod -l app=hello-world-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+oc logs $(oc get pod -l app=kafka-producer -o=jsonpath='{.items[0].metadata.name}') -f
+oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ----
 
 . Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
 
-[source,text]
 ----
 ---
 apiVersion: extensions/v1beta1
@@ -251,14 +339,12 @@ spec:
 
 . Deploy the new consumer
 
-[source,text]
 ----
-% oc apply -f examples/hello-world/deployment-new.yaml
+% oc apply -f deployment-new.yaml
 ----
 
 . Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
 
-[source,text]
 ----
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:25 - 	     partition: 0
@@ -292,7 +378,6 @@ spec:
 
 and
 
-[source,text]
 ----
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:25 - 	     partition: 2
@@ -312,7 +397,6 @@ and
 
 . In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration
 +
-[source,text]
 ----
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
@@ -327,7 +411,6 @@ and
 
 . Create the configuration for the file source
 +
-[source,json]
 ----
 % cat <<EOF >> /tmp/source-plugin.json
 {
@@ -344,7 +427,6 @@ EOF
 
 . Create a connector that will read the TXT file and push its content into the Kafka broker
 +
-[source,text]
 ----
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
