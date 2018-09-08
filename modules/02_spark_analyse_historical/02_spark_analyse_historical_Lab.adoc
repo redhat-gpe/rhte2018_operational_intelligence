@@ -497,32 +497,39 @@ image::images/pvc-data-zeppelin.png[data-placeholder]
 .. It is an Important phase in the Lab2, Students are expected to run these each paragraphs. Careful attention and Execution is need in this phase.
 .. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
 
-.. Import the Required Packages.
+.. Import the Required Packages. Scala Import Statements to use the Spark API and Dependent Libraries.
 +
 image::images/Import.png[import]
 
-.. Define StructType
+.. Define StructType - Since the Data uber.csv is a raw data, we need to define them in the form of Structural Schema. Hence we are using StructType Class from SparkAPI to convert them into Structural Schema.
+.. Why we are doing this - SparkSQL deals with structural schema very easily as we can register with Temp tables in the Memory and can retrieve the data faster.
 +
 image::images/StructuredSchema.png[ss]
 
 .. Load the Data into DataFrames.
+.. A DataFrame is a distributed collection of data, which is organized into named columns. Conceptually, it is equivalent to relational tables with good optimization techniques.
+
 +
 image::images/LoadCsv.png[ls]
 
 .. PrintStructuralSchema and Display the StructuralSchema.
+.. In this step we are printing Structural Schema to view the output on how the data (uber.csv) is placed. Also, we are caching the data in the spark Memory for faster data retrieval operations.
 +
 image::images/dfShow.png[df]
-
-
 .. Define Feature Array.
-+
-In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
+.. Why Feature Array is needed?
+... Feature Array is the process of using domain knowledge to choose which data metrics to input as features into a machine learning algorithm. Feature Array plays a key role in K-means clustering; using meaningful features that capture the variability of the data is essential for the algorithm to find all of the naturally-occurring groups.
+... Categorical data (i.e., category labels such as gender, country, browser type) needs to be encoded or separated in a way that can still work with the algorithm.
 +
 image::images/df2show.png[df2]
+.. From a DataStructures Point of view.
 +
 image::images/df2business.png[dfb]
 
+.. KMeans Object is clustering with KMeans ++ like initialization mode. This is an iterative algorithm that will take multiple passes over the data, So that any RDD (Resilient Distributed DataSet) can be cached by the user.
+
 .. Create a KMeans Object, Set the parameters to to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data.
+
 +
 image::images/kmeans.png[km]
 +
@@ -531,8 +538,14 @@ image::images/TransformBusiness.png[tfb]
 .. Output of the ModelClusters.
 +
 image::images/KMeansOutput.png[kmbo]
+
+.. Cluster Centers are displayed in GoogleMap which is shown below
 +
-image::images/KMeansBusinessFlow[kbf]
+image::images/ClusterCenters.png[cc]
+
+.. KMeans Functional Flow
++
+image::images/KMeansBusinessFlow.png[kbf]
 
 .. Now we can ask questions like, "Which hours of the day and which cluster had the highest number of pickups?"
 +
@@ -548,8 +561,6 @@ image::images/ZeppelinGraph.png[zg]
 image::images/TempTable.png[tt]
 +
 image::images/UberCellAnalysis.png[uberstream9]
-
-[red]#TODO:  Elaborate on each paragraph.   What does it do ?  WHy is it needed?  How does each paragraph contribute to the lab functional requirements ?#
 
 == Conclusions
 
