@@ -544,9 +544,8 @@ image::images/KMeansOutput.png[kmbo]
 image::images/ClusterCenters.png[cc]
 
 .. KMeans Functional Flow
-
 +
-image::images/KMeansBusinessFlow[kbf]
+image::images/KMeansBusinessFlow.png[kbf]
 
 .. Now we can ask questions like, "Which hours of the day and which cluster had the highest number of pickups?"
 +
