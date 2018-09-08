@@ -146,19 +146,19 @@ Compiling the Main.scala has already been done for you and the output being the 
 .. Main Program which is currently running on Zeppelin Notebook. Let us explore what it does.
 
 .. Load the Data (Uber.csv) into the DataFrame.
-
++
 image::images/LoadData1.png[LoadData]
 
 .. Define Feature Array
 In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
-
++
 image::images/CreateFeatureArray.png[FeatureArray]
 .. Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
-
++
 image::images/KMeansModel.png[FeatureArray]
 
 .. Next, we use the model to get the clusters for test data in order to further analyze the clustering.
-
++
 image::images/Predictions.png[Predictions]
 
 
