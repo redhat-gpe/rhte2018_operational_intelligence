@@ -102,22 +102,22 @@ xxxxxxxx
 This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
 You will want to clone these lab assets to your lab environment so that you can review them.
 
-. Make a new directory where all lab assets will reside:
+. If you haven't done so already, make a new directory where all lab assets will reside:
 +
 -----
 $ mkdir -p $HOME/lab
 -----
 
-. At the terminal of your lab environment, clone the lab assets:
+. If you haven't done so already, clone the lab assets:
 +
 -----
-$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operation_intelligence
+$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operational_intelligence
 -----
 
-. Change directories to the newly cloned project:
+. Change directories to the `uber-data-analysis` directory of the newly cloned project:
 +
 -----
-$ cd $HOME/lab/operation_intelligence/uber-data-analysis
+$ cd $HOME/lab/operational_intelligence/uber-data-analysis
 -----
 
 . Review the various files specific to this lab :
@@ -307,7 +307,7 @@ Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist
 +
 image::images/provision_oc.png[]
 
-. Two `Deployment Config` resources will have been creted.
+. Two `Deployment Config` resources will have been created.
 These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
 These DCs are not configured with limits and requests as required by your lab environment.
 Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
