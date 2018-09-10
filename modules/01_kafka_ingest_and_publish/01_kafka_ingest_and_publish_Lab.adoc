@@ -83,7 +83,7 @@ Once you ssh'd into your remote terminal window, you'll want to set the followin
 
 echo "export LAB_CODE=a1012" >> ~/.bashrc
 echo "export OCP_USERNAME=developer" >> ~/.bashrc
-echo "export OCP_PASSWD=r3dh4t1!" >> ~/.bashrc
+echo "export OCP_PASSWD=admin" >> ~/.bashrc
 echo "export OCP_REGION=`echo $HOSTNAME | cut -d'.' -f2`" >> ~/.bashrc
 echo "export OCP_DOMAIN=clientvm.\$OCP_REGION.rhte.opentlc.com" >> ~/.bashrc
 echo "export OCP_WILDCARD_DOMAIN=apps.\$OCP_DOMAIN" >> ~/.bashrc
