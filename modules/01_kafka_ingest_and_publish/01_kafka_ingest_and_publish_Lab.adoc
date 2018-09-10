@@ -212,7 +212,7 @@ $ cd rhte2018
 . Download data file in csv format, using this command
 +
 ----
-$ curl -f -v -k -X GET "https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-realtime-spark-stream-analysis/data/uber.csv" > uber.csv
+$ curl -f -v -k -X GET "https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-realtime-spark-stream-analysis/data/uber.csv" > /tmp/uber.csv
 ----
 
 === Deploy Kafka producer and consumer
