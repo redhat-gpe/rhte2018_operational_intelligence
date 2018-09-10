@@ -245,8 +245,11 @@ strimzi-cluster-operator-7fbd7f6fcc-9nt9h     1/1       Running   0          1h
 [red]*TODO*
 
 .. *strimzi-cluster-operator-**
-+
-[red]*TODO*
+
+... Expect this pod to be in a `Running` state after one restart.
+... A sample log file immediately after a successful start-up can be found link:https://gist.github.com/jbride/7ccc27fd6970db980434c55289709e43[here].
+
+... [red]#TODO:   What functionality does this provide ?#
 
 . Pre-provisioned Topics:
 +
@@ -290,11 +293,11 @@ $ cd $HOME/lab/operational_intelligence/strimzi
 
 . Review the details of the lab assets found in this directory:
 
-. *strimzi-consumer.yaml*
+.. *strimzi-consumer.yaml*
 +
 [red]#TODO#
 
-. *strimzi-producer.yaml*
+.. *strimzi-producer.yaml*
 +
 [red]#TODO#
 
