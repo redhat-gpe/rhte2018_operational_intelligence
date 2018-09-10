@@ -94,6 +94,21 @@ The students are expected to deploy the Oshinko Cluster in the OpenShift Environ
        https://www.youtube.com/watch?v=zHbxbb2ye3E
 
 
+=== Validate Environment Variables
+In a previous lab, you should have already set various environment variables in the shell of your lab environment.
+
+At this time, ensure that these environment variables remain set:
+
+-----
+$ echo $OCP_USERNAME
+developer
+
+
+
+
+-----
+
+If any of the above environment variables are missing, return back to that previous lab and set them.
 
 == Lab Asset Overview
 
@@ -186,7 +201,13 @@ In this section of the lab, you will provision Oshinko.
 The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
 With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
 
-To begin your exploration, we recommend starting with the oshinko-webui application. The oshinko-webui is a self-contained deployment of the Oshinko technologies. An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser. Through the browser interface you will be able to manage Apache Spark clusters within your project.
+To begin your exploration, we recommend starting with the oshinko-webui application.
+
+The oshinko-webui is a self-contained deployment of the Oshinko technologies.
+An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser.
+Through the browser interface you will be able to manage Apache Spark clusters within your project.
+Once installed, it consists of a Node.JS application that is contained within a Pod and provides a web browser based user interface for controlling the lifecycle of Spark clusters.
+
 
 Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
 
@@ -200,9 +221,13 @@ Another important part of Oshinko to highlight is the oshinko-s2i repository and
 $ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
-. Switch to the OCP project specific to this lab:
+. Create and switch to the OCP project specific to this lab:
 +
 -----
+$ oc new-project $OCP_USERNAME-uber-data --description=$OCP_USERNAME-uber-data
+
+
+
 $ oc project $OCP_USERNAME-uber-data
 -----
 
@@ -210,22 +235,26 @@ $ oc project $OCP_USERNAME-uber-data
 +
 -----
 $ oc create \
-     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/oshinko-cluster.yaml \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.3/templates/oshinko-cluster.yaml \
      -n $OCP_USERNAME-uber-data
 -----
 
-. Review the templates that have been created:
+. Review the template that has been created:
 +
 -----
-$ oc get templates -n $OCP_USERNAME-uber-data
+$ oc get template oshinko-webui -n $OCP_USERNAME-uber-data -o yaml | more
 
 -----
++
+Notice the presence of two containers in the oshinko web pod.
+
 
 . Provision the Oshinko web-ui
 +
 -----
 $ oc new-app oshinko-webui -n $OCP_USERNAME-uber-data > /tmp/oshinko-web.txt
 -----
+
 .. Review the output found in `/tmp/oshinko-web.txt`
 +
 -----
@@ -262,26 +291,27 @@ $ oc get routes
 
 NAME                HOST/PORT                                                             PATH      SERVICES                            PORT            TERMINATION   WILDCARD
 oshinko-web         oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
-oshinko-web-proxy   oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com   /proxy    oshinko-web-proxy                   oc-proxy-port                 None
-
 -----
 
-.. *oshinko-web*
+. Wait until both containers of the oshinko-web pod have started:
 +
-This project provides a solution for deploying and managing Apache Spark clusters in an OpenShift environment. The oshinko-webui is deployed into a project within OpenShift, and then can create, update, and destroy Apache Spark clusters in that project. Once installed, it consists of a Node.JS application that is contained within a Pod and provides a web browser based user interface for controlling the lifecycle of Spark clusters.
+-----
+$ oc get pods -w
+NAME                  READY     STATUS    RESTARTS   AGE
 
 
+oshinko-web-1-86blg   2/2       Running   0
+-----
 
-.. *oshinko-web-proxy*
-+
-This Enables you to login into Oshinko webui through a secured port. It uses oAuth Proxy and exposed to the port 8443.
 
 . Log into the Oshinko web UI
 .. Point your browser to the output of the following command:
 +
 -----
-$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)"\n\n"
+$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/webui"\n\n"
 -----
++
+image::images/oshinko_homepage.png[]
 
 .. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
 +
@@ -311,23 +341,18 @@ Interpreters: Each interpreter runs in a separate JVM to provide the functionali
 
 === Provision
 
-. Log into OpenShift Environment using OC Client Tool to your Lab Region
-+
------
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
------
-
-. Switch to the OCP project specific to this lab:
+. If you are not already there, switch to the OCP project specific to this lab:
 +
 -----
 $ oc project $OCP_USERNAME-uber-data
 -----
 
-. In your OpenShift namespace, create needed zeppelin templates:
+. In your OpenShift namespace, create the needed zeppelin templates:
 +
 -----
 $ oc create \
-     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/zeppelin-openshift.yaml \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.3/templates/zeppelin-openshift.yaml \
+     -n $OCP_USERNAME-uber-data
 
 
      ...
@@ -346,11 +371,11 @@ $ oc get templates -n $OCP_USERNAME-uber-data
 . Provision the Zeppelin web-ui
 +
 -----
-oc new-app --template=apache-zeppelin-openshift \
-> --param=APPLICATION_NAME=apache-zeppelin \
-> --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
-> --param=ZEPPELIN_INTERPRETERS=md
-> /tmp/zeppelin-web.txt
+$ oc new-app --template=apache-zeppelin-openshift \
+  --param=APPLICATION_NAME=apache-zeppelin \
+  --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
+  --param=ZEPPELIN_INTERPRETERS=md \
+  /tmp/zeppelin-web.txt
 -----
 .. Review the output found in `/tmp/zeppelin-web.txt`
 +
@@ -381,17 +406,27 @@ oc new-app --template=apache-zeppelin-openshift \
 
 -----
 
-==== Get the Routes
+.. Expect that a apache-zeppelin buid pod run to completion from which the apache-zeppelin deployment will start:
++
+-----
+$ oc get pods -w
+
+
+NAME                      READY     STATUS      RESTARTS   AGE
+apache-zeppelin-1-build   0/1       Completed   0          2m
+apache-zeppelin-1-tf9g8   1/1       Running     0          36s
+
 -----
 
-[root@localhost ~]# oc get routes
-NAME                         HOST/PORT                                                                            PATH      SERVICES                            PORT            TERMINATION   WILDCARD
-apache-zeppelin              apache-zeppelin-user3-uber-data-apps.6d13.openshift.opentlc.com                        apache-zeppelin                     8080-tcp                      None
-oshinko-web                  oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com                  /webui    oshinko-web(50%),oshinko-web(50%)   <all>                         None
-oshinko-web-proxy            oshinko-web-user3-uber-data-apps.6d13.openshift.opentlc.com                  /proxy    oshinko-web-proxy                   oc-proxy-port                 None
-uber-data-cluster-ui-route   uber-data-cluster-ui-route-user3-uber-data-apps.6d13.openshift.opentlc.com             uber-data-cluster-ui                <all>                         None
+==== Login into Zeppelin UI
+
+Navigate your browser to the output of the following URL:
 
 -----
+$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+-----
+
+image::images/zeppelin.png[uberstream7]
 
 == Zeppelin Interpreter
 
@@ -481,9 +516,12 @@ image::images/ocrsync.png[uber10]
 
 It is the Source code and Output file that every students expected to Run and visualize the results.
 
-.. Once the data copied, Open the Zeppelin URL
+.. Once the data copied, Open the Zeppelin URL using the URL determined in the previous section:
 +
-image::images/zeppelin.png[uberstream7]
+-----
+$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+-----
+
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 +
 image::images/UberDataImport.png[uberstream8]
