@@ -91,7 +91,7 @@ echo "export OCP_WILDCARD_DOMAIN=apps.\$OCP_DOMAIN" >> ~/.bashrc
 source ~/.bashrc
 
 #  Using above variables, copy & paste the following in same terminal #
-$ export OCP_PROJECT=kafka-project
+$ export OCP_PROJECT=developer-lab1-kafka-project
 -----
 
 
@@ -184,7 +184,7 @@ $ oc get projects
 developer-lab1-kafka-project                                     Active
 -----
 
-. Switch to your  OpenShift project
+. Switch to your OpenShift project
 +
 -----
 $ oc project $OCP_PROJECT
@@ -195,7 +195,7 @@ $ oc project $OCP_PROJECT
 .. To access, point to your browser to the output of the following:
 +
 -----
-$ echo -en "\n\nhttps://master.$OCP_DOMAIN:8443\n\n"
+$ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 -----
 
 .. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
@@ -205,7 +205,11 @@ $ echo -en "\n\nhttps://master.$OCP_DOMAIN:8443\n\n"
 .. Clone the github repo
 +
 -----
+<<<<<<< HEAD
 $ git clone https:https://github.com/gpe-mw-training/rhte2018.git
+=======
+$ git clone https://github.com/gpe-mw-training/rhte2018.git
+>>>>>>> a4fb46e8ba69334cde9d3670da356a315cd10888
 $ cd rhte2018
 -----
 

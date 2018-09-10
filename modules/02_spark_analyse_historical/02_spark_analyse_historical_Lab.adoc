@@ -161,19 +161,19 @@ Compiling the Main.scala has already been done for you and the output being the 
 .. Main Program which is currently running on Zeppelin Notebook. Let us explore what it does.
 
 .. Load the Data (Uber.csv) into the DataFrame.
-
++
 image::images/LoadData1.png[LoadData]
 
 .. Define Feature Array
 In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
-
++
 image::images/CreateFeatureArray.png[FeatureArray]
 .. Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
-
++
 image::images/KMeansModel.png[FeatureArray]
 
 .. Next, we use the model to get the clusters for test data in order to further analyze the clustering.
-
++
 image::images/Predictions.png[Predictions]
 
 
@@ -475,6 +475,12 @@ A limit range, defined by a LimitRange object, enumerates compute resource const
 
 All resource create and modification requests are evaluated against each LimitRange object in the project. If the resource violates any of the enumerated constraints, then the resource is rejected. If the resource does not set an explicit value, and if the constraint supports a default value, then the default value is applied to the resource.
 
+By default, all OCP projects are assigned a limit range.  the limit range assigns default limits and requests for both CPU and RAM if the DCs themselves don't specify limits and requests.
+The default CPU limit is set to 1/20th of a CPU.  So Spark was running on 1/20th of a CPU.
+
+In general, all of us should always understand the details of LimitRanges assigned to our projects.
+And its very likely that we should be adding/tweaking the limits and requests in our DC's.
+
 ==== CPU Limits
 
 Each container in a pod can specify the amount of CPU it is limited to use on a node. CPU limits control the maximum amount of CPU that your container may use independent of contention on the node. If a container attempts to exceed the specified limit, the system will throttle the container. This allows the container to have a consistent level of service independent of the number of pods scheduled to the node.
@@ -485,6 +491,59 @@ By default, a container is able to consume as much memory on the node as possibl
 ==== Memory Limits
 If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
 
+=== Do we need to Know them
+The above parameters are managed by the cluster Administrator and Infrastructure team, Hence it is not needed for the students to learn. But a basic concept of Knowing this will help.
+
+*Students are expected to learn this much alone.*
+----
+For Viewing Quotas
+
+$ oc get quota -n user3-uber-data
+NAME                AGE
+besteffort          11m
+compute-resources   2m
+object-counts       29m
+...
+...
+$ oc describe quota object-counts -n user3-uber-data
+Name:			object-counts
+Namespace:		user3-uber-data
+Resource		Used	Hard
+--------		----	----
+configmaps		3	10
+persistentvolumeclaims	0	4
+replicationcontrollers	3	20
+secrets			9	10
+services		2	10
+
+For Viewing Limit Ranges
+
+$ oc get limits -n user3-uber-data
+NAME              AGE
+resource-limits   6d
+
+$ oc describe limits resource-limits
+Name:		resource-limits
+Namespace:	use3-uber-data
+Type		Resource	Min	Max	Default Request	Default Limit	Max Limit/Request Ratio
+----		--------	---	---	---------------	-------------	-----------------------
+Pod		cpu		30m	2	-		-		-
+Pod		memory		150Mi	1Gi	-		-		-
+Container	memory		150Mi	1Gi	307Mi		512Mi		-
+Container	cpu		30m	2	60m		1		-
+
+$ oc describe limits resource-limits -n user3-uber-data
+Name:                           resource-limits
+Namespace:                      demoproject
+Type                            Resource                Min     Max     Default Request Default Limit   Max Limit/Request Ratio
+----                            --------                ---     ---     --------------- -------------   -----------------------
+Pod                             cpu                     200m    2       -               -               -
+Pod                             memory                  6Mi     1Gi     -               -               -
+Container                       cpu                     100m    2       200m            300m            10
+Container                       memory                  4Mi     1Gi     100Mi           200Mi           -
+openshift.io/Image              storage                 -       1Gi     -               -               -
+openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
+openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
 
 === Inject Uber historical data
 
@@ -548,7 +607,7 @@ image::images/StructuredSchema.png[ss]
 .. A DataFrame is a distributed collection of data, which is organized into named columns. Conceptually, it is equivalent to relational tables with good optimization techniques.
 
 +
-image::images/LoadCsv.png[ls]
+image::images/LoadCSV.png[ls]
 
 .. PrintStructuralSchema and Display the StructuralSchema.
 .. In this step we are printing Structural Schema to view the output on how the data (uber.csv) is placed. Also, we are caching the data in the spark Memory for faster data retrieval operations.
@@ -657,3 +716,4 @@ Base: The TLC base company affiliated with the Uber pickup
 ifdef::showscript[]
 
 endif::showscript[]
+
