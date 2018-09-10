@@ -69,53 +69,59 @@ SparkContext is the heart of a Spark application. Once a SparkContext is created
 
 ==== Oshinko
 
-==== What is Oshinko?
+The _Oshinko_ project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift Container Platform.
 
-The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+This Lab demonstrates the usage of an Oshinko cluster running in your OpenShift Container Platform environment.
 
-==== How Oshinko is Related to our Lab?
-
-This Lab demonstrates the usage of Oshinko Cluster and the Spark Application (i.e Zeppelin Notebook Application) will be deployed in Oshinko Cluster.
-
-==== Who will deploy the Oshinko Cluster?
-
-The students are expected to deploy the Oshinko Cluster in the OpenShift Environment with their assigned userId. Detailed instructions are provided in this lab.
 
 === Reference
 
-:numbered:
-
-       http://spark.apache.org/
-       http://spark.apache.org/examples.html
-       http://spark.apache.org/mllib/
-       https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
-       https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
-       https://spark.apache.org/sql/
-       https://www.youtube.com/watch?v=zHbxbb2ye3E
-
+.  http://spark.apache.org/
+.  http://spark.apache.org/examples.html
+.  http://spark.apache.org/mllib/
+.  https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
+.  https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
+.  https://spark.apache.org/sql/
+.  https://www.youtube.com/watch?v=zHbxbb2ye3E
 
 === Validate Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
-At this time, ensure that these environment variables remain set:
+At this time, ensure that the following environment variables remain set:
 
 -----
 $ echo $OCP_USERNAME
 developer
 
-
-
-
+$ echo $OCP_PASSWD
+xxxxxxxx
 -----
-
-If any of the above environment variables are missing, return back to that previous lab and set them.
 
 == Lab Asset Overview
 
-In a previous lab of this course, you should have already cloned the lab assets.
+This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
+You will want to clone these lab assets to your lab environment so that you can review them.
 
-The following depicts the assets specific to this lab:
+. Make a new directory where all lab assets will reside:
++
+-----
+$ mkdir -p $HOME/lab
+-----
 
+. At the terminal of your lab environment, clone the lab assets:
++
+-----
+$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operation_intelligence
+-----
+
+. Change directories to the newly cloned project:
++
+-----
+$ cd $HOME/lab/operation_intelligence/uber-data-analysis
+-----
+
+. Review the various files specific to this lab :
++
 -----
 ├── templates
 │   ├── oshinko-cluster.yaml
@@ -138,58 +144,42 @@ The following depicts the assets specific to this lab:
 -----
 
 
-Several key assets to review before executing this lab are as follows:
+. Several key assets to review are as follows:
 
-. *pom.xml*
+.. *pom.xml*
 +
 Notice that community Apache Spark and community Scala packages are being utilized.
 At this time, Red Hat does not intend to provide supported versions of these packages.
 
-. *Raw Uber historical Data*
-+
-.. Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
-.. It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
+.. *Raw Uber historical Data*
 
-. *Main.scala*
-+
-Main.scala is the code applied to the Zeppelin Notebook to analyse the data.
+... Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
+... It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
-.. This file is provided to you as background and context only.
+.. *Main.scala*
++
+Main.scala is the code applied to the Zeppelin Notebook to analyze the data.
+
+... This file is provided to you as background and context only.
 For the purpose of this lab, you will not be modifying or compiling this Main.scala.
-Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
+... Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
 
-.. Main Program which is currently running on Zeppelin Notebook. Let us explore what it does.
 
-.. Load the Data (Uber.csv) into the DataFrame.
+
+
+.. *Uber.json*
 +
-image::images/LoadData1.png[LoadData]
+... Later in this lab you will analyze this Uber.json.  It is generated from SCALA IDE or Using Zeppelin Paragraph Cells Compilation.
+... Later in this lab you will import this JSON File in the Zeppelin NoteBook and run the each paragraph .
 
-.. Define Feature Array
-In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
-+
-image::images/CreateFeatureArray.png[FeatureArray]
-.. Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
-+
-image::images/KMeansModel.png[FeatureArray]
+.. *templates*
 
-.. Next, we use the model to get the clusters for test data in order to further analyze the clustering.
-+
-image::images/Predictions.png[Predictions]
+... *oshinko-cluster.yaml*
+....  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
 
+... *zeppelin-openshift.yaml*
 
-. *Uber.json*
-+
-.. Students are expected to analyze the Uber.json which is generated from SCALA IDE or Using Zeppelin Paragraph Cells Compilation.
-.. Students are expected to import this JSON File in the NoteBook and run the each paragraphs to generate the output.
-
-. *templates*
-
-.. *oshinko-cluster.yaml*
-...  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
-
-.. *zeppelin-openshift.yaml*
-
-... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
+.... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
 
 == Oshinko
@@ -322,7 +312,7 @@ These two DCs are responsible for the provisioning of the Oshinko Master and Wor
 These DCs are not configured with limits and requests as required by your lab environment.
 Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
 
-.. Add limits and requests to master:
+.. Add limits and requests to the master pod:
 +
 -----
 $ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
@@ -332,7 +322,7 @@ $ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
     --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-m", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
 -----
 
-.. Add limits and requests to worker:
+.. Add limits and requests to the worker pod:
 +
 -----
 $ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
@@ -529,6 +519,28 @@ oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apa
 +
 image::images/ocrsync.png[uber10]
 
+=== Creation of Uber NoteBook
+
+Recall that the lab assets provided a Main.scala.
+
+This application is currently running on Zeppelin Notebook. Let us explore what it does.
+
+... Load the Data (Uber.csv) into the DataFrame.
++
+image::images/LoadData1.png[LoadData]
+
+... Define Feature Array
+In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
++
+image::images/CreateFeatureArray.png[FeatureArray]
+... Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
++
+image::images/KMeansModel.png[FeatureArray]
+
+... Next, we use the model to get the clusters for test data in order to further analyze the clustering.
++
+image::images/Predictions.png[Predictions]
+
 === Import Uber _NoteBook_
 
 It is the Source code and Output file that every students expected to Run and visualize the results.
@@ -546,6 +558,9 @@ image::images/UberDataImport.png[uberstream8]
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
 image::images/pvc-data-zeppelin.png[data-placeholder]
+
+
+
 
 === Execute Uber _Paragraphs_
 
