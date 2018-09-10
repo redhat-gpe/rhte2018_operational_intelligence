@@ -83,7 +83,7 @@ Once you ssh'd into your remote terminal window, you'll want to set the followin
 
 echo "export LAB_CODE=a1012" >> ~/.bashrc
 echo "export OCP_USERNAME=developer" >> ~/.bashrc
-echo "export OCP_PASSWD=r3dh4t1\!" >> ~/.bashrc
+echo "export OCP_PASSWD=r3dh4t1!" >> ~/.bashrc
 echo "export OCP_REGION=`echo $HOSTNAME | cut -d'.' -f2`" >> ~/.bashrc
 echo "export OCP_DOMAIN=clientvm.\$OCP_REGION.rhte.opentlc.com" >> ~/.bashrc
 echo "export OCP_WILDCARD_DOMAIN=apps.\$OCP_DOMAIN" >> ~/.bashrc
@@ -124,7 +124,7 @@ $ cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l
 
 === Kafka access
 
-Your lab environment includes access to a Kafka installation. To find your environment GUID, refer to https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc. The GUID Grabber response will also specify a username of lab-user and the password. Once you have the GUID, you can navigate to the master at https://master.{$GUID}.openshift.opentlc.com.
+Your lab environment includes access to a Kafka installation. To find your environment GUID, refer to https://github.com/RedHatDemos/RHTE-2018/blob/master/GG/gg-dedicated.adoc. The GUID Grabber response will also specify a username of lab-user and the password. Once you have the GUID, you can navigate to the master at https://clientvm.{$GUID}.openshift.opentlc.com:8443
 
 === OpenShift Container Platform
 
