@@ -13,8 +13,8 @@
 
 .Prerequisite
 * Skills
-** 
-** 
+**
+**
 * Tools
 ** `curl` utility
 ** `oc` version 3.9 utility
@@ -179,7 +179,7 @@ kubernetes v1.9.1+a0ce1bc657
 -----
 $ oc get projects
 
-... 
+...
 
 developer-lab1-kafka-project                                     Active
 -----
@@ -200,25 +200,26 @@ $ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 
 .. Authenticate using the values of $OCP_USERNAME and $OCP_PASSWD
 
-== Lab instructions
+== Kafka setup
 
-.. Clone the github repo
+. Clone the github repo
 +
 -----
-<<<<<<< HEAD
-$ git clone https:https://github.com/gpe-mw-training/rhte2018.git
-=======
 $ git clone https://github.com/gpe-mw-training/rhte2018.git
->>>>>>> a4fb46e8ba69334cde9d3670da356a315cd10888
 $ cd rhte2018
 -----
++
+. Download data file in csv format, using this command
++
+----
+$ curl -f -v -k -X GET "https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-realtime-spark-stream-analysis/data/uber.csv" > uber.csv
+----
 
 === Deploy Kafka producer and consumer
 
 . Create the deployment.yaml in a local directory with deployment sections for the producer and consumer:
-
++
 ----
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -261,7 +262,9 @@ spec:
             value: "INFO"
           - name: MESSAGE_COUNT
             value: "1000"
----
+----
++
+----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -305,24 +308,23 @@ spec:
           - name: MESSAGE_COUNT
             value: "1000"
 ----
-
++
 . Deploy the Kafka producer and consumer
-
++
 ----
 % oc apply -f <path_to_your_local_dir>/deployment.yaml
 ----
-
++
 . Check the producer and consumer logs to verify that they are working
-
++
 ----
 oc logs $(oc get pod -l app=kafka-producer -o=jsonpath='{.items[0].metadata.name}') -f
 oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ----
-
++
 . Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
-
++
 ----
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -340,15 +342,15 @@ spec:
       - name: kafka-consumer-2
         image: strimzici/hello-world-consumer:support-training
 ----
-
++
 . Deploy the new consumer
-
++
 ----
 % oc apply -f deployment-new.yaml
 ----
-
++
 . Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
-
++
 ----
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:31:58 INFO  KafkaConsumerExample:25 - 	     partition: 0
@@ -379,9 +381,9 @@ spec:
 2018-08-30 18:32:07 INFO  KafkaConsumerExample:26 - 	     offset: 137775
 2018-08-30 18:32:07 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 112
 ----
-
-and
-
++
+*and*
++
 ----
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:24:42 INFO  KafkaConsumerExample:25 - 	     partition: 2
@@ -429,7 +431,7 @@ and
 EOF
 ----
 
-. Create a connector that will read the TXT file and push its content into the Kafka broker
+. Create a connector that will read the data file and push its content into the Kafka broker
 +
 ----
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
@@ -441,9 +443,13 @@ EOF
 
 == Conclusions
 
+* Can you appreciate the value of Kakfa in any customer use cases that you may have?
+
 == Questions
 
-TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+//TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+
+* What is the purpose for the use of the *source-plugin.json* plugin?
 
 == Appendix
 ifdef::showscript[]
