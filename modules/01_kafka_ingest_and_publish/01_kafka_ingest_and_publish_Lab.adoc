@@ -76,7 +76,7 @@ Once you ssh'd into your remote terminal window, you'll want to set the followin
 
 echo "export OCP_USERNAME=developer" >> ~/.bashrc
 echo 'export OCP_PASSWD=r3dh4t1!' >> ~/.bashrc
-echo "export OCP_PROJECT=$OCP_USERNAME-lab1-kafka-project" >> ~/.bashrc
+echo "export OCP_PROJECT=\$OCP_USERNAME-lab1-kafka-project" >> ~/.bashrc
 
 echo "export OCP_REGION=`echo $HOSTNAME | cut -d'.' -f2`" >> ~/.bashrc
 echo "export OCP_DOMAIN=clientvm.\$OCP_REGION.rhte.opentlc.com" >> ~/.bashrc
@@ -259,12 +259,18 @@ As part of the Kafka cluster, it can also deploy the topic operator which provid
 -----
 $ sudo -i
 $ oc get KafkaTopic
+$ exit
 -----
 
 == Lab Asset Overview
 
-This lab provides a set of assets to assist with the utilization of Strimzi.
-You will want to clone these lab assets to your lab environment so that you can review them.
+The purpose of this lab section is to demonstrate topic publishing and subscribing using pre-deployed Kafka producers and consumers. When the producer in the example boots up, it publishes a certain number of messages. Similarly, when the consumer is created, it waits to receive the specified number of messages. The Kafka producer and consumer deployment yamls use the client code defined in
+
+-----
+https://github.com/strimzi/client-examples
+-----
+
+This lab provides a set of assets to assist with the utilization of Strimzi. You will want to clone these lab assets to your lab environment so that you can review them.
 
 . Make a new directory where all lab assets will reside:
 +
@@ -288,14 +294,18 @@ $ cd $HOME/lab/operational_intelligence/strimzi
 
 .. *strimzi-consumer.yaml*
 +
-[red]#TODO#
+It is important to pay attention to the following attributes in the yaml.
++
+... image: code image that gets pulled 
+... resources: limits and requests. When allocating compute resources, each container may specify a request and a limit value each for CPU and memory. If the quota has a value specified for requests.cpu or requests.memory, then it requires that every incoming container make an explicit request for those resources. If the quota has a value specified for limits.cpu or limits.memory, then it requires that every incoming container specify an explicit limit for those resources.
+... TOPIC, MESSAGE_COUNT: topic that the subscriber listens on and the number of messages it listens for
 
 .. *strimzi-producer.yaml*
 +
-[red]#TODO#
+The same set of attributes as the consumer are important. 
 
 == Kafka producer and consumer
-In this section of the lab, you will provision a Strimzi producer and consumer.
+Using the deployment yaml files provided earlier, you will provision a Strimzi producer and consumer.
 
 These resources will send to and receive from the previously created Strimzi topics.
 
@@ -309,11 +319,14 @@ $ oc create -f $HOME/lab/operational_intelligence/strimzi/strimzi-consumer.yaml
 +
 -----
 $ oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
-
 ...
-
-TODO:   What's the expected output ?
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:24 - Received message:
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:25 - 	     partition: 1
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:26 - 	     offset: 137766
+2018-08-30 18:32:00 INFO  KafkaConsumerExample:27 - 	     value: Hello world - 105
 -----
+
+The output looks like sections arranged like the above. Notice that since we have just created one consumer on the topic, messages on all partitions are delivered to that consumer. Later on, we will create another consumer and observe that each partition gets uniquely mapped to a consumer.
 
 . Create the Strimzi producer:
 .. Execute:
@@ -325,18 +338,26 @@ $ oc create -f $HOME/lab/operational_intelligence/strimzi/strimzi-producer.yaml
 +
 -----
 $ oc logs $(oc get pod -l app=kafka-producer -o=jsonpath='{.items[0].metadata.name}') -f
-
 ...
-
-TODO:   What's the expected output ?
+2018-09-11 02:33:18 INFO  KafkaProducerExample:18 - Sending messages "Hello world - 357"
+2018-09-11 02:34:19 INFO  KafkaProducerExample:18 - Sending messages "Hello world - 358"
+2018-09-11 02:35:20 INFO  KafkaProducerExample:18 - Sending messages "Hello world - 359"
+2018-09-11 02:36:21 INFO  KafkaProducerExample:18 - Sending messages "Hello world - 360"
+2018-09-11 02:37:22 INFO  KafkaProducerExample:18 - Sending messages "Hello world - 361"
 -----
 
+If you have a lot of extraneous messages you can filter the messages using "Sending messages" as a filter.
 
-== Additional Strimzi consumer
+=== Additional Strimzi consumer
 
-[red]#TODO:   Elaborate on the purpose of this section. Limits and requests will be needed#
+This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
 
-. Add a consumer by creating a deployment yaml file similar to the existing one. The initial section of it should look similar to
+
+image::images/sing_cons.png[400,400]
+
+image::images/mult_cons.png[400,400]
+
+. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
@@ -354,7 +375,25 @@ spec:
     spec:
       containers:
       - name: kafka-consumer-2
-        image: strimzici/hello-world-consumer:support-training
+        image: strimzi/hello-world-consumer:latest
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: my-topic
+          - name: GROUP_ID
+            value: my-hello-world-consumer
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
 ----
 +
 . Deploy the new consumer
