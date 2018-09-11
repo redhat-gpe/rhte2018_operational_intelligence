@@ -187,7 +187,7 @@ $ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 
 === Kafka cluster
 
-Your lab environment includes access to a pre-installed Kafka cluster.
+Your lab environment includes access to a pre-installed Kafka cluster. The environment was creating using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
 
 . Switch to your OpenShift project
 +
@@ -209,11 +209,13 @@ strimzi-cluster-operator     1         1         1            1           1h
 
 .. *my-connect-cluster-connect*
 +
-[red]*TODO*
+The Kafka connect cluster allows for connecting Kafka brokers to different sources and sinks. In the case of this lab, the Kafka connect deployment is pre-configured for reading files.
 
 .. *strimzi-cluster-operator*
 +
-[red]*TODO*
+Before deploying a Kafka cluster, the Cluster Operator must be deployed. The Strimzi cluster operator is responsible for deploying a Kafka cluster alongside a Zookeeper ensemble. As mentioned above, the operator is also used to deploy Kafka connect. 
++
+image::images/cop_arch.png[]
 
 .. View the corresponding pods:
 +
@@ -234,22 +236,11 @@ strimzi-cluster-operator-7fbd7f6fcc-9nt9h     1/1       Running   0          1h
 
 .. *my-cluster-kafka-**
 +
-[red]*TODO*
+This is the set of Kafka brokers deployed using the Strimzi cluster operator. The deployment is described in a yaml file that pulls the amqstreams image from the RHT registry. AMQ Streams provides two options for Kafka cluster deployment:ephemeral and persistent. Persistent is the correct option to select for production environments (we have used the same in this deployment).
 
 .. *my-cluster-zookeeper-**
 +
-[red]*TODO*
-
-.. *my-connect-cluster-connect-**
-+
-[red]*TODO*
-
-.. *strimzi-cluster-operator-**
-
-... Expect this pod to be in a `Running` state after one restart.
-... A sample log file immediately after a successful start-up can be found link:https://gist.github.com/jbride/7ccc27fd6970db980434c55289709e43[here].
-
-... [red]#TODO:   What functionality does this provide ?#
+When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds the necessary configuration to connect Kafka with Zookeeper. 
 
 . Pre-provisioned Topics:
 +
@@ -263,10 +254,12 @@ my-topic     1h
 my-topic-2   1h
 -----
 +
-[red]*TODO*
-
-
-
+As part of the Kafka cluster, it can also deploy the topic operator which provides operator-style topic management via KafkaTopic custom resources. To view the topics, you will need to sudo inside the cluster. At this point, you will be logged into the cluster as cluster-admin and you will be able to perform the above command to get the topics.
++
+-----
+$ sudo -i
+$ oc get KafkaTopic
+-----
 
 == Lab Asset Overview
 
