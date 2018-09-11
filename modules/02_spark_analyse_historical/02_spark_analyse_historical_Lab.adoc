@@ -102,22 +102,22 @@ xxxxxxxx
 This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
 You will want to clone these lab assets to your lab environment so that you can review them.
 
-. If you haven't done so already, make a new directory where all lab assets will reside:
+. Make a new directory where all lab assets will reside:
 +
 -----
 $ mkdir -p $HOME/lab
 -----
 
-. If you haven't done so already, clone the lab assets:
+. At the terminal of your lab environment, clone the lab assets:
 +
 -----
-$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operational_intelligence
+$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operation_intelligence
 -----
 
-. Change directories to the `uber-data-analysis` directory of the newly cloned project:
+. Change directories to the newly cloned project:
 +
 -----
-$ cd $HOME/lab/operational_intelligence/uber-data-analysis
+$ cd $HOME/lab/operation_intelligence/uber-data-analysis
 -----
 
 . Review the various files specific to this lab :
@@ -307,7 +307,7 @@ Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist
 +
 image::images/provision_oc.png[]
 
-. Two `Deployment Config` resources will have been created.
+. Two `Deployment Config` resources will have been creted.
 These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
 These DCs are not configured with limits and requests as required by your lab environment.
 Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
@@ -378,7 +378,7 @@ $ oc project $OCP_USERNAME-uber-data
 +
 -----
 $ oc create \
-     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.3/templates/zeppelin-openshift.yaml \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.4/templates/zeppelin-openshift.yaml \
      -n $OCP_USERNAME-uber-data
 
 
@@ -402,7 +402,7 @@ $ oc new-app --template=apache-zeppelin-openshift \
   --param=APPLICATION_NAME=apache-zeppelin \
   --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
   --param=ZEPPELIN_INTERPRETERS=md \
-  /tmp/zeppelin-web.txt
+  >> /tmp/zeppelin-web.txt
 -----
 .. Review the output found in `/tmp/zeppelin-web.txt`
 +
@@ -433,7 +433,7 @@ $ oc new-app --template=apache-zeppelin-openshift \
 
 -----
 
-.. Expect that a apache-zeppelin buid pod run to completion from which the apache-zeppelin deployment will start:
+.. Expect that a apache-zeppelin build pod run to completion from which the apache-zeppelin deployment will start:
 +
 -----
 $ oc get pods -w
@@ -458,38 +458,38 @@ image::images/zeppelin.png[uberstream7]
 == Zeppelin Interpreter
 
 === Overview
-Finally, you can find the Zeppelin running by accessing the Route URL. Configuration changes has to be made in Zeppelin Interpreter for our use case.
 
-Zeppelin Interpreter is a plug-in which enables Zeppelin users to use a specific language/data-processing-backend. For example, to use Scala code in Zeppelin, you need %spark interpreter.
-
-When you click the +Create button in the interpreter page, the interpreter drop-down list box will show all the available interpreters on your server.
+Zeppelin Interpreters are plug-ins which allow for specific languages and data-processing-backend.
+For example, to use Scala code in Zeppelin, the Spark interpreter is needed.
 
 
 === Port(s) and protocols
 
-In local Zeppelin's default port is 8080. Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
+Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
 
-Below Figure Explain's the configuration settings of Zeppelin UI.
-
-
+. Open the Zeppelin Interpreter settings and do the following changes as shown in the below figure.
++
 image::images/ZeppelinNewSettings.png[]
 
------
-...
-Please add these properties in the zeppelin Intepreter settings
+.. *master*                         : spark://uber-data-cluster:7077
+.. *spark.driver.bindAddress*       :  0.0.0.0
+.. *spark.driver.host*              :	 apache-zeppelin
+.. *spark.driver.blockManager.port* :	 42100
+.. *spark.driver.port*	            :  42000
 
-spark.driver.bindAddress	                            0.0.0.0
-spark.driver.host	                                   apache-zeppelin
-spark.driver.blockManager.port	                     42100
-spark.driver.port	                                   42000
-...
------
-Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
+. Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
++
+----
+$ oc get services apache-zeppelin
 
-image::images/PortZeppelin.png[portzepp]
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+apache-zeppelin   ClusterIP   172.30.43.201   <none>        8080/TCP,42000/TCP,42100/TCP   4m
 
-=== Deployment Topology Diagram
-
+----
++
+Notice the Service 42000 has been exposed to spark.driver.port and 42100 has been exposed spark.driver.blockManager.port
+This ensures the two-way communication between zeppelin Interpreter and Oshinko Cluster.
++
 image::images/DeploymentTopology.png[zeppelinTopo]
 
 
