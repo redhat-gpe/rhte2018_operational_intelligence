@@ -226,7 +226,7 @@ $ oc project $OCP_USERNAME-uber-data
 +
 -----
 $ oc create \
-     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.4/templates/oshinko-cluster.yaml \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.3/templates/oshinko-cluster.yaml \
      -n $OCP_USERNAME-uber-data
 -----
 
