@@ -592,7 +592,7 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 
-   https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
+.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
 
 +
 image::images/UberImport.png[uberstream8]
