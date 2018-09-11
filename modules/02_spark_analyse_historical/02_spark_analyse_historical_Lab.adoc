@@ -459,23 +459,20 @@ image::images/zeppelin.png[uberstream7]
 
 === Overview
 
-Zeppelin Interpreters are plug-ins which allow for specific languages and data-processing-backend.
+Zeppelin Interpreters are plug-ins which allow for specific languages and data-processing-backends.
 For example, to use Scala code in Zeppelin, the Spark interpreter is needed.
+If you chose to write your data analytics code in Python, the the PySpark would be an option for you.
+
+In this section of the lab, you will run various Uber related data analysis _paragraphs_ as part of a Zeppelin Notebook.
+
+These paragraphs are written in Scala and subsequently will run in a Spark Interpreter.
 
 
 === Port(s) and protocols
 
-Since we use OpenShift to deploy, we expose these ports which is given in the properties files to ensure two-way communication between the Spark-Master-Node and Spark-Worker-Node. To make enable these port changes, we need to edit the configuration settings of Zeppelin UI.
+The Spark Master and Worker pods need to be configured to communicate with each other along with the Zeppelin Interpreter.
 
-. Open the Zeppelin Interpreter settings and do the following changes as shown in the below figure.
-+
-image::images/ZeppelinNewSettings.png[]
-
-.. *master*                         : spark://uber-data-cluster:7077
-.. *spark.driver.bindAddress*       :  0.0.0.0
-.. *spark.driver.host*              :	 apache-zeppelin
-.. *spark.driver.blockManager.port* :	 42100
-.. *spark.driver.port*	            :  42000
+In this section you will use the Zeppelin UI to make these configuration changes.
 
 . Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
 +
@@ -488,36 +485,69 @@ apache-zeppelin   ClusterIP   172.30.43.201   <none>        8080/TCP,42000/TCP,4
 ----
 +
 Notice the Service 42000 has been exposed to spark.driver.port and 42100 has been exposed spark.driver.blockManager.port
-This ensures the two-way communication between zeppelin Interpreter and Oshinko Cluster.
+
+. In the Zeppelin UI, open the Zeppelin UI by navigating to the drop down at the top right corner.
+. From the drop down, select:  `Interpreter`.
+. Scroll down to the `Spark` section and you should see configurations similar to the following:
 +
-image::images/DeploymentTopology.png[zeppelinTopo]
+image::images/ZeppelinNewSettings.png[]
+
+. Make the following changes in this Spark section:
+
+.. Find the existing text box for the URL to the `master` and populate it as follows:
++
+-----
+*master*                         : spark://uber-data-cluster:7077
+-----
+
+.. Scroll down to the bottom of the Spark section and add the following new text fields:
+
+... *spark.driver.bindAddress*       :  0.0.0.0
+... *spark.driver.host*              :	 apache-zeppelin
+... *spark.driver.blockManager.port* :	 42100
+... *spark.driver.port*	            :  42000
+
+. After making the changes, scroll to the bottom of the page and click: `Save`.
 
 
 === Inject Uber historical data
 
-Zeppelin Data (ie.uber.csv file) has to be localized to the deployment pod for faster retrievals and gives the spark jobs to have data locality benefit. It also, helps us for faster querying on the data on Memory and to perform data analytics operations over mulitple iterations.
+In this section of the lab, the raw uber related data found in your lab assets will be mounted to your Apache Zeppelin interpreter.
+By keeping the data local to the Zeppelin interpreter, the data analysis will execute quickly.
 
-.. Navigate to Storage-->Create Storage. Create a PVC of 50MB from the Create Storage screen.
+. Create a configuration map based on the uber.csv data file found in your lab assets:
 +
-image::images/uber-data.png[uber7]
-.. Attach it to the Pod.
-+
+-----
+$ oc create configmap uber-data-cm \
+    --from-file=$HOME/lab/operation_intelligence/uber-data-analysis/src/main/resources/data/uber.csv
+-----
 
-image::images/pvc.png[uber9]
+. Mount the config map to the `apache-zepplin` deployment config as a volume:
++
+-----
+$ oc set volume dc/apache-zeppelin \
+         --add --overwrite \
+         --name=uber-data-volume \
+         -t configmap \
+         --configmap-name=uber-data-cm \
+         -m /data/uber.csv \
+         --sub-path=uber.csv \
+         --default-mode=0644
+-----
 
-.. Mount the Volume as shown below.
+. Mount the same config map to the Spark worker deployment config as a volume:
 +
-image::images/uber-data-pvc.png[uber8]
+-----
+$ oc set volume dc/uber-data-cluster-w  \
+         --add --overwrite \
+         --name=uber-data-volume \
+         -t configmap \
+         --configmap-name=uber-data-cm \
+         -m /data/uber.csv \
+         --sub-path=uber.csv \
+         --default-mode=0644
+-----
 
-.. Copy the Local Data to the Pod Directory using Rsync Command (Screen shot given below)
-+
-----
-oc rsync src directory pod directory:/data
-for Example
-oc rsync /home/prakrish/workspace/uberdata-analysis/src/main/resources/data/ apache-zeppelin-2-f89tz:/data
-----
-+
-image::images/ocrsync.png[uber10]
 
 === Creation of Uber NoteBook
 
