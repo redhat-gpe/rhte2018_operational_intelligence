@@ -89,6 +89,11 @@ In a previous lab, you should have already set various environment variables in 
 At this time, ensure that the following environment variables remain set:
 
 -----
+echo "export OCP_PROJECT=\$OCP_USERNAME-uber-data" >> ~/.bashrc
+
+source ~/.bashrc
+
+
 $ echo $OCP_USERNAME
 developer
 
@@ -586,8 +591,11 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 -----
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+
+   https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
+
 +
-image::images/UberDataImport.png[uberstream8]
+image::images/UberImport.png[uberstream8]
 
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
@@ -625,7 +633,7 @@ image::images/LoadCSV.png[ls]
   Lat: The latitude of the Uber pickup.
   Lon: The longitude of the Uber pickup.
   Base: The TLC base company affiliated with the Uber pickup.
-  
+
 ​  ​The Data Records are in CSV format. An example line is shown below:
 
   2014-08-01 00:00:00,40.729,-73.9422,B02598
