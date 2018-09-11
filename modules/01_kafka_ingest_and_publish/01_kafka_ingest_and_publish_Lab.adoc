@@ -375,7 +375,25 @@ spec:
     spec:
       containers:
       - name: kafka-consumer-2
-        image: strimzici/hello-world-consumer:support-training
+        image: strimzi/hello-world-consumer:latest
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: my-topic
+          - name: GROUP_ID
+            value: my-hello-world-consumer
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
 ----
 +
 . Deploy the new consumer
