@@ -76,7 +76,7 @@ Once you ssh'd into your remote terminal window, you'll want to set the followin
 
 echo "export OCP_USERNAME=developer" >> ~/.bashrc
 echo 'export OCP_PASSWD=r3dh4t1!' >> ~/.bashrc
-echo "export OCP_PROJECT=$OCP_USERNAME-lab1-kafka-project" >> ~/.bashrc
+echo "export OCP_PROJECT=\$OCP_USERNAME-lab1-kafka-project" >> ~/.bashrc
 
 echo "export OCP_REGION=`echo $HOSTNAME | cut -d'.' -f2`" >> ~/.bashrc
 echo "export OCP_DOMAIN=clientvm.\$OCP_REGION.rhte.opentlc.com" >> ~/.bashrc
@@ -259,6 +259,7 @@ As part of the Kafka cluster, it can also deploy the topic operator which provid
 -----
 $ sudo -i
 $ oc get KafkaTopic
+$ exit
 -----
 
 == Lab Asset Overview
