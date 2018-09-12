@@ -247,7 +247,7 @@ When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds th
 Your lab environment comes pre-provisioned with the following _KafkaTopic_ resources (which are only observable by a cluster-admin):
 +
 -----
-# oc get KafkaTopic
+# oc get KafkaTopics
 
 NAME         AGE
 my-topic     1h
@@ -258,7 +258,7 @@ As part of the Kafka cluster, it can also deploy the topic operator which provid
 +
 -----
 $ sudo -i
-$ oc get KafkaTopic
+$ oc get KafkaTopics
 $ exit
 -----
 
@@ -320,6 +320,12 @@ $ oc create -f $HOME/lab/operational_intelligence/strimzi/strimzi-consumer.yaml
 -----
 $ oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ...
+ConsumerConfig values:
+auto.commit.interval.ms = 5000
+auto.offset.reset = earliest
+bootstrap.servers = [my-cluster-kafka-bootstrap:9092]
+.....
+.....
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:25 - 	     partition: 1
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:26 - 	     offset: 137766
@@ -357,7 +363,7 @@ image::images/sing_cons.png[400,400]
 
 image::images/mult_cons.png[400,400]
 
-. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml. The initial section of it should look similar to
+. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
@@ -454,7 +460,7 @@ spec:
 
 === Configure Kafka connector
 
-. In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration
+. In the strimzi/kafka-connect.yaml, under the spec object, review the configuration
 +
 ----
   config:
@@ -477,7 +483,7 @@ spec:
   "config": {
     "connector.class": "FileStreamSource",
     "tasks.max": "3",
-    "topic": "UberInput",
+    "topic": "my-topic-2",
     "file": "/tmp/uber.csv"
   }
 }
@@ -499,8 +505,6 @@ EOF
 * Can you appreciate the value of Kakfa in any customer use cases that you may have?
 
 == Questions
-
-//TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
 
 * What is the purpose for the use of the *source-plugin.json* plugin?
 
