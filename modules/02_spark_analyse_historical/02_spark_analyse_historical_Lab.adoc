@@ -106,19 +106,11 @@ xxxxxxxx
 This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
 You will want to clone these lab assets to your lab environment so that you can review them.
 
-. Make a new directory where all lab assets will reside:
-+
------
-$ mkdir -p $HOME/lab
------
+. Make a new directory where all lab assets will reside.
+  Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
 
-. At the terminal of your lab environment, clone the lab assets:
 +
------
-$ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOME/lab/operation_intelligence
------
-
-. Change directories to the newly cloned project:
+. Change directory to the newly cloned project.
 +
 -----
 $ cd $HOME/lab/operation_intelligence/uber-data-analysis
@@ -209,7 +201,7 @@ Another important part of Oshinko to highlight is the oshinko-s2i repository and
 . Log into OpenShift Environment using OC Client Tool to your Lab Region
 +
 -----
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
+$ oc login https://$HOSTNAME:8443 -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
 . Create and switch to the OCP project specific to this lab:
@@ -597,7 +589,13 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 +
 image::images/UberImport.png[uberstream8]
 
-.. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
+.. You can change the directory structure in zeppelin notebook pointing to the data directory in POD.
+   You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
+   All Paragraphs are editable in Zeppelin Notebook.
+.. *Why we are doing this?*
+   We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
++
+image::images/ReadCSV.png[ReadCSV]
 +
 image::images/pvc-data-zeppelin.png[data-placeholder]
 
