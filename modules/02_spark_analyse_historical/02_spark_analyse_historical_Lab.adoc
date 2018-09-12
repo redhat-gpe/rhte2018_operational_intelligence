@@ -11,13 +11,13 @@
 ** Programming Knowledge of Python, Scala and Java Languages
 ** Knowledge of git
 ** Knowledge on OpenShift Deployments
-** Basic Knowledge of Cluster Computing and Distributed Architetcures
+** Basic Knowledge of Cluster Computing and Distributed Architectures
 
 * Tools
 ** `curl` utility
 ** `sed` utility
 ** `oc` version 3.9 utility
-** `Interactive Notebooks - Jupyter and Zeppelin`
+** `Interactive Notebooks - Jupyter`
 ** `git` command basics
 
 :numbered:
@@ -26,10 +26,9 @@
 
 === Lab Goals
 
-* Apache Spark Deployment using Apache Zeppelin
-* Uber Historical Data Analysis using SparkSQL
+* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
+* Uber Historical Data Analysis using Apache Spark
 * Usage of Interactive NoteBooks like Apache Zeppelin
-
 
 === Technical Background
 
@@ -90,6 +89,11 @@ In a previous lab, you should have already set various environment variables in 
 At this time, ensure that the following environment variables remain set:
 
 -----
+echo "export OCP_PROJECT=\$OCP_USERNAME-uber-data" >> ~/.bashrc
+
+source ~/.bashrc
+
+
 $ echo $OCP_USERNAME
 developer
 
@@ -163,9 +167,6 @@ Main.scala is the code applied to the Zeppelin Notebook to analyze the data.
 ... This file is provided to you as background and context only.
 For the purpose of this lab, you will not be modifying or compiling this Main.scala.
 ... Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
-
-
-
 
 .. *Uber.json*
 +
@@ -307,7 +308,7 @@ Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist
 +
 image::images/provision_oc.png[]
 
-. Two `Deployment Config` resources will have been creted.
+. Two `Deployment Config` resources will have been created.
 These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
 These DCs are not configured with limits and requests as required by your lab environment.
 Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
@@ -467,53 +468,6 @@ In this section of the lab, you will run various Uber related data analysis _par
 
 These paragraphs are written in Scala and subsequently will run in a Spark Interpreter.
 
-
-=== Port(s) and protocols
-
-The Spark Master and Worker pods need to be configured to communicate with each other along with the Zeppelin Interpreter.
-
-In this section you will use the Zeppelin UI to make these configuration changes.
-
-. Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
-+
-----
-$ oc get services apache-zeppelin
-
-NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
-apache-zeppelin   ClusterIP   172.30.43.201   <none>        8080/TCP,42000/TCP,42100/TCP   4m
-
-----
-+
-Notice the Service 42000 has been exposed to spark.driver.port and 42100 has been exposed spark.driver.blockManager.port
-
-. In the Zeppelin UI, open the Zeppelin UI by navigating to the drop down at the top right corner.
-. From the drop down, select:  `Interpreter`.
-. Scroll down to the `Spark` section and you should see configurations similar to the following:
-+
-image::images/ZeppelinNewSettings.png[]
-
-. Make the following changes in this Spark section:
-
-.. Find the existing text box for the URL to the `master` and populate it as follows:
-+
------
-*master*                         : spark://uber-data-cluster:7077
------
-
-.. Scroll down to the bottom of the Spark section and add the following new text fields:
-
-... *spark.driver.bindAddress*       :  0.0.0.0
-... *spark.driver.host*              :	 apache-zeppelin
-... *spark.driver.blockManager.port* :	 42100
-... *spark.driver.port*	            :  42000
-
-. After making the changes, scroll to the bottom of the page and click: `Save`.
-
-. Deployment Topology given below.
-
-image::images/DeploymentTopologyLatest.png[DeploymentTopo]
-
-
 === Inject Uber historical data
 
 In this section of the lab, the raw uber related data found in your lab assets will be mounted to your Apache Zeppelin interpreter.
@@ -551,6 +505,52 @@ $ oc set volume dc/uber-data-cluster-w  \
          --sub-path=uber.csv \
          --default-mode=0644
 -----
+
+
+=== Port(s) and protocols
+
+The Spark Master and Worker pods need to be configured to communicate with each other along with the Zeppelin Interpreter.
+
+In this section you will use the Zeppelin UI to make these configuration changes.
+
+. Ensure that you have apache-zeppelin having this kind of configuration as shown in the given below figure.
++
+----
+$ oc get services apache-zeppelin
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+apache-zeppelin   ClusterIP   172.30.43.201   <none>        8080/TCP,42000/TCP,42100/TCP   4m
+
+----
++
+Notice the Service 42000 has been exposed to spark.driver.port and 42100 has been exposed spark.driver.blockManager.port
+
+. In the Zeppelin UI, open the Zeppelin UI by navigating to the drop down at the top right corner.
+. From the drop down, select:  `Interpreter`.
+. Scroll down to the `Spark` section and you should see configurations similar to the following:
++
+image::images/ZeppelinNewSettings.png[]
+
+. Make the following changes in this Spark section:
+
+.. Find the existing text box for the URL to the `master` and populate it as follows:
++
+-----
+master                         : spark://uber-data-cluster:7077
+-----
+
+.. Scroll down to the bottom of the Spark section and add the following new text fields:
+
+... *spark.driver.bindAddress*       :  0.0.0.0
+... *spark.driver.host*              :	apache-zeppelin
+... *spark.driver.blockManager.port* :	42100
+... *spark.driver.port*	             :  42000
+
+. After making the changes, scroll to the bottom of the page and click: `Save`.
+
+. Deployment Topology given below.
+
+image::images/DeploymentTopologyLatest.png[DeploymentTopo]
 
 
 === Creation of Uber NoteBook
@@ -591,15 +591,15 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 -----
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+
+.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
+
 +
-image::images/UberDataImport.png[uberstream8]
+image::images/UberImport.png[uberstream8]
 
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD
 +
 image::images/pvc-data-zeppelin.png[data-placeholder]
-
-
-
 
 === Execute Uber _Paragraphs_
 
@@ -627,6 +627,18 @@ image::images/LoadCSV.png[ls]
 ... Since the UberData is in Raw Format (CSV), it is advised to convert into Structural Schema, where we can define a basic StructType.
     StructType is an object that defines the schema of Spark DataFrames.
     StructType objects contain a list of StructField objects that define the name, type, and nullable flag for each column in a DataFrame.
+.. What is in the DataSets?
+  The Data Set Schema
+  Date/Time: The date and time of the Uber pickup.
+  Lat: The latitude of the Uber pickup.
+  Lon: The longitude of the Uber pickup.
+  Base: The TLC base company affiliated with the Uber pickup.
+
+​  ​The Data Records are in CSV format. An example line is shown below:
+
+  2014-08-01 00:00:00,40.729,-73.9422,B02598
+
+
 .. PrintStructuralSchema and Display the StructuralSchema.
 +
 image::images/StructuralSchema.png[structuralschema]
@@ -640,14 +652,13 @@ image::images/dfShow.png[df]
 ... Categorical data (i.e., category labels such as gender, country, browser type) needs to be encoded or separated in a way that can still work with the algorithm.
 +
 image::images/df2show.png[df2]
-.. From a DataStructures Point of view.
+.. From a DataStructures point of Visualization of FeatureArray.
 +
 image::images/df2business.png[dfb]
-
+.. Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance.
 .. KMeans is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
 
 .. Create a KMeans Object, Set the parameters to to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data.
-
 +
 image::images/kmeans.png[km]
 +
@@ -660,6 +671,7 @@ image::images/KMeansOutput.png[kmbo]
 .. Cluster Centers are displayed in GoogleMap which is shown below
 +
 image::images/ClusterCenters.png[cc]
+
 
 .. KMeans Functional Flow
 +
@@ -682,7 +694,16 @@ image::images/UberCellAnalysis.png[uberstream9]
 
 == Conclusions
 
-You have learned the concepts of Spark Cluster, Actions, Transformations, Spark SQL and NoteBook Deployment.
+====  What did we learn?
+
+Oshinko Cluster - Cluster Management Solution for Apache Spark.
+
+Apache Spark - Basics of Apache Spark like Actions and Transformations.
+
+Apache Zeppelin NoteBook - Usage of Interactive Notebooks like Zeppelin and it's interaction with Oshinko Cluster for Apache Spark in a current Big Data scenario.
+
+SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+
 
 == Questions
 
@@ -690,15 +711,6 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 == Appendix
 
-===  Overview
-So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Historical Data.
-
-===  What did we learn?
-This Lab helps the students to get to know the basics of interactive notebook usage in the current big data scenario.
-
-Basic deployment of spark jobs on Oshinko cluster amd connectivity of zeppelin notebook to the Spark Oshinko Cluster.
-
-SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
 
 === Background
 
@@ -717,21 +729,6 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 === Where do we get these DataSets?
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
-
-===  What algorithm is suitable for Data Analytics?
-
-Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance. K-means is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
-
-===  What is in the data set?
-
-The Data Set Schema
-Date/Time: The date and time of the Uber pickup
-Lat: The latitude of the Uber pickup
-Lon: The longitude of the Uber pickup
-Base: The TLC base company affiliated with the Uber pickup
-​​The Data Records are in CSV format. An example line is shown below:
-
-2014-08-01 00:00:00,40.729,-73.9422,B02598
 
 
 ifdef::showscript[]
