@@ -460,7 +460,13 @@ spec:
 
 === Configure Kafka connector
 
-. In the strimzi/kafka-connect.yaml, under the spec object, review the configuration
+. In this section we will review the Kafka Connect deployment. Clone the Kafka distribution to the client VM. 
++
+-----
+$ git clone https://github.com/gpe-mw-training/rhte2018.git
+-----
+
+. Navigate to the strimzi directory. In kafka-connect.yaml, under the spec object, review the configuration
 +
 ----
   config:
@@ -470,9 +476,24 @@ spec:
     value.converter.schemas.enable: false
 ----
 
-. Open a terminal in the Kakfa connect pod and verify that the input file has been copied to the /opt/kafka directory.
+. Navigate to where you have cloned the lab assets. Under ../operational_intelligence/uber-data-analysis/src/main/resources/data, review the input data file (uber.csv). Copy this file to the /tmp directory. The contents of this directory will be streamed by Kafka connect to the Kafka broker.
 
-. A topic (file-publish) that Kafka Connect uses to publish to the Kafka broker has been created for you
+. A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
+
+. Create a topic consumer for this topic in a manner similar to how you created the additional consumer in the earlier section. Create a deployment yaml (connector-consumer.yaml) in the strimzi/ directory for this consumer and make sure that the top of the env section looks like
++
+-----
+env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: my-topic
+-----
+
+. Use the following command to create the new consumer
+-----
+$ oc apply -f connector-consumer.yaml
+-----
 
 . Create the configuration for the file source
 +
@@ -496,17 +517,20 @@ EOF
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
 
-. Verify the contents are being published to the message consumer configured.
+. Verify the contents are being published to the message consumer configured
 +
+-----
+$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
+-----
 
 == Conclusions
-
-* Can you appreciate the value of Kakfa in any customer use cases that you may have?
 
 == Questions
 
 * What is the purpose for the use of the *source-plugin.json* plugin?
+* Can you appreciate the value of Kakfa in any customer use cases that you may have?
 
 == Appendix
 ifdef::showscript[]
