@@ -201,7 +201,7 @@ Another important part of Oshinko to highlight is the oshinko-s2i repository and
 . Log into OpenShift Environment using OC Client Tool to your Lab Region
 +
 -----
-$ oc login https://master.$REGION.openshift.opentlc.com -u $OCP_USERNAME -p $OCP_PASSWD
+$ oc login https://$HOSTNAME:8443 -u $OCP_USERNAME -p $OCP_PASSWD
 -----
 
 . Create and switch to the OCP project specific to this lab:
