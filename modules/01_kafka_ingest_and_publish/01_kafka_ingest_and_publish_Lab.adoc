@@ -113,6 +113,39 @@ $ cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l
 4
 -----
 
+== Update Maven 
+
+On the VMs, it has an older version of Maven 3.0.5.  The labs require Maven 3.5.x. Here are quick steps to update Maven for your VM.  
+
+. Download Maven 
+* _The `curl` command below should be entered all on one line_
++
+----
+curl http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar -xzf - -C ~/
+----
+
+. Update your Linux path
++
+----
+echo "PATH=$HOME/apache-maven-3.5.4/bin:$PATH" >> ~/.bashrc
+
+source ~/.bashrc
+----
+
+. Verify Maven version
++
+----
+mvn -v
+----
+
+* You should see the updated Apache Maven version *3.5.4*:
++
+----
+Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-17T18:33:14Z)
+Maven home: /home/lab-user/apache-maven-3.5.4
+...
+----
+
 === OpenShift Container Platform
 
 You lab environment is built on Red Hat's OpenShift Container Platform.
@@ -187,7 +220,7 @@ $ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 
 === Kafka cluster
 
-Your lab environment includes access to a pre-installed Kafka cluster. The environment was creating using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
+Your lab environment includes access to a pre-installed Kafka cluster. The environment was created using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
 
 . Switch to your OpenShift project
 +
@@ -244,21 +277,18 @@ When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds th
 
 . Pre-provisioned Topics:
 +
-Your lab environment comes pre-provisioned with the following _KafkaTopic_ resources (which are only observable by a cluster-admin):
+Your lab environment comes pre-provisioned with the following _KafkaTopic_ resources (which are only observable by a cluster-admin). As part of the Kafka cluster, it can also deploy the topic operator which provides operator-style topic management via KafkaTopic custom resources. To view the topics, you will need to sudo inside the cluster. At this point, you will be logged into the cluster as cluster-admin and you will be able to perform the above command to get the topics.
 +
 -----
-# oc get KafkaTopics
+$ sudo -i
+$ oc project developer-lab1-kafka-project
+$ oc get KafkaTopics
 
 NAME         AGE
 my-topic     1h
 my-topic-2   1h
------
-+
-As part of the Kafka cluster, it can also deploy the topic operator which provides operator-style topic management via KafkaTopic custom resources. To view the topics, you will need to sudo inside the cluster. At this point, you will be logged into the cluster as cluster-admin and you will be able to perform the above command to get the topics.
-+
------
-$ sudo -i
-$ oc get KafkaTopics
+
+
 $ exit
 -----
 
@@ -315,7 +345,7 @@ These resources will send to and receive from the previously created Strimzi top
 -----
 $ oc create -f $HOME/lab/operational_intelligence/strimzi/strimzi-consumer.yaml
 -----
-.. View the Strimzi consumer logs:
+.. Wait for a minute while the deployment initializes and view the Strimzi consumer logs:
 +
 -----
 $ oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
