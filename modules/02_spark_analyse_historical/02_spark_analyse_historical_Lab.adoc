@@ -107,10 +107,10 @@ This lab provides a set of assets to assist with the provisioning of Oshinko and
 You will want to clone these lab assets to your lab environment so that you can review them.
 
 . Make a new directory where all lab assets will reside.
-  Already the lab assets are cloned in Lab1.
+  Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
 
 +
-. Change directories to the newly cloned project:
+. Change directory to the newly cloned project.
 +
 -----
 $ cd $HOME/lab/operation_intelligence/uber-data-analysis
