@@ -506,7 +506,20 @@ $ cd ~/lab/operational_intelligence/strimzi
     value.converter.schemas.enable: false
 ----
 
-. Navigate to where you have cloned the lab assets. Under ../operational_intelligence/uber-data-analysis/src/main/resources/data, review the input data file (uber.csv). Copy this file to the /tmp directory. The contents of this directory will be streamed by Kafka connect to the Kafka broker.
+. Navigate to where you have cloned the lab assets. Under ../operational_intelligence/uber-data-analysis/src/main/resources/data, review the input data file (uber.csv). Copy this file to the /tmp directory on the connect container. The contents of this directory will be streamed by Kafka connect to the Kafka broker. The following instructions illustrate how to copy the file over to the connect container.
++
+-----
+$ oc get pods
+-----
+
+. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
+
++
+-----
+$ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
+$ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
+$ ls /tmp
+-----
 
 . A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
 
