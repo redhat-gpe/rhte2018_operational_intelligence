@@ -108,8 +108,6 @@ You will want to clone these lab assets to your lab environment so that you can 
 
 . Make a new directory where all lab assets will reside.
   Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
-
-+
 . Change directory to the newly cloned project.
 +
 -----
