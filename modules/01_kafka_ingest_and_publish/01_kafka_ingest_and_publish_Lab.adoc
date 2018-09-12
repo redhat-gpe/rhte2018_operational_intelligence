@@ -490,13 +490,13 @@ spec:
 
 === Configure Kafka connector
 
-. In this section we will review the Kafka Connect deployment. Clone the Kafka distribution to the client VM. 
+. In this section we will review the Kafka Connect deployment. Navigate to the directory below:
 +
 -----
-$ git clone https://github.com/gpe-mw-training/rhte2018.git
+$ cd ~/lab/operational_intelligence/strimzi
 -----
 
-. Navigate to the strimzi directory. In kafka-connect.yaml, under the spec object, review the configuration
+. In kafka-connect.yaml, under the spec object, review the configuration
 +
 ----
   config:
@@ -510,17 +510,53 @@ $ git clone https://github.com/gpe-mw-training/rhte2018.git
 
 . A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
 
-. Create a topic consumer for this topic in a manner similar to how you created the additional consumer in the earlier section. Create a deployment yaml (connector-consumer.yaml) in the strimzi/ directory for this consumer and make sure that the top of the env section looks like
+. Make a copy of the strimzi-consumer.yaml
 +
 -----
-env:
+$ cp strimzi-consumer.yaml connector-consumer.yaml
+-----
+
+. Create a topic consumer for Kafka connect. Make sure the connector-consumer.yaml looks like
++
+-----
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: connector-consumer
+  name: connector-consumer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: connector-consumer
+    spec:
+      containers:
+      - name: connector-consumer
+        image: strimzi/hello-world-consumer:latest
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        env:
           - name: BOOTSTRAP_SERVERS
             value: my-cluster-kafka-bootstrap:9092
           - name: TOPIC
-            value: my-topic
+            value: my-topic-2
+          - name: GROUP_ID
+            value: my-hello-world-consumer
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
 -----
 
 . Use the following command to create the new consumer
++
 -----
 $ oc apply -f connector-consumer.yaml
 -----
