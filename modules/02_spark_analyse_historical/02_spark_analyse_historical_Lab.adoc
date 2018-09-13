@@ -111,7 +111,7 @@ You will want to clone these lab assets to your lab environment so that you can 
 . Change directory to the newly cloned project.
 +
 -----
-$ cd $HOME/lab/operation_intelligence/uber-data-analysis
+$ cd $HOME/lab/operational_intelligence/uber-data-analysis
 -----
 
 . Review the various files specific to this lab :
@@ -467,7 +467,7 @@ By keeping the data local to the Zeppelin interpreter, the data analysis will ex
 +
 -----
 $ oc create configmap uber-data-cm \
-    --from-file=$HOME/lab/operation_intelligence/uber-data-analysis/src/main/resources/data/uber.csv
+    --from-file=$HOME/lab/operational_intelligence/uber-data-analysis/src/main/resources/data/uber.csv
 -----
 
 . Mount the config map to the `apache-zepplin` deployment config as a volume:
