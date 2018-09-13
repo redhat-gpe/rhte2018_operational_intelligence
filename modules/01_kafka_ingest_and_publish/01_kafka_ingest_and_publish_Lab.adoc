@@ -113,6 +113,39 @@ $ cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l
 4
 -----
 
+== Update Maven 
+
+On the VMs, it has an older version of Maven 3.0.5.  The labs require Maven 3.5.x. Here are quick steps to update Maven for your VM.  
+
+. Download Maven 
+* _The `curl` command below should be entered all on one line_
++
+----
+curl http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar -xzf - -C ~/
+----
+
+. Update your Linux path
++
+----
+echo "PATH=$HOME/apache-maven-3.5.4/bin:$PATH" >> ~/.bashrc
+
+source ~/.bashrc
+----
+
+. Verify Maven version
++
+----
+mvn -v
+----
+
+* You should see the updated Apache Maven version *3.5.4*:
++
+----
+Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-17T18:33:14Z)
+Maven home: /home/lab-user/apache-maven-3.5.4
+...
+----
+
 === OpenShift Container Platform
 
 You lab environment is built on Red Hat's OpenShift Container Platform.
@@ -187,7 +220,7 @@ $ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 
 === Kafka cluster
 
-Your lab environment includes access to a pre-installed Kafka cluster. The environment was creating using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
+Your lab environment includes access to a pre-installed Kafka cluster. The environment was created using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
 
 . Switch to your OpenShift project
 +
@@ -244,21 +277,18 @@ When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds th
 
 . Pre-provisioned Topics:
 +
-Your lab environment comes pre-provisioned with the following _KafkaTopic_ resources (which are only observable by a cluster-admin):
+Your lab environment comes pre-provisioned with the following _KafkaTopic_ resources (which are only observable by a cluster-admin). As part of the Kafka cluster, it can also deploy the topic operator which provides operator-style topic management via KafkaTopic custom resources. To view the topics, you will need to sudo inside the cluster. At this point, you will be logged into the cluster as cluster-admin and you will be able to perform the above command to get the topics.
 +
 -----
-# oc get KafkaTopic
+$ sudo -i
+$ oc project developer-lab1-kafka-project
+$ oc get KafkaTopics
 
 NAME         AGE
 my-topic     1h
 my-topic-2   1h
------
-+
-As part of the Kafka cluster, it can also deploy the topic operator which provides operator-style topic management via KafkaTopic custom resources. To view the topics, you will need to sudo inside the cluster. At this point, you will be logged into the cluster as cluster-admin and you will be able to perform the above command to get the topics.
-+
------
-$ sudo -i
-$ oc get KafkaTopic
+
+
 $ exit
 -----
 
@@ -315,11 +345,17 @@ These resources will send to and receive from the previously created Strimzi top
 -----
 $ oc create -f $HOME/lab/operational_intelligence/strimzi/strimzi-consumer.yaml
 -----
-.. View the Strimzi consumer logs:
+.. Wait for a minute while the deployment initializes and view the Strimzi consumer logs:
 +
 -----
 $ oc logs $(oc get pod -l app=kafka-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ...
+ConsumerConfig values:
+auto.commit.interval.ms = 5000
+auto.offset.reset = earliest
+bootstrap.servers = [my-cluster-kafka-bootstrap:9092]
+.....
+.....
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:24 - Received message:
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:25 - 	     partition: 1
 2018-08-30 18:32:00 INFO  KafkaConsumerExample:26 - 	     offset: 137766
@@ -357,7 +393,7 @@ image::images/sing_cons.png[400,400]
 
 image::images/mult_cons.png[400,400]
 
-. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml. The initial section of it should look similar to
+. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
@@ -454,7 +490,13 @@ spec:
 
 === Configure Kafka connector
 
-. In the resources/kafka-connect/kafka-connect.yaml, under the spec object, review the configuration
+. In this section we will review the Kafka Connect deployment. Navigate to the directory below:
++
+-----
+$ cd ~/lab/operational_intelligence/strimzi
+-----
+
+. In kafka-connect.yaml, under the spec object, review the configuration
 +
 ----
   config:
@@ -464,9 +506,73 @@ spec:
     value.converter.schemas.enable: false
 ----
 
-. Open a terminal in the Kakfa connect pod and verify that the input file has been copied to the /opt/kafka directory.
+. Navigate to where you have cloned the lab assets. Under ../operational_intelligence/uber-data-analysis/src/main/resources/data, review the input data file (uber.csv). Copy this file to the /tmp directory on the connect container. The contents of this directory will be streamed by Kafka connect to the Kafka broker. The following instructions illustrate how to copy the file over to the connect container.
++
+-----
+$ oc get pods
+-----
 
-. A topic (file-publish) that Kafka Connect uses to publish to the Kafka broker has been created for you
+. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
+
++
+-----
+$ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
+$ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
+$ ls /tmp
+-----
+
+. A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
+
+. Make a copy of the strimzi-consumer.yaml
++
+-----
+$ cp strimzi-consumer.yaml connector-consumer.yaml
+-----
+
+. Create a topic consumer for Kafka connect. Make sure the connector-consumer.yaml looks like
++
+-----
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: connector-consumer
+  name: connector-consumer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: connector-consumer
+    spec:
+      containers:
+      - name: connector-consumer
+        image: strimzi/hello-world-consumer:latest
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: my-topic-2
+          - name: GROUP_ID
+            value: my-hello-world-consumer
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000"
+-----
+
+. Use the following command to create the new consumer
++
+-----
+$ oc apply -f connector-consumer.yaml
+-----
 
 . Create the configuration for the file source
 +
@@ -477,7 +583,7 @@ spec:
   "config": {
     "connector.class": "FileStreamSource",
     "tasks.max": "3",
-    "topic": "UberInput",
+    "topic": "my-topic-2",
     "file": "/tmp/uber.csv"
   }
 }
@@ -490,19 +596,20 @@ EOF
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
 
-. Verify the contents are being published to the message consumer configured.
+. Verify the contents are being published to the message consumer configured
 +
+-----
+$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
+-----
 
 == Conclusions
 
-* Can you appreciate the value of Kakfa in any customer use cases that you may have?
-
 == Questions
 
-//TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
-
 * What is the purpose for the use of the *source-plugin.json* plugin?
+* Can you appreciate the value of Kakfa in any customer use cases that you may have?
 
 == Appendix
 ifdef::showscript[]
