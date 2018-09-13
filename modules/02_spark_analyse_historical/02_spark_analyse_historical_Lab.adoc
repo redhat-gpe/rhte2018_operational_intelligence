@@ -111,7 +111,7 @@ You will want to clone these lab assets to your lab environment so that you can 
 . Change directory to the newly cloned project.
 +
 -----
-$ cd $HOME/lab/operational_intelligence/uber-data-analysis
+$ cd $HOME/lab/operational_intelligence/
 -----
 
 . Review the various files specific to this lab :
