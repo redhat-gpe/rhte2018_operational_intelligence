@@ -96,7 +96,7 @@ source ~/.bashrc
 . _sed_
 . _oc_
 
-. Validate that your virtual machine consists of 16GB RAM and 4 CPUs.
+. Validate that your virtual machine consists of 8GB RAM and 2 CPUs.
 .. Execute:
 +
 -----
@@ -435,7 +435,7 @@ spec:
 . Deploy the new consumer
 +
 ----
-% oc apply -f deployment-new.yaml
+% oc apply -f <your-new-deployment-filename>.yaml
 ----
 +
 . Observe that the new consumer now receives from one or more partitions that are distinct from the kafka-consumer. The output in their respective logs will look similar to:
@@ -513,7 +513,6 @@ $ oc get pods
 -----
 
 . Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
-
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
