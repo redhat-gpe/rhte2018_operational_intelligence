@@ -111,7 +111,7 @@ You will want to clone these lab assets to your lab environment so that you can 
 . Change directory to the newly cloned project.
 +
 -----
-$ cd $HOME/lab/operation_intelligence/uber-data-analysis
+$ cd $HOME/lab/operational_intelligence/uber-data-analysis
 -----
 
 . Review the various files specific to this lab :
@@ -220,28 +220,17 @@ $ oc create \
      -n $OCP_USERNAME-uber-data
 -----
 
-. Review the template that has been created:
+. Provision the Oshinko-WebUI
 +
 -----
-$ oc get template oshinko-webui -n $OCP_USERNAME-uber-data -o yaml | more
 
------
-+
-Notice the presence of two containers in the oshinko web pod.
-
-
-. Provision the Oshinko web-ui
-+
------
 $ oc new-app oshinko-webui -n $OCP_USERNAME-uber-data > /tmp/oshinko-web.txt
------
 
-.. Review the output found in `/tmp/oshinko-web.txt`
+-----
 +
------
-
-....
-
+.. Review the output found in /tmp/oshinko-web.txt
++
+----
 --> Deploying template "user3-uber-data/oshinko-webui" to project user3-uber-data
 
      * With parameters:
@@ -260,7 +249,13 @@ $ oc new-app oshinko-webui -n $OCP_USERNAME-uber-data > /tmp/oshinko-web.txt
     Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
+----
+. Review the template that has been created
++
 -----
+$ oc get template oshinko-webui -n $OCP_USERNAME-uber-data -o yaml | more
+-----
+
 
 . Wait until both containers of the oshinko-web pod have started:
 +
@@ -467,10 +462,10 @@ By keeping the data local to the Zeppelin interpreter, the data analysis will ex
 +
 -----
 $ oc create configmap uber-data-cm \
-    --from-file=$HOME/lab/operation_intelligence/uber-data-analysis/src/main/resources/data/uber.csv
+    --from-file=$HOME/lab/operational_intelligence/uber-data-analysis/src/main/resources/data/uber.csv
 -----
 
-. Mount the config map to the `apache-zepplin` deployment config as a volume:
+. Mount the config map to the `apache-zeppelin` deployment config as a volume:
 +
 -----
 $ oc set volume dc/apache-zeppelin \
