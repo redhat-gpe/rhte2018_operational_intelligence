@@ -17,7 +17,7 @@
 ** `curl` utility
 ** `sed` utility
 ** `oc` version 3.9 utility
-** `Interactive Notebooks - Jupyter`
+** `Interactive Notebooks - Apache Zeppelin`
 ** `git` command basics
 
 :numbered:
