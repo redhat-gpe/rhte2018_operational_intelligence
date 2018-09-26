@@ -26,7 +26,7 @@
 ** `curl` utility
 ** `sed` utility
 ** `oc` version 3.9 utility
-** `Interactive Notebooks - Jupyter and Zeppelin`
+** `Interactive Notebooks - Zeppelin`
 ** `git` command basics
 
 
@@ -34,22 +34,97 @@
 
 == Overview
 
-We will build a real-time example for analysis and monitoring of Uber car GPS trip data. 
+We will build a real-time example for analysis and monitoring of Uber car GPS trip data.
 
 The first project discussed creating a machine learning model using Apache Spark’s K-means algorithm to cluster Uber data based on location. This complex project will discuss using the saved K-means model with streaming data to do real-time analysis of where and when Uber cars are clustered
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture1.png[uberstream10]
+image::images/picture1.png[uberstream10]
 
-=== Background
+=== Technical Background
+==== Apache Spark
+. *Apache Spark*
++
+Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
+
+. *Apache Kafka*
++
+Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
+
+. *Spark MLlib*
++
+MLib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
+
+. *Apache Zeppelin*
++
+Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
+Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server.
+As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available.
+Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
+Zeppelin has a built in Scala and Python Intepretors.
+These interpreters can be utilized to visualize raw historical data.
+
+. *Spark Notebook*
++
+The Spark Notebook is the open source notebook aimed at enterprise environments, providing Data Scientists and Data Engineers with an interactive web-based editor that can combine Scala code, SQL queries, Markup and JavaScript in a collaborative manner to explore, analyse and learn from massive data sets.
+
+. *Spark SQL*
++
+Spark SQL is a Spark module for structured data processing. It enables unmodified Hadoop Hive queries to run up to 100x faster on existing deployments and data. It also provides powerful integration with the rest of the Spark ecosystem (e.g., integrating SQL query processing with machine learning).
+
+. *Resilient Distributed Datasets*
++
+Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. It is an immutable distributed collection of objects. Each dataset in RDD is divided into logical partitions, which may be computed on different nodes of the cluster. Spark Actions are RDD operations that produce non-RDD values. They materialize a value in a Spark program. In other words, a RDD operation returns a value of any type.
+
+. *SparkContext*
++
+SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
+
+==== Oshinko
+
+The _Oshinko_ project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift Container Platform.
+
+This Lab demonstrates the usage of an Oshinko cluster running in your OpenShift Container Platform environment.
 
 
 === Reference
 
+.  http://spark.apache.org/
+.  http://spark.apache.org/examples.html
+.  http://spark.apache.org/mllib/
+.  https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
+.  https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
+.  https://spark.apache.org/sql/
+.  https://www.youtube.com/watch?v=zHbxbb2ye3E
+.  https://kafka.apache.org/
+.  https://spark.apache.org/streaming/
+
+
+=== Validate Environment Variables
+In a previous lab, you should have already set various environment variables in the shell of your lab environment.
+
+At this time, ensure that the following environment variables remain set:
+
+-----
+echo "export OCP_PROJECT=\$OCP_USERNAME-uber-realtime-data" >> ~/.bashrc
+
+source ~/.bashrc
+
+
+$ echo $OCP_USERNAME
+developer
+
+$ echo $OCP_PASSWD
+xxxxxxxx
+-----
+
 == Lab Asset Overview
 
-=== Environment Variables
+This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
+You will want to clone these lab assets to your lab environment so that you can review them.
 
-=== OpenShift access
+. Make a new directory where all lab assets will reside.
+  Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
+. Change directory to the newly cloned project.
 
 === Code Analysis of Lab 3
 
@@ -62,7 +137,7 @@ Entire Flow is with KafkaProducerConsumer.scala. Hence we analyse with this code
 
 A Spark streaming application subscribed to the topic UberInput ingests a stream of uber trip events. It identifies the location cluster corresponding to the latitude and longitude of the uber trip. It adds the cluster location to the data tuple and publishes the results in JSON format to the UberRealTime topic. A Spark streaming application subscribed to the UberRealTime topic analyzes the uber trip location clusters that are popular by date and time.
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture2.png[uberstream11]
+image::images/picture2.png[uberstream11]
 
 ==== Data Flow in Detail
 The Uber trip data is in the following format
@@ -70,15 +145,15 @@ The Uber trip data is in the following format
 date/time, latitude,longitude,base
 2014-08-01 00:00:00,40.729,-73.9422,B02598
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture3.png[uber12]
+image::images/picture3.png[uber12]
 
 Data will be enriched are in JSON Format which is given below
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture4.png[berstream13]
+image::images/picture4.png[berstream13]
 
 Spark Kafka Producer Consumer Code with Enriched Data
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/picture5.png[berstream14]
+image::images/picture5.png[berstream14]
 
 ==== Code flow
 
@@ -157,8 +232,11 @@ Make Changes in Spark.Memory Parameters to 5G
 
 zeppelin Dependency Local Repo as shown in the Figure
 
-image::https://github.com/Pkrish15/uber-datanalysis/blob/master/ZeppelinUIChangesLab3.png[zepp5ui]
+image::images/ZeppelinUIChangesLab3.png[zepp5ui]
 
+== Deployment Topology
+
+image::images/DeploymentTopologyLab3.png[DeploymentTopo]
 
 == Conclusions
 
@@ -171,7 +249,7 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 == Appendix
 
-===  Overview 
+===  Overview
 
 So far we learned about Spark uses Zeppelin Notebook and Performs the Data Analysis based on the Uber RealTime Data.
 
