@@ -4,7 +4,7 @@
 :toc2:
 :linkattrs:
 
-= Spark Analysis of Historical Data
+= Spark Real Time Analysis of Uber Data
 
 .Prerequisite
 * Skills
@@ -26,8 +26,9 @@
 
 === Lab Goals
 
+* Kafka Spark Streaming of Uber.csv file.
 * Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
-* Uber Historical Data Analysis using Apache Spark
+* Uber Realtime Data Analysis using Apache Spark
 * Usage of Interactive NoteBooks like Apache Zeppelin
 
 === Technical Background
@@ -47,7 +48,7 @@ Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestio
 Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server.
 As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available.
 Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
-Zeppelin has a built in Scala and Python Intepretors.
+Zeppelin has a built in Scala and Python Interpretors.
 These interpreters can be utilized to visualize raw historical data.
 
 . *Spark Notebook*
@@ -116,6 +117,7 @@ $ cd $HOME/lab/operational_intelligence/
 
 . Review the various files specific to this lab :
 +
+==Red - To be Changed to SparkProducerConsumer.scala
 -----
 ├── templates
 │   ├── oshinko-cluster.yaml
@@ -536,6 +538,8 @@ master                         : spark://uber-realtime-data-cluster:7077
 . Deployment Topology given below.
 
 image::images/DeploymentTopologyLatest.png[DeploymentTopo]
+
+=== Zeppelin Kafka Configuration
 
 
 === Creation of Uber NoteBook
