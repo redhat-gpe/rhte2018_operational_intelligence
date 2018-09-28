@@ -518,6 +518,7 @@ Notice the Service 42000 has been exposed to spark.driver.port and 42100 has bee
 +
 image::images/ZeppelinNewSettings.png[]
 
+
 . Make the following changes in this Spark section:
 
 .. Find the existing text box for the URL to the `master` and populate it as follows:
@@ -536,8 +537,16 @@ master                         : spark://uber-realtime-data-cluster:7077
 . After making the changes, scroll to the bottom of the page and click: `Save`.
 
 . Deployment Topology given below.
++
+image::images/DeploymentTopologyLab3.png[DeploymentTopo]
 
-image::images/DeploymentTopologyLatest.png[DeploymentTopo]
+. Deployment Topology with DataFlow.
++
+image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
+
+. DataFlow Schematic Diagram.
++
+image::images/DataFlowSchematic.png[DataFlow]
 
 === Zeppelin Kafka Configuration
 
