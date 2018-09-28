@@ -242,9 +242,11 @@ image::images/DeploymentTopologyLab3.png[DeploymentTopo]
 
 
 . *Data Flow Diagram*
+
 image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
 
 . *Data Flow Schematic Diagram*
+
 image::images/DataFlowSchematic.png[DataFlowschematic]
 
 
