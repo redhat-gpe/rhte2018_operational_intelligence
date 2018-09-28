@@ -236,7 +236,18 @@ image::images/ZeppelinUIChangesLab3.png[zepp5ui]
 
 == Deployment Topology
 
+. *Ports and Protocols*
+
 image::images/DeploymentTopologyLab3.png[DeploymentTopo]
+
+
+. *Data Flow Diagram*
+image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
+
+. *Data Flow Schematic Diagram*
+image::images/DataFlowSchematic.png[DataFlowschematic]
+
+
 
 == Conclusions
 
