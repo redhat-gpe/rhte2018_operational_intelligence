@@ -92,8 +92,13 @@ At this time, ensure that the following environment variables remain set:
 -----
 echo "export OCP_PROJECT=\$OCP_USERNAME-uber-realtime-data" >> ~/.bashrc
 
-source ~/.bashrc
+echo "export OCP_REGION=`echo $HOSTNAME | cut -d'.' -f2`" >> ~/.bashrc
 
+echo "export OCP_DOMAIN=clientvm.\$OCP_REGION.rhte.opentlc.com" >> ~/.bashrc
+
+echo "export OCP_WILDCARD_DOMAIN=apps.\$OCP_DOMAIN" >> ~/.bashrc
+
+source ~/.bashrc
 
 $ echo $OCP_USERNAME
 developer
@@ -117,26 +122,41 @@ $ cd $HOME/lab/operational_intelligence/
 
 . Review the various files specific to this lab :
 +
-==Red - To be Changed to SparkProducerConsumer.scala
 -----
-├── templates
-│   ├── oshinko-cluster.yaml
-│   └── zeppelin-openshift.yaml
-├── uber-data-analysis
-│   ├── notebooks
-│   │   └── Uber.json
-│   ├── pom.xml
-│   ├── README.md
-│   └── src
-│       └── main
-│           ├── java
-│           │   └── com
-│           │       └── redhat
-│           │           └── gpte
-│           │               └── Main.scala
-│           └── resources
-│               └── data
-│                   └── uber.csv
+uber-realtime-spark-stream-analysis/
+├── data
+│   ├── cluster.txt
+│   └── uber.csv
+├── notebooks
+│   ├── Spark ML KMeans - Uber.json
+│   ├── Spark ML KMeansUber.json
+│   ├── uberml201.json
+│   ├── uberstreaming201.json
+│   ├── uberstreaming2.json
+│   └── uberZeppelinnotebook.json
+├── pom.xml
+├── ReadMe.adoc
+└── src
+    └── main
+        ├── java
+        │   └── com
+        │       └── streamskafka
+        │           └── uber
+        │               ├── MsgConsumer.java
+        │               └── MsgProducer.java
+        └── scala
+            └── com
+                ├── sparkkafka
+                │   └── uber
+                │       ├── JSONUtil.scala
+                │       ├── KafkaProducerExample.scala
+                │       ├── SparkKafkaConsumerProducer.scala
+                │       └── SparkKafkaConsumer.scala
+                └── sparkml
+                    └── uber
+                        ├── ClusterUber.scala
+                        └── SqlUber.scala
+
 -----
 
 
@@ -152,7 +172,7 @@ At this time, Red Hat does not intend to provide supported versions of these pac
 ... Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
 ... It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
-.. *Main.scala*
+.. *SparkKafkaConsumerProducer.scala*
 +
 Main.scala is the code applied to the Zeppelin Notebook to analyze the data.
 
