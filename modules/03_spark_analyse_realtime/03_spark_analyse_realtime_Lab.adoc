@@ -593,7 +593,7 @@ These are the basic steps for the Spark Streaming Consumer Producer code:
 
 ... *Initialize a Spark StreamingContext Object*
 
-ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a MapR Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
+.. ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a MapR Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
 
 +
 image::images/picture11.png[stream]
@@ -603,12 +603,12 @@ image::images/picture12.png[DStream]
 
 .. Apply Transformations (Which create New DStreams)
 
-We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
+.. We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
 
 +
 image::images/picture13.png[code]
 
-Here is the Output from the df.show
+.. Here is the Output from the df.show
 
 +
 image::images/picture14.png[dfshow]
@@ -706,5 +706,87 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
 
-
 ifdef::showscript[]
+
+=== ClusterQuota and Limit Range for Zeppelin Interpreter
+
+==== Cluster Quota
+A resource quota, defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that may be consumed by resources in that project.
+
+==== Limit Range
+A limit range, defined by a LimitRange object, enumerates compute resource constraints in a project at the pod, container, image, image stream, and persistent volume claim level, and specifies the amount of resources that a pod, container, image, image stream, or persistent volume claim can consume.
+
+All resource create and modification requests are evaluated against each LimitRange object in the project. If the resource violates any of the enumerated constraints, then the resource is rejected. If the resource does not set an explicit value, and if the constraint supports a default value, then the default value is applied to the resource.
+
+By default, all OCP projects are assigned a limit range.  the limit range assigns default limits and requests for both CPU and RAM if the DCs themselves don't specify limits and requests.
+The default CPU limit is set to 1/20th of a CPU.  So Spark was running on 1/20th of a CPU.
+
+In general, all of us should always understand the details of LimitRanges assigned to our projects.
+And its very likely that we should be adding/tweaking the limits and requests in our DC's.
+
+==== CPU Limits
+
+Each container in a pod can specify the amount of CPU it is limited to use on a node. CPU limits control the maximum amount of CPU that your container may use independent of contention on the node. If a container attempts to exceed the specified limit, the system will throttle the container. This allows the container to have a consistent level of service independent of the number of pods scheduled to the node.
+
+==== Memory Requests
+By default, a container is able to consume as much memory on the node as possible. In order to improve placement of pods in the cluster, specify the amount of memory required for a container to run. The scheduler will then take available node memory capacity into account prior to binding your pod to a node. A container is still able to consume as much memory on the node as possible even when specifying a request.
+
+==== Memory Limits
+If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
+
+=== Do we need to Know them
+The above parameters are managed by the cluster Administrator and Infrastructure team, Hence it is not needed for the students to learn. But a basic concept of Knowing this will help.
+
+*Students are expected to learn this much alone.*
+----
+For Viewing Quotas
+
+$ oc get quota -n user3-uber-data
+NAME                AGE
+besteffort          11m
+compute-resources   2m
+object-counts       29m
+...
+...
+$ oc describe quota object-counts -n user3-uber-data
+Name:			object-counts
+Namespace:		user3-uber-data
+Resource		Used	Hard
+--------		----	----
+configmaps		3	10
+persistentvolumeclaims	0	4
+replicationcontrollers	3	20
+secrets			9	10
+services		2	10
+
+For Viewing Limit Ranges
+
+$ oc get limits -n user3-uber-data
+NAME              AGE
+resource-limits   6d
+
+$ oc describe limits resource-limits
+Name:		resource-limits
+Namespace:	use3-uber-data
+Type		Resource	Min	Max	Default Request	Default Limit	Max Limit/Request Ratio
+----		--------	---	---	---------------	-------------	-----------------------
+Pod		cpu		30m	2	-		-		-
+Pod		memory		150Mi	1Gi	-		-		-
+Container	memory		150Mi	1Gi	307Mi		512Mi		-
+Container	cpu		30m	2	60m		1		-
+
+$ oc describe limits resource-limits -n user3-uber-data
+Name:                           resource-limits
+Namespace:                      demoproject
+Type                            Resource                Min     Max     Default Request Default Limit   Max Limit/Request Ratio
+----                            --------                ---     ---     --------------- -------------   -----------------------
+Pod                             cpu                     200m    2       -               -               -
+Pod                             memory                  6Mi     1Gi     -               -               -
+Container                       cpu                     100m    2       200m            300m            10
+Container                       memory                  4Mi     1Gi     100Mi           200Mi           -
+openshift.io/Image              storage                 -       1Gi     -               -               -
+openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
+openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
+
+
+endif::showscript[]
