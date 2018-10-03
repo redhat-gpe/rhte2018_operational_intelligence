@@ -481,12 +481,27 @@ image::images/DeploymentTopologyLab3.png[DeploymentTopo]
 +
 image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
 
-. DataFlow Schematic Diagram.
-+
+. DataPipeLine Architecture Diagram.
+
+Uber trip data is published to a Kafka Streams topic using the Kafka API.
+A Spark streaming application subscribed to the first topic:
+Ingests a stream of uber trip events
+Identifies the location cluster corresponding to the latitude and longitude of the uber trip
+Adds the cluster location to the event and publishes the results in JSON format to another topic
+A Spark streaming application subscribed to the second topic:
+Analyzes the uber trip location clusters that are popular by date and time.
+
+
 image::images/DataFlowSchematic.png[DataFlow]
 
 === Zeppelin Kafka Configuration
 
+=== What we did in the Lab2?
+In Lab2 we just created a model with the Historical data (Uber.csv), build a training set, Identified the patterns and did a Test Predictions.
+
+In Lab3 we are going to use the Deployed Model and give accurate predictions.
+
+image::images/picture1.png[recall]
 
 === Creation of Uber NoteBook
 
@@ -494,22 +509,36 @@ Recall that the lab assets provided as SparkProducerConsumer.scala.
 
 This application is currently running on Zeppelin Notebook. Let us explore what it does.
 
-... Load the Data (Uber.csv) into the DataFrame.
+... Incoming Data is in CSV format, get enriched with JSON Format and the KMeans Cluster ID is assigned to it.
 +
-image::images/LoadData1.png[LoadData]
-... What is Feature Array?
+image::images/picture3.png[LoadData]
 
-Features of the array data type.
-The amount of memory required to represent an array value is usually proportional to its cardinality, and not to the maximum cardinality of its type.
-When an array is being referenced, all of the values in the array are stored in main memory.
-
-... Define Feature Array.
-In order for the features to be used by a machine learning algorithm, the features are transformed and put into Feature Vectors, which are vectors of numbers representing the value for each feature. Below, a VectorAssembler is used to transform and return a new DataFrame with all of the feature columns in a vector column.
 +
-image::images/CreateFeatureArray.png[FeatureArray]
+image::images/picture4.png[KMeans]
+
++
+image::images/picture5.png[KMeansClusterID]
+
+... Parsing the Data Set Records
+A Scala Uber case class defines the schema corresponding to the CSV records. The parseUber function parses the comma separated values into the Uber case class.
+
++
+image::images/picture6.png[ubercaseclass]
+
+... Loading the K-Means Model
+The Spark KMeansModel class is used to load the saved K-means model fitted on the historical Uber trip data.
+
++
+image::images/picture7.png[LoadKMeans]
+
+Output of Model clusterCenters
+
++
+image::images/picture8.png[outputmodelclusters]
+
 ... Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
 +
-image::images/KMeansModel.png[FeatureArray]
+image::images/KMeansM.png[FeatureArray]
 
 ... Next, we use the model to get the clusters for test data in order to further analyze the clustering.
 +
@@ -544,107 +573,113 @@ image::images/pvc-data-zeppelin.png[data-placeholder]
 
 === Execute Uber _Paragraphs_
 
-.. It is an Important phase in the Lab2, Students are expected to run these each paragraphs. Careful attention and Execution is need in this phase.
-.. Execute the cell at very stages and you can visualize the data, upon each query, Output will be cleared in the Zeppelin Notebook and the Students are expected to generate the output.
-.. General MLFlow Pipeline in Apache Spark
-+
-image::images/bcmlprocess.png[SparkMLFlow]
+.. *Spark Streaming Code*
 
-.. Import the Required Packages. Scala Import Statements to use the Spark API and Dependent Libraries.
-+
-image::images/Import.png[import]
+These are the basic steps for the Spark Streaming Consumer Producer code:
 
-.. Define StructType - Since the Data uber.csv is a raw data, we need to define them in the form of Structural Schema. Hence we are using StructType Class from SparkAPI to convert them into Structural Schema.
-.. Why we are doing this - SparkSQL deals with structural schema very easily as we can register with Temp tables in the Memory and can retrieve the data faster.
-+
-image::images/StructuredSchema.png[ss]
+... *Configure Kafka Consumer Producer properties*
+.. Initialize a Spark StreamingContext object. Using this context, create a DStream which reads message from a Topic.
+.. Apply transformations (which create new DStreams).
+.. Write messages from the transformed DStream to a Topic.
+.. Start receiving data and processing. Wait for the processing to be stopped.
+.. We will go through each of these steps with the example application code.
 
-.. Load the Data into DataFrames.
-.. A DataFrame is a distributed collection of data, which is organized into named columns. Conceptually, it is equivalent to relational tables with good optimization techniques.
-+
-image::images/LoadCSV.png[ls]
+... *Configure Kafka Consumer Producer properties*
+.. The first step is to set the KafkaConsumer and KafkaProducer configuration properties, which will be used later to create a DStream for receiving/sending messages to topics. You need to set the following paramters:
 
-.. What is StructuralSchema?
-... Since the UberData is in Raw Format (CSV), it is advised to convert into Structural Schema, where we can define a basic StructType.
-    StructType is an object that defines the schema of Spark DataFrames.
-    StructType objects contain a list of StructField objects that define the name, type, and nullable flag for each column in a DataFrame.
-.. What is in the DataSets?
-  The Data Set Schema
-  Date/Time: The date and time of the Uber pickup.
-  Lat: The latitude of the Uber pickup.
-  Lon: The longitude of the Uber pickup.
-  Base: The TLC base company affiliated with the Uber pickup.
+.. Key and value deserializers: for deserializing the message.
+.. Auto offset reset: to start reading from the earliest or latest message.
+.. Bootstrap servers: this can be set to a dummy host:port since the broker address is not actually used by MapR Streams.
 
-​  ​The Data Records are in CSV format. An example line is shown below:
+... *Initialize a Spark StreamingContext Object*
 
-  2014-08-01 00:00:00,40.729,-73.9422,B02598
+ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a MapR Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
 
++
+image::images/picture11.png[stream]
 
-.. PrintStructuralSchema and Display the StructuralSchema.
 +
-image::images/StructuralSchema.png[structuralschema]
-.. In this step we are printing Structural Schema to view the output on how the data (uber.csv) is placed. Also, we are caching the data in the spark Memory for faster data retrieval operations.
-+
-image::images/dfShow.png[df]
-.. Define Feature Array.
-... Features of the array data type. Therefore, arrays that contain a large amount of data will consume large amounts of main memory. Array element values can be retrieved by specifying the element's corresponding index value. Array data types are useful when you want to store a set of values of a single data type.
-.. Why Feature Array is needed?
-... Feature Array is the process of using domain knowledge to choose which data metrics to input as features into a machine learning algorithm. Feature Array plays a key role in K-means clustering; using meaningful features that capture the variability of the data is essential for the algorithm to find all of the naturally-occurring groups.
-... Categorical data (i.e., category labels such as gender, country, browser type) needs to be encoded or separated in a way that can still work with the algorithm.
-+
-image::images/df2show.png[df2]
-.. From a DataStructures point of Visualization of FeatureArray.
-+
-image::images/df2business.png[dfb]
-.. Clustering uses unsupervised algorithms, which do not have the outputs (labeled data) in advance.
-.. KMeans is one of the most commonly used clustering algorithms that clusters the data points into a predefined number of clusters (k). Clustering using the K-means algorithm begins by initializing all the coordinates to k number of centroids. With every pass of the algorithm, each point is assigned to its nearest centroid based on some distance metric, which is usually Euclidean distance. The centroids are then updated to be the “centers” of all the points assigned to it in that pass. This repeats until there is a minimum change in the centers.
+image::images/picture12.png[DStream]
 
-.. Create a KMeans Object, Set the parameters to to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data.
-+
-image::images/kmeans.png[km]
-+
-image::images/TransformBusiness.png[tfb]
+.. Apply Transformations (Which create New DStreams)
 
-.. Output of the ModelClusters.
-+
-image::images/KMeansOutput.png[kmbo]
+We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
 
-.. Cluster Centers are displayed in GoogleMap which is shown below
 +
-image::images/ClusterCenters.png[cc]
+image::images/picture13.png[code]
+
+Here is the Output from the df.show
+
++
+image::images/picture14.png[dfshow]
 
 
-.. KMeans Functional Flow
-+
-image::images/KMeansBusinessFlow.png[kbf]
+.. A VectorAssembler is used to transform and return a new DataFrame with the latitude and longitude feature columns in a vector column.
 
-.. Now we can ask questions like, "Which hours of the day and which cluster had the highest number of pickups?"
 +
-image::images/Predictions.png[pd]
-.. How many Pickups occured in Each Cluster?
+image::images/picture15.png[vectorAssemblerLoad]
+
 +
-image::images/PredictionResults.png[prg]
-.. With a Zeppelin notebook, we can also display query results in bar charts or graphs. Below the x axis is the hour, the y axis the count, and the colors are the different clusters.
+image::images/picture16.png[VectorAssemblerCode]
+
+.. Then the model is used to get the clusters from the features with the model transform method, which returns a DataFrame with the cluster predictions.
+
 +
-image::images/ZeppelinGraph.png[zg]
-.. You can register a DataFrame as a temporary table using a given name, for example: df.registerTempTable("uber") , and then run SQL statements using the SQL methods provided by sqlContext. An example is shown below in a Zeppelin notebook.
+image::images/picture17.png[LoadModel]
+
+
+.. Write messages from the transformed DStream to a Topic
+
 +
-image::images/TempTable.png[tt]
+image::images/picture20.png[Enriched]
+
+.. The Dataset result of the query is converted to JSON RDD Strings, then the RDD sendToKafka method is used to send the JSON key-value messages to a topic (the key is null in this case).
+
 +
-image::images/UberCellAnalysis.png[uberstream9]
+image::images/picture21.png[jsonconversion]
+
++
+image::images/picture22.png[dstreamRDD]
+
+
+.. Start receiving the data and processing it. Wait for the process to be stopped.
+To start receiving data, we must explicitly call start() on the StreamingContext, then call awaitTermination to wait for the streaming computation to finish.
+
++
+image::images/picture23.png[processingdata]
+
+.. *Spark Kafka Consumer Code*
+Next, we will go over some of the Spark streaming code which consumes the JSON-enriched messages.
+
++
+image::images/picture24.png[consumer]
+
+... *Below is the code for*
+
+.. Creating a Direct Kafka Stream
+.. Converting the JSON message values to Dataset[Row] using spark.read.json with the schema
+.. Creating two temporary views for subsequent SQL queries
+.. Using ssc.remember to cache data for queries
+
++
+image::images/picture26.png[kafkaStream]
+
+.. Output of the Cluster Centers
+
++
+image::images/picture28.png[outputcluster]
+
+
 
 == Conclusions
 
 ====  What did we learn?
 
-Oshinko Cluster - Cluster Management Solution for Apache Spark.
+Apache Strimzi - Basics of Apache Strimzi and it's deployment on OpenShift.
 
-Apache Spark - Basics of Apache Spark like Actions and Transformations.
+Spark Streaming - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
 
-Apache Zeppelin NoteBook - Usage of Interactive Notebooks like Zeppelin and it's interaction with Oshinko Cluster for Apache Spark in a current Big Data scenario.
-
-SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
-
+Kafka with Apache Spark Integration - We learned Apache Kafka integration with Spark on Zeppelin Notebook.
 
 == Questions
 
@@ -673,86 +708,3 @@ http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
 
 
 ifdef::showscript[]
-
-=== ClusterQuota and Limit Range for Zeppelin Interpreter
-
-==== Cluster Quota
-A resource quota, defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that may be consumed by resources in that project.
-
-==== Limit Range
-A limit range, defined by a LimitRange object, enumerates compute resource constraints in a project at the pod, container, image, image stream, and persistent volume claim level, and specifies the amount of resources that a pod, container, image, image stream, or persistent volume claim can consume.
-
-All resource create and modification requests are evaluated against each LimitRange object in the project. If the resource violates any of the enumerated constraints, then the resource is rejected. If the resource does not set an explicit value, and if the constraint supports a default value, then the default value is applied to the resource.
-
-By default, all OCP projects are assigned a limit range.  the limit range assigns default limits and requests for both CPU and RAM if the DCs themselves don't specify limits and requests.
-The default CPU limit is set to 1/20th of a CPU.  So Spark was running on 1/20th of a CPU.
-
-In general, all of us should always understand the details of LimitRanges assigned to our projects.
-And its very likely that we should be adding/tweaking the limits and requests in our DC's.
-
-==== CPU Limits
-
-Each container in a pod can specify the amount of CPU it is limited to use on a node. CPU limits control the maximum amount of CPU that your container may use independent of contention on the node. If a container attempts to exceed the specified limit, the system will throttle the container. This allows the container to have a consistent level of service independent of the number of pods scheduled to the node.
-
-==== Memory Requests
-By default, a container is able to consume as much memory on the node as possible. In order to improve placement of pods in the cluster, specify the amount of memory required for a container to run. The scheduler will then take available node memory capacity into account prior to binding your pod to a node. A container is still able to consume as much memory on the node as possible even when specifying a request.
-
-==== Memory Limits
-If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
-
-=== Do we need to Know them
-The above parameters are managed by the cluster Administrator and Infrastructure team, Hence it is not needed for the students to learn. But a basic concept of Knowing this will help.
-
-*Students are expected to learn this much alone.*
-----
-For Viewing Quotas
-
-$ oc get quota -n user3-uber-data
-NAME                AGE
-besteffort          11m
-compute-resources   2m
-object-counts       29m
-...
-...
-$ oc describe quota object-counts -n user3-uber-data
-Name:			object-counts
-Namespace:		user3-uber-data
-Resource		Used	Hard
---------		----	----
-configmaps		3	10
-persistentvolumeclaims	0	4
-replicationcontrollers	3	20
-secrets			9	10
-services		2	10
-
-For Viewing Limit Ranges
-
-$ oc get limits -n user3-uber-data
-NAME              AGE
-resource-limits   6d
-
-$ oc describe limits resource-limits
-Name:		resource-limits
-Namespace:	use3-uber-data
-Type		Resource	Min	Max	Default Request	Default Limit	Max Limit/Request Ratio
-----		--------	---	---	---------------	-------------	-----------------------
-Pod		cpu		30m	2	-		-		-
-Pod		memory		150Mi	1Gi	-		-		-
-Container	memory		150Mi	1Gi	307Mi		512Mi		-
-Container	cpu		30m	2	60m		1		-
-
-$ oc describe limits resource-limits -n user3-uber-data
-Name:                           resource-limits
-Namespace:                      demoproject
-Type                            Resource                Min     Max     Default Request Default Limit   Max Limit/Request Ratio
-----                            --------                ---     ---     --------------- -------------   -----------------------
-Pod                             cpu                     200m    2       -               -               -
-Pod                             memory                  6Mi     1Gi     -               -               -
-Container                       cpu                     100m    2       200m            300m            10
-Container                       memory                  4Mi     1Gi     100Mi           200Mi           -
-openshift.io/Image              storage                 -       1Gi     -               -               -
-openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
-openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
-
-
-endif::showscript[]
