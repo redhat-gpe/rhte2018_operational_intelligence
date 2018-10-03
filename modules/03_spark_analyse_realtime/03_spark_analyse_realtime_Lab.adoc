@@ -26,63 +26,18 @@
 
 === Lab Goals
 
-* Kafka Spark Streaming of Uber.csv file.
-* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
-* Uber Realtime Data Analysis using Apache Spark
-* Usage of Interactive NoteBooks like Apache Zeppelin
+. Kafka streaming of Uber.csv file to Apache Spark on Oshinko Cluster.
+. Large Data Analysis using Apache Spark with Apache Kafka.
 
 === Technical Background
 
-==== Apache Spark
-. *Apache Spark*
-+
-Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
-
-. *Spark MLlib*
-+
-MLib is Spark's scalable machine learning library consisting of common learning algorithms and utilities, including classification, regression, clustering, collaborative filtering, dimensionality reduction, as well as underlying optimization primitives.
-
-. *Apache Zeppelin*
-+
-Apache Zeppelin is a multi-purpose web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
-Based on the concept of an interpreter that can be bound to any language or data processing backend, Zeppelin is a web based notebook server.
-As one of its backends, Zeppelin implements Spark, and other implementations, such as Hive, Markdown, D3 etc., are also available.
-Zeppelin has support for multiple interpreters like Scala, Python, Kotlin, HBase.
-Zeppelin has a built in Scala and Python Interpretors.
-These interpreters can be utilized to visualize raw historical data.
-
-. *Spark Notebook*
-+
-The Spark Notebook is the open source notebook aimed at enterprise environments, providing Data Scientists and Data Engineers with an interactive web-based editor that can combine Scala code, SQL queries, Markup and JavaScript in a collaborative manner to explore, analyse and learn from massive data sets.
-
-. *Spark SQL*
-+
-Spark SQL is a Spark module for structured data processing. It enables unmodified Hadoop Hive queries to run up to 100x faster on existing deployments and data. It also provides powerful integration with the rest of the Spark ecosystem (e.g., integrating SQL query processing with machine learning).
-
-. *Resilient Distributed Datasets*
-+
-Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. It is an immutable distributed collection of objects. Each dataset in RDD is divided into logical partitions, which may be computed on different nodes of the cluster. Spark Actions are RDD operations that produce non-RDD values. They materialize a value in a Spark program. In other words, a RDD operation returns a value of any type.
-
-. *SparkContext*
-+
-SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
-
-==== Oshinko
-
-The _Oshinko_ project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift Container Platform.
-
-This Lab demonstrates the usage of an Oshinko cluster running in your OpenShift Container Platform environment.
+==== Apache Spark with Red Hat Strimzi Cluster
+. *Apache Strimzi*
 
 
 === Reference
-
-.  http://spark.apache.org/
-.  http://spark.apache.org/examples.html
-.  http://spark.apache.org/mllib/
-.  https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
-.  https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
-.  https://spark.apache.org/sql/
-.  https://www.youtube.com/watch?v=zHbxbb2ye3E
+.  https://kafka.apache.org/
+.  https://strimzi.io/
 
 === Validate Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
@@ -174,11 +129,11 @@ At this time, Red Hat does not intend to provide supported versions of these pac
 
 .. *SparkKafkaConsumerProducer.scala*
 +
-Main.scala is the code applied to the Zeppelin Notebook to analyze the data.
+SparkkafkaConsumerProducer.scala is the code applied to the Zeppelin Notebook to analyze the data.
 
 ... This file is provided to you as background and context only.
-For the purpose of this lab, you will not be modifying or compiling this Main.scala.
-... Compiling the Main.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
+For the purpose of this lab, you will not be modifying or compiling this scala class file.
+... Compiling the SparkkafkaConsumerProducer.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
 
 .. *Uber.json*
 +
@@ -196,24 +151,6 @@ For the purpose of this lab, you will not be modifying or compiling this Main.sc
 
 
 == Oshinko
-=== Overview
-
-Oshinko is the project focused on providing a Spark cluster on OpenShift Container Platform.
-In this section of the lab, you will provision Oshinko.
-
-The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
-With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
-
-To begin your exploration, we recommend starting with the oshinko-webui application.
-
-The oshinko-webui is a self-contained deployment of the Oshinko technologies.
-An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser.
-Through the browser interface you will be able to manage Apache Spark clusters within your project.
-Once installed, it consists of a Node.JS application that is contained within a Pod and provides a web browser based user interface for controlling the lifecycle of Spark clusters.
-
-
-Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
-
 
 
 === Oshinko Web UI
@@ -294,7 +231,7 @@ oshinko-web-1-86blg   2/2       Running   0
 .. Point your browser to the output of the following command:
 +
 -----
-$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/webui"\n\n"
+$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/webui"\n\n"
 -----
 +
 image::images/oshinko_homepage.png[]
@@ -304,6 +241,8 @@ image::images/oshinko_homepage.png[]
 Subsequently, you should be able to access the UI without authenticating.
 
 === Oshinko Cluster
+In a real-time scenario, we would have different clusters for each services and use cases. Hence, we are not going to use the same cluster which was used in Lab2. We are going to create a new cluster for Lab3.
+Because of this cluster can act as an Independent services. Hence we are doing this.
 
 Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist of both a master and worker pods.
 
@@ -361,18 +300,6 @@ A completely open web-based notebook that enables interactive data analytics. Ap
 Interactive browser-based notebooks enable data engineers, data analysts and data scientists to be more productive by developing, organizing, executing, and sharing data code and visualizing results without referring to the command line or needing the cluster details. Notebooks allow these users not only allow to execute but to interactively work with long workflows.  There are a number of notebooks available with Spark. iPython remains a mature choice and great example of a data science notebook.  The Hortonworks Gallery provides an Ambari stack definition to help our customers quickly set up iPython on their Hadoop clusters.
 
 Apache Zeppelin is a new and upcoming web-based notebook which brings data exploration, visualization, sharing and collaboration features to Spark.   It support Python, but also a growing list of programming languages such as Scala, Hive, SparkSQL, shell and markdown.
-
-=== Architecture
-
-image::images/zeppelinArchitecture.jpg[za]
-
-Frontend: This provides UI and shells to interact with humans and a display system to show data in tabular, graphical form, and export iframe.
-
-Zeppelin Server: This provides web sockets and the REST API to interact with the UI and access service remotely. There are two types of API calls—a REST API for notebooks and an Interpreter API for interpreters. The Notebook REST API is to interact with notebooks—creating paragraph, submitting paragraph job in batch, adding cron jobs, and so on. The Interpreter REST API is to change the configuration properties and restart the interpreter.
-
-Pluggable Interpreter System: This is to interact with different interpreters such as Spark, Shell, Markdown, AngularJS, Hive, Ignite, Flink, and others.
-
-Interpreters: Each interpreter runs in a separate JVM to provide the functionality needed by the user.
 
 === Provision
 
@@ -458,24 +385,14 @@ apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 Navigate your browser to the output of the following URL:
 
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/"\n\n"
 -----
 
 image::images/zeppelin.png[uberstream7]
 
 == Zeppelin Interpreter
 
-=== Overview
-
-Zeppelin Interpreters are plug-ins which allow for specific languages and data-processing-backends.
-For example, to use Scala code in Zeppelin, the Spark interpreter is needed.
-If you chose to write your data analytics code in Python, the the PySpark would be an option for you.
-
-In this section of the lab, you will run various Uber related data analysis _paragraphs_ as part of a Zeppelin Notebook.
-
-These paragraphs are written in Scala and subsequently will run in a Spark Interpreter.
-
-=== Inject Uber historical data
+=== Inject Uber RealTime data
 
 In this section of the lab, the raw uber related data found in your lab assets will be mounted to your Apache Zeppelin interpreter.
 By keeping the data local to the Zeppelin interpreter, the data analysis will execute quickly.
@@ -573,7 +490,7 @@ image::images/DataFlowSchematic.png[DataFlow]
 
 === Creation of Uber NoteBook
 
-Recall that the lab assets provided as Main.scala.
+Recall that the lab assets provided as SparkProducerConsumer.scala.
 
 This application is currently running on Zeppelin Notebook. Let us explore what it does.
 
