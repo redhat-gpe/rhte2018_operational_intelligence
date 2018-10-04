@@ -25,8 +25,8 @@
 == Overview
 
 === Lab Goals
-[red]#TODO#
-. Tell about the Data from Uber Perspective, Why Near Realtime scenario occurs? Explain it.
+. Near-Real-Time-Data, This lab provides a near-real-time-data (i.e) the data which is exported from Uber Dashboard through API. This data will be three days old data.
+. It has very huge volume for one particular region upto 1.5 TB. To avoid the network bandwidth, we reduced the data with 0.8 Million Records which is a near realistic uber data.
 
 . Kafka streaming of Uber.csv file to Apache Spark on Oshinko Cluster.
 . Large Data Analysis using Apache Spark with Apache Kafka.
@@ -36,17 +36,18 @@
 ==== Apache Spark with Red Hat Strimzi Cluster
 . *Apache Strimzi*
 
+Strimzi provides a way to run an Apache Kafka cluster on Kubernetes or OpenShift in various deployment configurations.
+
 
 === Reference
 .  https://kafka.apache.org/
 .  https://strimzi.io/
 
-=== Validate Environment Variables
+=== Reset Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
 At this time, ensure that the following environment variables remain reset:
-[red]#TODO#
-Reset the Env varibles
+
 -----
 echo "export OCP_PROJECT=\$OCP_USERNAME-uber-realtime-data" >> ~/.bashrc
 
@@ -67,9 +68,6 @@ xxxxxxxx
 
 == Lab Asset Overview
 
-Near-Real-Time-Data, This lab provides a near-real-time-data (i.e) the data which is exported from Uber Dashboard through API. This data will be three days old data.
-It has very huge volume for one particular region upto 1.5 TB. To avoid the network bandwidth, we reduced the data with 0.8 Million Records which is a near realistic uber data.
-
 This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
 You will want to clone these lab assets to your lab environment so that you can review them.
 
@@ -83,7 +81,6 @@ $ cd $HOME/lab/operational_intelligence/uber-realtime-spark-stream-analysis
 -----
 
 . Review the various files specific to this lab :
-
 +
 -----
 uber-realtime-spark-stream-analysis/
@@ -157,12 +154,10 @@ For the purpose of this lab, you will not be modifying or compiling this scala c
 .... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
 == Kafka Strimzi Assets
-[red]#TODO#
-Lab3 Expects from lab1 - Explain it thoroughly
-Some OC Commands must be der.
+.. Lab3 Expects from lab1 - Recall the Assets of Lab1
+.. Recall the OC Commands created to kafka-topic.
 
 == Oshinko
-
 
 === Oshinko Web UI
 
@@ -353,9 +348,6 @@ $ oc new-app --template=apache-zeppelin-openshift \
 .. Review the output found in `/tmp/zeppelin-web.txt`
 +
 -----
-
-....
-
 --> Deploying template "developer-uber-realtime-data/apache-zeppelin-openshift" to project developer-uber-realtime-data
 
      * With parameters:
@@ -375,8 +367,6 @@ $ oc new-app --template=apache-zeppelin-openshift \
     Access your application via route 'apache-zeppelin-developer-uber-realtime-data.apps.6d13.openshift.opentlc.com'
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
-
-
 -----
 
 .. Expect that a apache-zeppelin build pod run to completion from which the apache-zeppelin deployment will start:
@@ -551,6 +541,7 @@ image::images/picture8.png[outputmodelclusters]
 image::images/picture9.png[FeatureArray]
 
 ... Next, we use the model to get the clusters for test data in order to further analyze the clustering.
+
 +
 image::images/Predictions.png[Predictions]
 
@@ -596,11 +587,11 @@ These are the basic steps for the Spark Streaming Consumer Producer code:
 
 .. Key and value deserializers: for deserializing the message.
 .. Auto offset reset: to start reading from the earliest or latest message.
-.. Bootstrap servers: this can be set to a dummy host:port since the broker address is not actually used by MapR Streams.
+.. Bootstrap servers: this can be set to a dummy host:port since the broker address is not actually used by Kafka Streams.
 
 ... *Initialize a Spark StreamingContext Object*
 
-.. ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a MapR Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
+.. ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a Kafka Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
 
 +
 image::images/picture11.png[stream]
@@ -705,9 +696,9 @@ Data Discovery: The first phase involves analysis on historical data to build th
 
 Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
 
-image:images/1.jpg[uberstream]
+In the Second Lab, We dealt with getting started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
 
-In this first post, I’ll help you get started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
+In this Third Lab, We see the Near Real Time Traffic predictions using Kafka with Spark Streaming on a Strimzi Cluster.
 
 === Where do we get these DataSets?
 
