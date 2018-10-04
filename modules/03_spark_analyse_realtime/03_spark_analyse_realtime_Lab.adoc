@@ -4,7 +4,7 @@
 :toc2:
 :linkattrs:
 
-= Spark Real Time Analysis of Uber Data
+= Spark Near Real Time Analysis of Uber Data
 
 .Prerequisite
 * Skills
@@ -25,6 +25,8 @@
 == Overview
 
 === Lab Goals
+[red]#TODO#
+. Tell about the Data from Uber Perspective, Why Near Realtime scenario occurs? Explain it.
 
 . Kafka streaming of Uber.csv file to Apache Spark on Oshinko Cluster.
 . Large Data Analysis using Apache Spark with Apache Kafka.
@@ -42,8 +44,9 @@
 === Validate Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
-At this time, ensure that the following environment variables remain set:
-
+At this time, ensure that the following environment variables remain reset:
+[red]#TODO#
+Reset the Env varibles
 -----
 echo "export OCP_PROJECT=\$OCP_USERNAME-uber-realtime-data" >> ~/.bashrc
 
@@ -64,18 +67,23 @@ xxxxxxxx
 
 == Lab Asset Overview
 
+Near-Real-Time-Data, This lab provides a near-real-time-data (i.e) the data which is exported from Uber Dashboard through API. This data will be three days old data.
+It has very huge volume for one particular region upto 1.5 TB. To avoid the network bandwidth, we reduced the data with 0.8 Million Records which is a near realistic uber data.
+
 This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
 You will want to clone these lab assets to your lab environment so that you can review them.
 
 . Make a new directory where all lab assets will reside.
   Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
-. Change directory to the newly cloned project.
+. Change directory to the previously cloned lab asset.
 +
 -----
-$ cd $HOME/lab/operational_intelligence/
+$ cd $HOME/lab/operational_intelligence/uber-realtime-spark-stream-analysis
+
 -----
 
 . Review the various files specific to this lab :
+
 +
 -----
 uber-realtime-spark-stream-analysis/
@@ -83,12 +91,8 @@ uber-realtime-spark-stream-analysis/
 │   ├── cluster.txt
 │   └── uber.csv
 ├── notebooks
-│   ├── Spark ML KMeans - Uber.json
-│   ├── Spark ML KMeansUber.json
-│   ├── uberml201.json
-│   ├── uberstreaming201.json
-│   ├── uberstreaming2.json
-│   └── uberZeppelinnotebook.json
+│   ├── ubernearrealtime.json
+│  
 ├── pom.xml
 ├── ReadMe.adoc
 └── src
@@ -103,10 +107,7 @@ uber-realtime-spark-stream-analysis/
             └── com
                 ├── sparkkafka
                 │   └── uber
-                │       ├── JSONUtil.scala
-                │       ├── KafkaProducerExample.scala
                 │       ├── SparkKafkaConsumerProducer.scala
-                │       └── SparkKafkaConsumer.scala
                 └── sparkml
                     └── uber
                         ├── ClusterUber.scala
@@ -122,12 +123,20 @@ uber-realtime-spark-stream-analysis/
 Notice that community Apache Spark and community Scala packages are being utilized.
 At this time, Red Hat does not intend to provide supported versions of these packages.
 
-.. *Raw Uber historical Data*
+.. *Raw Near Realtime Uber Data*
 
 ... Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
 ... It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
 .. *SparkKafkaConsumerProducer.scala*
+
+ .. Consumer of what?
+ ... Consumes the Uber.csv file which is a near-real-time-uber-data and send its to the UberTopic which has already been created in Lab1.
+ .. Produces what?
+ ... Produces the Enriched UberData with KMeans clusterId which is send to the spark streaming which helps for accurate predictions.
+ .. How connection happening with Spark ?
+ ... In Lab1 we create a topic called UberTopic which consumes the Uber.csv file and pushed into the spark-streaming. Please refer the deployment Topology diagram with Uber.csv file.
+
 +
 SparkkafkaConsumerProducer.scala is the code applied to the Zeppelin Notebook to analyze the data.
 
@@ -135,12 +144,10 @@ SparkkafkaConsumerProducer.scala is the code applied to the Zeppelin Notebook to
 For the purpose of this lab, you will not be modifying or compiling this scala class file.
 ... Compiling the SparkkafkaConsumerProducer.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
 
-.. *Uber.json*
+.. *UberNearRealTime.json*
 +
 ... Later in this lab you will analyze this Uber.json.  It is generated from SCALA IDE or Using Zeppelin Paragraph Cells Compilation.
 ... Later in this lab you will import this JSON File in the Zeppelin NoteBook and run the each paragraph .
-
-.. *templates*
 
 ... *oshinko-cluster.yaml*
 ....  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
@@ -149,6 +156,10 @@ For the purpose of this lab, you will not be modifying or compiling this scala c
 
 .... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
+== Kafka Strimzi Assets
+[red]#TODO#
+Lab3 Expects from lab1 - Explain it thoroughly
+Some OC Commands must be der.
 
 == Oshinko
 
@@ -190,7 +201,7 @@ $ oc new-app oshinko-webui -n $OCP_USERNAME-uber-realtime-data > /tmp/oshinko-we
 .. Review the output found in /tmp/oshinko-web.txt
 +
 ----
---> Deploying template "user3-uber-realtime-data/oshinko-webui" to project user3-uber-realtime-data
+--> Deploying template "developer-uber-realtime-data/oshinko-webui" to project developer-uber-realtime-data
 
      * With parameters:
         * SPARK_DEFAULT=
@@ -252,7 +263,7 @@ Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist
 .. *Number of workers*: 1
 . Click the `Deploy` button
 +
-image::images/provision_oc.png[]
+image::images/uberrealtimedatacluster.png[uberrealtimedatacluster]
 
 . Two `Deployment Config` resources will have been created.
 These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
@@ -345,7 +356,7 @@ $ oc new-app --template=apache-zeppelin-openshift \
 
 ....
 
---> Deploying template "user3-uber-realtime-data/apache-zeppelin-openshift" to project user3-uber-realtime-data
+--> Deploying template "developer-uber-realtime-data/apache-zeppelin-openshift" to project developer-uber-realtime-data
 
      * With parameters:
         * Application Name=apache-zeppelin
@@ -361,7 +372,7 @@ $ oc new-app --template=apache-zeppelin-openshift \
     imagestream "apache-zeppelin" created
     imagestream "zeppelin-openshift" created
 --> Success
-    Access your application via route 'apache-zeppelin-user3-uber-realtime-data.apps.6d13.openshift.opentlc.com'
+    Access your application via route 'apache-zeppelin-developer-uber-realtime-data.apps.6d13.openshift.opentlc.com'
     Build scheduled, use 'oc logs -f bc/apache-zeppelin' to track its progress.
     Run 'oc status' to view your app.
 
@@ -494,8 +505,6 @@ Analyzes the uber trip location clusters that are popular by date and time.
 
 image::images/DataFlowSchematic.png[DataFlow]
 
-=== Zeppelin Kafka Configuration
-
 === What we did in the Lab2?
 In Lab2 we just created a model with the Historical data (Uber.csv), build a training set, Identified the patterns and did a Test Predictions.
 
@@ -531,14 +540,15 @@ The Spark KMeansModel class is used to load the saved K-means model fitted on th
 +
 image::images/picture7.png[LoadKMeans]
 
-Output of Model clusterCenters
+.. Output of Model clusterCenters
 
 +
 image::images/picture8.png[outputmodelclusters]
 
 ... Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
+
 +
-image::images/KMeansM.png[FeatureArray]
+image::images/picture9.png[FeatureArray]
 
 ... Next, we use the model to get the clusters for test data in order to further analyze the clustering.
 +
@@ -566,10 +576,7 @@ image::images/UberImport.png[uberstream8]
    All Paragraphs are editable in Zeppelin Notebook.
 .. *Why we are doing this?*
    We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
-+
-image::images/ReadCSV.png[ReadCSV]
-+
-image::images/pvc-data-zeppelin.png[data-placeholder]
+
 
 === Execute Uber _Paragraphs_
 
