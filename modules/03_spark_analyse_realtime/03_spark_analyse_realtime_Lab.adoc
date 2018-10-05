@@ -517,7 +517,6 @@ image::images/picture3.png[LoadData]
 +
 image::images/picture4.png[KMeans]
 
-
 +
 image::images/picture5.png[KMeansClusterID]
 
