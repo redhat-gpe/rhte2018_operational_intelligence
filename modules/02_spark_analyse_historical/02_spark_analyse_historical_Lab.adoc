@@ -589,7 +589,7 @@ It is the Source code and Output file that every students expected to Run and vi
 .. Once the data copied, Open the Zeppelin URL using the URL determined in the previous section:
 +
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
