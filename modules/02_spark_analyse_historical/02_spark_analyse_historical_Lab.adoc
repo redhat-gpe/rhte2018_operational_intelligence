@@ -430,13 +430,29 @@ apache-zeppelin-1-build   0/1       Completed   0          2m
 apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
+.. Apache Zeppelin Secured Route
+
+-----
+
+$ oc create route edge --service=apache-zeppelin
+
+route "apache-zeppelin" created
+
+-----
+.. Why we are doing this above step?
+
+As apache-zeppelin internally uses WebSocket to communicate,
+ws://apache-zeppelin-developer-uber-data.apps.clientvm.5fd4.rhte.opentlc.com/ws.
+This URL is unable to connect due to firewall block, Hence we are making it to as a secured route to communicate.
+This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
+
 
 ==== Login into Zeppelin UI
 
 Navigate your browser to the output of the following URL:
 
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
 image::images/zeppelin.png[uberstream7]
