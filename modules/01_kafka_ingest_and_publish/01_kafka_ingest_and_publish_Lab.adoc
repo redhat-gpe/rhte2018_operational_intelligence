@@ -512,7 +512,7 @@ $ cd ~/lab/operational_intelligence/strimzi
 $ oc get pods
 -----
 
-. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
+. Create a local directory and copy the `uber.csv` file to that directory. You can locate this file under /home/lab-user/lab/operational_intelligence/uber-data-analysis/src/main/resources/data. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred. 
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
@@ -567,13 +567,13 @@ spec:
             value: "1000"
 -----
 
-. Use the following command to create the new consumer
+. Exit the connector pod and use the following command to create the new consumer
 +
 -----
 $ oc apply -f connector-consumer.yaml
 -----
 
-. Create the configuration for the file source
+. rsh into the connector pod as before and create the configuration for the file source
 +
 ----
 % cat <<EOF >> /tmp/source-plugin.json
@@ -595,7 +595,7 @@ EOF
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
 
-. Verify the contents are being published to the message consumer configured
+. Exit the connector pod and verify the contents are being published to the message consumer configured
 +
 -----
 $ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
