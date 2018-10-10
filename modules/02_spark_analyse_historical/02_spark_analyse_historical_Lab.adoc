@@ -431,6 +431,7 @@ apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
 .. Apache Zeppelin Secured Route
++
 
 -----
 
@@ -439,11 +440,11 @@ $ oc create route edge --service=apache-zeppelin
 route "apache-zeppelin" created
 
 -----
-.. Why we are doing this above step?
+
+..  Why we are doing this above step?
 
 As apache-zeppelin internally uses WebSocket to communicate,
-ws://apache-zeppelin-developer-uber-data.apps.clientvm.5fd4.rhte.opentlc.com/ws.
-This URL is unable to connect due to firewall block, Hence we are making it to as a secured route to communicate.
+But due to firewall block, Hence we are making it to as a secured route to communicate.
 This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
 
 
