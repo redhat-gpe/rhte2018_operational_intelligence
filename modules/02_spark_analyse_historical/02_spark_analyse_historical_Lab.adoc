@@ -583,9 +583,6 @@ image::images/KMeansModel.png[FeatureArray]
 +
 image::images/Predictions.png[Predictions]
 
-.. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
-.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberlatest.json
-
 === Import Uber _NoteBook_
 
 It is the Source code and Output file that every students expected to Run and visualize the results.
