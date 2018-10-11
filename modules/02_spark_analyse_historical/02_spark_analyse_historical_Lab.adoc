@@ -740,7 +740,6 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
 
-
 ifdef::showscript[]
 
 === ClusterQuota and Limit Range for Zeppelin Interpreter
