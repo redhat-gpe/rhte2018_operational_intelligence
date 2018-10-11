@@ -430,13 +430,30 @@ apache-zeppelin-1-build   0/1       Completed   0          2m
 apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
+.. Apache Zeppelin Secured Route
++
+
+-----
+
+$ oc create route edge --service=apache-zeppelin
+
+route "apache-zeppelin" created
+
+-----
+
+..  Why we are doing this above step?
+
+As apache-zeppelin internally uses WebSocket to communicate,
+But due to firewall block, Hence we are making it to as a secured route to communicate.
+This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
+
 
 ==== Login into Zeppelin UI
 
 Navigate your browser to the output of the following URL:
 
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
 image::images/zeppelin.png[uberstream7]
@@ -572,13 +589,15 @@ It is the Source code and Output file that every students expected to Run and vi
 .. Once the data copied, Open the Zeppelin URL using the URL determined in the previous section:
 +
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
-.. Import the JSON File given the GitHub URL in the Zeppelin Notebook
+.. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
 
-.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
+*You can import anyone of them*
 
+.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberwithoutput.json
+.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberlatest.json
 +
 image::images/UberImport.png[uberstream8]
 
@@ -720,7 +739,6 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 === Where do we get these DataSets?
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
-
 
 ifdef::showscript[]
 
