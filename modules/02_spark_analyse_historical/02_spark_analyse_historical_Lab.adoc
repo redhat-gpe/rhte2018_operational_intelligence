@@ -431,12 +431,30 @@ apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
 
+.. Apache Zeppelin Secured Route
++
+
+-----
+$ oc delete route apache-zeppelin
+$ oc create route edge --service=apache-zeppelin
+
+route "apache-zeppelin" created
+
+-----
+
+..  Why we are doing this above step?
+
+As apache-zeppelin internally uses WebSocket to communicate,
+But due to firewall block, Hence we are making it to as a secured route to communicate.
+This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
+
+
 ==== Login into Zeppelin UI
 
 Navigate your browser to the output of the following URL:
 
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
 image::images/zeppelin.png[uberstream7]
@@ -565,6 +583,9 @@ image::images/KMeansModel.png[FeatureArray]
 +
 image::images/Predictions.png[Predictions]
 
+.. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
+.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberlatest.json
+
 === Import Uber _NoteBook_
 
 It is the Source code and Output file that every students expected to Run and visualize the results.
@@ -572,7 +593,7 @@ It is the Source code and Output file that every students expected to Run and vi
 .. Once the data copied, Open the Zeppelin URL using the URL determined in the previous section:
 +
 -----
-$ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
+$ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
@@ -585,6 +606,7 @@ image::images/UberImport.png[uberstream8]
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD.
    You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
    All Paragraphs are editable in Zeppelin Notebook.
+
 .. *Why we are doing this?*
    We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
 +
