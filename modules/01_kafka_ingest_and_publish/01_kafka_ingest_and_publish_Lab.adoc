@@ -518,6 +518,7 @@ $ oc get pods
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
 $ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
 $ ls /tmp
+$ exit
 -----
 
 . A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
@@ -576,6 +577,7 @@ $ oc apply -f connector-consumer.yaml
 . rsh into the connector pod as before and create the configuration for the file source
 +
 ----
+% oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
 % cat <<EOF >> /tmp/source-plugin.json
 {
   "name": "source-test",
@@ -598,6 +600,7 @@ EOF
 . Exit the connector pod and verify the contents are being published to the message consumer configured
 +
 -----
+$ exit
 $ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
