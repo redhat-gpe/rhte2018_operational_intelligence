@@ -431,24 +431,6 @@ apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
 
-.. Apache Zeppelin Secured Route
-+
-
------
-$ oc delete route apache-zeppelin
-$ oc create route edge --service=apache-zeppelin
-
-route "apache-zeppelin" created
-
------
-
-..  Why we are doing this above step?
-
-As apache-zeppelin internally uses WebSocket to communicate,
-But due to firewall block, Hence we are making it to as a secured route to communicate.
-This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
-
-
 ==== Login into Zeppelin UI
 
 Navigate your browser to the output of the following URL:
@@ -548,6 +530,15 @@ master                         : spark://uber-data-cluster:7077
 ... *spark.driver.host*              :	apache-zeppelin
 ... *spark.driver.blockManager.port* :	42100
 ... *spark.driver.port*	             :  42000
+... *spark.executor.memory*          :  6g
+
+.. Enable the CheckBox in ZeppelinUI as shown in the figure:
+
+... This will avoid the stackoverflowException and allows concurrentSQL operations to perform and gives significant performance benefits.
+    And also increase the driver memory to 6g
+
++
+image::images/stackoverflowException.png[stackoverflowException]
 
 . After making the changes, scroll to the bottom of the page and click: `Save`.
 
@@ -595,7 +586,7 @@ $ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {
 
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 
-.
+. https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
 
 +
 image::images/UberImport.png[uberstream8]
