@@ -724,7 +724,6 @@ image::images/picture26.png[kafkaStream]
 image::images/picture28.png[outputcluster]
 
 
-
 == Conclusions
 
 ====  What did we learn?
