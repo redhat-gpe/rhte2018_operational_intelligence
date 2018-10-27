@@ -622,7 +622,7 @@ image::images/UberImport.png[uberstream8]
    You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
    All Paragraphs are editable in Zeppelin Notebook.
 .. *Why we are doing this?*
-   We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
+   We need to import the data into the Spark Master Node into the Mounted Volume */data/uber.csv* which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
 
 
 === Execute Uber _Paragraphs_
@@ -658,7 +658,6 @@ image::images/picture12.png[DStream]
 .. Apply Transformations (Which create New DStreams)
 
 .. We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
-
 +
 image::images/picture13.png[code]
 
