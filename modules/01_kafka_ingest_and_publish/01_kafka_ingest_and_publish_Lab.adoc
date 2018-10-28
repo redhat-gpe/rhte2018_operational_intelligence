@@ -513,9 +513,16 @@ spec:
 $ cd ~/lab/operational_intelligence/strimzi
 -----
 
-. In kafka-connect.yaml, under the spec object, review the configuration
+. In kafka-connect.yaml, under the spec object, *review the configuration*
+
 +
 ----
+$ cd ~/lab/operational_intelligence/strimzi
+
+[johndoe@redhat.com@clientvm 0 ~/lab/operational_intelligence/strimzi]$ ls
+
+kafka-connect.yaml  strimzi-consumer.yaml  strimzi-producer.yaml
+
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.storage.StringConverter
