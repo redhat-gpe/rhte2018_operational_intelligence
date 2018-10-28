@@ -527,9 +527,17 @@ $ cd ~/lab/operational_intelligence/strimzi
 +
 -----
 $ oc get pods
+
+NAME
+.
+                                       READY     STATUS             RESTARTS   AGE
+my-connect-cluster-connect-64dd9b5cc5-mlz26   0/1       Running            492        9d
+.
+
 -----
 
-. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
+. Note the name of the connect pod (*my-connect-cluster-connect-64dd9b5cc5-mlz26*) and use that in the oc rsync command. rsh in to the container and check that the file has been transferred.
+Name of the connect pod would be like this *my-connect-cluster-connect-XXXXXX* based on the student's VM in which they are querying for *oc get pods*.
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
