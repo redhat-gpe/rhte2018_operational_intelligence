@@ -4,7 +4,7 @@
 :toc2:
 :linkattrs:
 
-= Spark Near Real Time Analysis of Uber Data
+= Large Data Sets of Uber Data Analysis using Spark
 
 .Prerequisite
 * Skills
@@ -25,25 +25,45 @@
 == Overview
 
 === Lab Goals
-. Near-Real-Time-Data, This lab provides a near-real-time-data (i.e) the data which is exported from Uber Dashboard through API. This data will be three days old data.
-. It has very huge volume for one particular region upto 1.5 TB. To avoid the network bandwidth, we reduced the data with 0.8 Million Records which is a near realistic uber data.
-
+. This Lab will provide you large datasets of UberData.
 . Kafka streaming of Uber.csv file to Apache Spark on Oshinko Cluster.
-. Large Data Analysis using Apache Spark with Apache Kafka.
 
 === Technical Background
 
 ==== Apache Spark with Red Hat Strimzi Cluster
-. *Apache Strimzi*
 
+. *Apache Strimzi*
++
 Strimzi provides a way to run an Apache Kafka cluster on Kubernetes or OpenShift in various deployment configurations.
 
+. *KafkaAPI*
+
+KafkaAPI is composed of Five Core API's which we need to know:
+
+. The Producer API allows applications to send streams of data to topics in the Kafka cluster.
+. The Consumer API allows applications to read streams of data from topics in the Kafka cluster.
+. The Streams API allows transforming streams of data from input topics to output topics.
+. The Connect API allows implementing connectors that continually pull from some source system or application into Kafka or push from Kafka into some sink system or application.
+. The AdminClient API allows managing and inspecting topics, brokers, and other Kafka objects.
+
+
+
+=== Architecture
+. DataPipeLine Architecture Diagram.
++
+Uber trip data is published to a Kafka Streams topic using the Kafka API. A Spark streaming application subscribed to the first topic: Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
+
+image::images/DataFlowSchematic.png[DataFlow]
+
+. Deployment Topology diagram with DataFlow.
++
+image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
 
 === Reference
 .  https://kafka.apache.org/
 .  https://strimzi.io/
 
-=== Reset Environment Variables
+=== Modify the Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
 At this time, ensure that the following environment variables remain reset:
@@ -120,18 +140,16 @@ uber-realtime-spark-stream-analysis/
 Notice that community Apache Spark and community Scala packages are being utilized.
 At this time, Red Hat does not intend to provide supported versions of these packages.
 
-.. *Raw Near Realtime Uber Data*
+.. *Large Datasets of Uber Data*
 
 ... Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
 ... It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
 .. *SparkKafkaConsumerProducer.scala*
 
- .. Consumer of what?
- ... Consumes the Uber.csv file which is a near-real-time-uber-data and send its to the UberTopic which has already been created in Lab1.
- .. Produces what?
- ... Produces the Enriched UberData with KMeans clusterId which is send to the spark streaming which helps for accurate predictions.
- .. How connection happening with Spark ?
+  ... Consumes the Uber.csv file which is a near-real-time-uber-data and send its to the UberTopic which has already been created in Lab1.
+  ... Produces the Enriched UberData with KMeans clusterId which is send to the spark streaming which helps for accurate predictions.
+ .. How Integration happening with Spark ?
  ... In Lab1 we create a topic called UberTopic which consumes the Uber.csv file and pushed into the spark-streaming. Please refer the deployment Topology diagram with Uber.csv file.
 
 +
@@ -154,8 +172,8 @@ For the purpose of this lab, you will not be modifying or compiling this scala c
 .... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
 == Kafka Strimzi Assets
-.. Lab3 Expects from lab1 - Recall the Assets of Lab1
-.. Recall the OC Commands created to kafka-topic.
+Recall the OC commands created in Lab1.
+
 
 == Oshinko
 
@@ -300,13 +318,6 @@ uber-realtime-data-cluster-w-2-678fp   1/1       Running     0          10s
 
 == Zeppelin
 
-=== Overview
-A completely open web-based notebook that enables interactive data analytics. Apache Zeppelin is a new and incubating multi-purposed web-based notebook which brings data ingestion, data exploration, visualization, sharing and collaboration features to Hadoop and Spark.
-
-Interactive browser-based notebooks enable data engineers, data analysts and data scientists to be more productive by developing, organizing, executing, and sharing data code and visualizing results without referring to the command line or needing the cluster details. Notebooks allow these users not only allow to execute but to interactively work with long workflows.  There are a number of notebooks available with Spark. iPython remains a mature choice and great example of a data science notebook.  The Hortonworks Gallery provides an Ambari stack definition to help our customers quickly set up iPython on their Hadoop clusters.
-
-Apache Zeppelin is a new and upcoming web-based notebook which brings data exploration, visualization, sharing and collaboration features to Spark.   It support Python, but also a growing list of programming languages such as Scala, Hive, SparkSQL, shell and markdown.
-
 === Provision
 
 . If you are not already there, switch to the OCP project specific to this lab:
@@ -341,7 +352,7 @@ $ oc get templates -n $OCP_USERNAME-uber-realtime-data
 -----
 $ oc new-app --template=apache-zeppelin-openshift \
   --param=APPLICATION_NAME=apache-zeppelin \
-  --param=GIT_URI=https://github.com/rimolive/zeppelin-openshift.git \
+  --param=GIT_URI=https://github.com/gpe-mw-training/operational_intelligence.git \
   --param=ZEPPELIN_INTERPRETERS=md \
   >> /tmp/zeppelin-web.txt
 -----
@@ -391,7 +402,33 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 
 image::images/zeppelin.png[uberstream7]
 
-== Zeppelin Interpreter
+== Zeppelin Kafka configurations
+Apache Kafka is a third Party Library to Zeppelin, Hence we need to add kafka Libraries as a Maven Dependency in the Zeppelin UI.
+Zeppelin will download it from Maven Repository and gets added as an application jar file.
+Two steps we have to perform in the Spark Interpreter
+
+image::images/zeppelinKafka.png[zeppelinKafkaThirdPartyJarsInclusion]
+
+----
+zeppelin.dep.localrepo             :  	https://repo.maven.apache.org/maven2/
+spark.jars                         :    /opt/zeppelin/notebook/thirdpartyjars/<pick-up-the-jar-files>
+----
+==== Zeppelin ClassPath
+
+Also in the zeppelin paragraph, we must include these below code, which will get added as a Dependency in Zeppelin ClassPath.
+This will resolve our dependency issues and compilation problems.
+
+----
+%spark.dep
+z.addRepo("mapr-releases").url("http://repository.mapr.com/maven/")
+z.load("org.apache.spark:spark-streaming-kafka-0-9_2.11:2.1.0-mapr-1703")
+z.load("/opt/zeppelin/notebook/thirdpartyjars/spark-streaming-kafka-0-9_2.11-2.1.0-mapr-1703.jar")
+z.load("/opt/zeppelin/notebook/thirdpartyjars/spark-streaming-kafka-0-10_2.11-2.0.2.jar")
+z.load("/opt/zeppelin/notebook/thirdpartyjars/kafka-clients-2.0.0.jar")
+z.load("/opt/zeppelin/notebook/thirdpartyjars/spark-streaming-kafka-producer_2.11-2.0.1-mapr-1703.jar")
+
+----
+
 
 === Inject Uber RealTime data
 
@@ -430,11 +467,28 @@ $ oc set volume dc/uber-realtime-data-cluster-w  \
          --sub-path=uber.csv \
          --default-mode=0644
 -----
+. Mount the configmaps to the `apache-zeppelin` deployment config as a volume:
++
+-----
+$ oc set volume dc/apache-zeppelin \
+         --add --overwrite \
+         --name=uber-realtime-thirdparty-jars-cm1 \
+         -t configmap \
+         --configmap-name=uber-thirdparty-jars-cm1 \
+         -m /data/uber.csv \
+         --sub-path=uber.csv \
+         --default-mode=0644
+-----
 
 
-=== Port(s) and protocols
+=== Port(s),protocols and Kafka Configurations
 
 The Spark Master and Worker pods need to be configured to communicate with each other along with the Zeppelin Interpreter.
+
+Apache Kafka is a third Party Library to Zeppelin, Hence we need to add kafka Libraries as a Maven Dependency in the Zeppelin UI.
+Zeppelin will download it from Maven Repository and gets added as an application jar file.
+
+
 
 In this section you will use the Zeppelin UI to make these configuration changes.
 
@@ -463,6 +517,8 @@ image::images/ZeppelinNewSettings.png[]
 +
 -----
 master                         : spark://uber-realtime-data-cluster:7077
+
+zeppelin.dep.localrepo             :  	https://repo.maven.apache.org/maven2/
 -----
 
 .. Scroll down to the bottom of the Spark section and add the following new text fields:
@@ -471,6 +527,7 @@ master                         : spark://uber-realtime-data-cluster:7077
 ... *spark.driver.host*              :	apache-zeppelin
 ... *spark.driver.blockManager.port* :	42100
 ... *spark.driver.port*	             :  42000
+... *spark.jars*                     :  <Manually add the Path of the Jar files which is placed in Kafka configuration screenshot>
 
 . After making the changes, scroll to the bottom of the page and click: `Save`.
 
@@ -565,7 +622,7 @@ image::images/UberImport.png[uberstream8]
    You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
    All Paragraphs are editable in Zeppelin Notebook.
 .. *Why we are doing this?*
-   We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
+   We need to import the data into the Spark Master Node into the Mounted Volume */data/uber.csv* which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
 
 
 === Execute Uber _Paragraphs_
@@ -601,7 +658,6 @@ image::images/picture12.png[DStream]
 .. Apply Transformations (Which create New DStreams)
 
 .. We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
-
 +
 image::images/picture13.png[code]
 
@@ -667,6 +723,7 @@ image::images/picture26.png[kafkaStream]
 image::images/picture28.png[outputcluster]
 
 
+
 == Conclusions
 
 ====  What did we learn?
@@ -682,21 +739,6 @@ Kafka with Apache Spark Integration - We learned Apache Kafka integration with S
 TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
 
 == Appendix
-
-
-=== Background
-
-According to Gartner, by 2020, a quarter of a billion connected cars will form a major element of the Internet of Things. Connected vehicles are projected to generate 25GB of data per hour, which can be analyzed to provide real-time monitoring and apps, and will lead to new concepts of mobility and vehicle usage. One of the 10 major areas in which big data is currently being used to excellent advantage is in improving cities. For example, the analysis of GPS car data can allow cities to optimize traffic flows based on real-time traffic information.
-
-Uber is using big data to perfect its processes, from calculating Uber’s pricing, to finding the optimal positioning of cars to maximize profits. In this series of blog posts, we are going to use public Uber trip data to discuss building a real-time example for analysis and monitoring of car GPS data. There are typically two phases in machine learning with real-time data:
-
-Data Discovery: The first phase involves analysis on historical data to build the machine learning model.
-
-Analytics Using the Model: The second phase uses the model in production on live events. (Note that Spark does provide some streaming machine learning algorithms, but you still often need to do an analysis of historical data.)building the model.
-
-In the Second Lab, We dealt with getting started using Apache Spark’s machine learning K-means algorithm to cluster Uber data based on location.
-
-In this Third Lab, We see the Near Real Time Traffic predictions using Kafka with Spark Streaming on a Strimzi Cluster.
 
 === Where do we get these DataSets?
 
