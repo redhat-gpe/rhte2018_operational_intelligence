@@ -651,26 +651,20 @@ image::images/picture12.png[DStream]
 .. We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
 +
 image::images/picture13.png[code]
-
 .. Here is the Output from the df.show
 +
 image::images/picture14.png[dfshow]
-
 .. A VectorAssembler is used to transform and return a new DataFrame with the latitude and longitude feature columns in a vector column.
 +
 image::images/picture15.png[vectorAssemblerLoad]
 +
 image::images/picture16.png[VectorAssemblerCode]
-
 .. Then the model is used to get the clusters from the features with the model transform method, which returns a DataFrame with the cluster predictions.
 +
 image::images/picture17.png[LoadModel]
-
-
 .. Write messages from the transformed DStream to a Topic
 +
 image::images/picture20.png[Enriched]
-
 .. The Dataset result of the query is converted to JSON RDD Strings, then the RDD sendToKafka method is used to send the JSON key-value messages to a topic (the key is null in this case).
 +
 image::images/picture21.png[jsonconversion]
@@ -700,8 +694,6 @@ image::images/picture26.png[kafkaStream]
 .. Output of the Cluster Centers
 +
 image::images/picture28.png[outputcluster]
-
-
 
 == Conclusions
 
