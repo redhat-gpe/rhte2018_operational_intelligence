@@ -6,13 +6,18 @@
 
 = Spark Analysis of Historical Data
 
-.Prerequisite
+.Goals
+
+* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
+* Uber Historical Data Analysis using Apache Spark
+* Usage of Interactive NoteBooks like Apache Zeppelin
+
+.Prerequisites
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages
 ** Knowledge of git
 ** Knowledge on OpenShift Deployments
 ** Basic Knowledge of Cluster Computing and Distributed Architectures
-
 * Tools
 ** `curl` utility
 ** `sed` utility
@@ -20,15 +25,13 @@
 ** `Interactive Notebooks - Apache Zeppelin`
 ** `git` command basics
 
+
+
+
 :numbered:
 
 == Overview
 
-=== Lab Goals
-
-* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
-* Uber Historical Data Analysis using Apache Spark
-* Usage of Interactive NoteBooks like Apache Zeppelin
 
 === Technical Background
 
