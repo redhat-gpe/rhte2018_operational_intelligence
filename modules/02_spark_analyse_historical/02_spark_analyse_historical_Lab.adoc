@@ -12,7 +12,8 @@
 * Analysis of Uber Historical Data using Apache Spark
 * Usage of Interactive NoteBooks like Apache Zeppelin to:
 ** Query and analyze raw Uber historical data
-** Visualize traffic cluster centers determined from analysis of Uber historical data
+** Identify traffic cluster centers determined from analysis of Uber historical data
+** Visualize traffic cluster centers 
 
 .Prerequisites
 * Skills
