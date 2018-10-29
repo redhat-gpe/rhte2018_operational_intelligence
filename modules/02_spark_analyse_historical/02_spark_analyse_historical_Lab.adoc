@@ -13,7 +13,8 @@
 * Usage of Interactive NoteBooks like Apache Zeppelin to:
 ** Query and analyze raw Uber historical data
 ** Identify traffic cluster centers determined from analysis of Uber historical data
-** Visualize traffic cluster centers 
+** Visualize traffic cluster centers
+* Version control of a json file of traffic cluster centers for use in future Uber data analysis
 
 .Prerequisites
 * Skills
@@ -27,9 +28,6 @@
 ** `oc` version 3.9 utility
 ** `Interactive Notebooks - Apache Zeppelin`
 ** `git` command basics
-
-
-
 
 :numbered:
 
