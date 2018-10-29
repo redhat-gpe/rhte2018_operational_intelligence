@@ -15,6 +15,7 @@
 ** Identify traffic cluster centers determined from analysis of Uber historical data
 ** Visualize traffic cluster centers
 * Version control of a json file of traffic cluster centers for use in future Uber data analysis
+* Creation of PMML file for future rule processing of Uber traffic data
 
 .Prerequisites
 * Skills
