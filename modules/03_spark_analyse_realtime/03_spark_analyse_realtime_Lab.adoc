@@ -258,7 +258,7 @@ oshinko-web-1-86blg   2/2       Running   0
 $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/webui"\n\n"
 -----
 +
-image::images/oshinko_homepage.png[]
+image::images/oshinko_homepage.png[oshinko_homepage]
 
 .. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
 +
