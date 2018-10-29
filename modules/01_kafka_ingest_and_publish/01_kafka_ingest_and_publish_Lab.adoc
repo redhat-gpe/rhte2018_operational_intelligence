@@ -314,7 +314,8 @@ $ exit
 The purpose of this lab section is to demonstrate topic publishing and subscribing using pre-deployed Kafka producers and consumers. When the producer in the example boots up, it publishes a certain number of messages. Similarly, when the consumer is created, it waits to receive the specified number of messages. The Kafka producer and consumer deployment yamls use the client code defined in
 
 -----
-https://github.com/strimzi/client-examples
+https://github.com/gpe-mw-training/operational_intelligence
+
 -----
 
 This lab provides a set of assets to assist with the utilization of Strimzi. You will want to clone these lab assets to your lab environment so that you can review them.
@@ -335,9 +336,18 @@ $ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOM
 +
 -----
 $ cd $HOME/lab/operational_intelligence/strimzi
+
+strimzi/
+├── kafka-connect.yaml
+├── strimzi-consumer.yaml
+└── strimzi-producer.yaml
+
 -----
 
 . Review the details of the lab assets found in this directory:
+.. *Kafka-connect.yaml*
++
+Strimzi uses the Cluster Operator to deploy and manage Kafka (including Zookeeper) and Kafka Connect clusters. The Cluster Operator is deployed inside of the OpenShift cluster. To deploy a Kafka cluster, a Kafka resource with the cluster configuration has to be created within the Kubernetes or OpenShift cluster. Based on what is declared inside of the Kafka resource, the Cluster Operator deploys a corresponding Kafka cluster.
 
 .. *strimzi-consumer.yaml*
 +
