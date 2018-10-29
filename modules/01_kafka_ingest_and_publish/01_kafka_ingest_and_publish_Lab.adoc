@@ -640,7 +640,7 @@ EOF
 . Verify the contents are being published to the message consumer configured
 +
 -----
-$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
+$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.item    s[0].metadata.name}') -f
 ....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
 -----
