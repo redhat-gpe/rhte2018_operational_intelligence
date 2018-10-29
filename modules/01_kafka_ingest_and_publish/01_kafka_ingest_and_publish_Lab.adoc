@@ -403,14 +403,14 @@ If you have a lot of extraneous messages you can filter the messages using "Send
 
 === Additional Strimzi consumer
 
-This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
+This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to the different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
 
 
 image::images/sing_cons.png[400,400]
 
 image::images/mult_cons.png[400,400]
 
-. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
+. Add a consumer by creating a deployment yaml file which is similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
