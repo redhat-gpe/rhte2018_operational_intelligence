@@ -6,6 +6,12 @@
 
 = Large Data Sets of Uber Data Analysis using Spark
 
+.Goals
+** Importing of a json file of traffic cluster centers
+** Consumption of Uber data record stream via a Kafka Topic
+** Enrichment of Uber data by assigning specific traffic cluster center Id to each record
+** Publishing of Enriched Data records to a different Kafka Topic for additional downstream rule processing
+
 .Prerequisite
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages
@@ -24,11 +30,7 @@
 
 == Overview
 
-=== Lab Goals
-. Importing of a json file of traffic cluster centers
-. Consumption of Uber data record stream via a Kafka Topic
-. Enrichment of Uber data by assigning specific traffic cluster center Id to each record
-. Publishing of Enriched Data records to a different Kafka Topic for additional downstream rule processing
+
 
 === Technical Background
 
