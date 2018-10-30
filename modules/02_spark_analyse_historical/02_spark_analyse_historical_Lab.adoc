@@ -6,13 +6,23 @@
 
 = Spark Analysis of Historical Data
 
-.Prerequisite
+.Goals
+
+* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
+* Analysis of Uber Historical Data using Apache Spark
+* Usage of Interactive NoteBooks like Apache Zeppelin to:
+** Query and analyze raw Uber historical data
+** Identify traffic cluster centers determined from analysis of Uber historical data
+** Visualize traffic cluster centers
+* Version control of a json file of traffic cluster centers for use in future Uber data analysis
+* Creation of PMML file for future rule processing of Uber traffic data
+
+.Prerequisites
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages
 ** Knowledge of git
 ** Knowledge on OpenShift Deployments
 ** Basic Knowledge of Cluster Computing and Distributed Architectures
-
 * Tools
 ** `curl` utility
 ** `sed` utility
@@ -24,11 +34,6 @@
 
 == Overview
 
-=== Lab Goals
-
-* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
-* Uber Historical Data Analysis using Apache Spark
-* Usage of Interactive NoteBooks like Apache Zeppelin
 
 === Technical Background
 
@@ -430,23 +435,6 @@ apache-zeppelin-1-build   0/1       Completed   0          2m
 apache-zeppelin-1-tf9g8   1/1       Running     0          36s
 
 -----
-.. Apache Zeppelin Secured Route
-+
-
------
-
-$ oc create route edge --service=apache-zeppelin
-
-route "apache-zeppelin" created
-
------
-
-..  Why we are doing this above step?
-
-As apache-zeppelin internally uses WebSocket to communicate,
-But due to firewall block, Hence we are making it to as a secured route to communicate.
-This is a temporary workaround solution. In General, we can use the *http* communication which is always recommended.
-
 
 ==== Login into Zeppelin UI
 
@@ -547,6 +535,15 @@ master                         : spark://uber-data-cluster:7077
 ... *spark.driver.host*              :	apache-zeppelin
 ... *spark.driver.blockManager.port* :	42100
 ... *spark.driver.port*	             :  42000
+... *spark.executor.memory*          :  6g
+
+.. Enable the CheckBox in ZeppelinUI as shown in the figure:
+
+... This will avoid the stackoverflowException and allows concurrentSQL operations to perform and gives significant performance benefits.
+    And also increase the driver memory to 6g
+
++
+image::images/stackoverflowException.png[stackoverflowException]
 
 . After making the changes, scroll to the bottom of the page and click: `Save`.
 
@@ -592,18 +589,17 @@ It is the Source code and Output file that every students expected to Run and vi
 $ echo -en "\n\nhttps://"$(oc get route/apache-zeppelin -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/"\n\n"
 -----
 
-.. Import the JSON File given the GitHub URL in the Zeppelin Notebook.
+.. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 
-*You can import anyone of them*
+. https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uber.json
 
-.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberwithoutput.json
-.  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-data-analysis/notebooks/Uberlatest.json
 +
 image::images/UberImport.png[uberstream8]
 
 .. You can change the directory structure in zeppelin notebook pointing to the data directory in POD.
    You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
    All Paragraphs are editable in Zeppelin Notebook.
+
 .. *Why we are doing this?*
    We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
 +

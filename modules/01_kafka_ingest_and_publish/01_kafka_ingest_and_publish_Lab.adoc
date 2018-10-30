@@ -38,34 +38,51 @@ Your lab environment consists of a remote virtual machine that is accessible via
 
 This virtual machine comes pre-installed with OpenShift Container Platform v3.9.
 
-=== Order VM via `GUID Grabber`
+=== Order VM via `RHPDS`
 
-This section of the lab explains how to access the Red Hat Tech Exchange _GuidGrabber_ in order to obtain a GUID.
-This GUID will be used to access the lab environment.
+NOTE: [blue]#This section is only applicable if your desire is to utilize a lab environment in Red Hat's _Partner Demo System_ (RHPDS)#.
 
-. Begin by going to http://bit.ly/rhte-guidgrabber
+. Begin by navigating to the _Cloud Forms_ environment for Red Hat Partner Demo System at:   https://rhpds.redhat.com
+. Authenticate using your _OPENTLC_ credentials (ie:  johndoe-redhat.com )
+. Navigate to the following catalog:  `Services -> Catalog -> All Services -> Red Hat Tech Exchange 2018`
+. Select the following catalog item: `Op Intel using Strimzi & Spark`
 +
-image::images/gg1.png[GuidGrabber Landing Page]
 
-. From this page select the *Lab Code* :  _A1012_
+image::images/RHPDS.png[RedHatPartnerDemoSystems]
 
-. Enter the *Activation Key* provided by the lab proctor.
+. Click `Order` at the top of the next page
+. Click `Submit`
 
-. Click *Next*.
+==== Access VM via OPENTLC or RHSE
 
-. The resulting page will display your lab's GUID and other useful information about your lab environment.
+NOTE: [blue]#This section is applicable if you are an existing student of either Red Hat's _Open Partner Enablement Network (OPEN)_ or Skills Exchange (RHSE) programs.#
+
+. Begin by navigating to the _Cloud Forms_ environment for both OPEN and RHSE at:   https://labs.opentlc.com
+. Authenticate using your _OPENTLC_ credentials (ie:  johndoe-redhat.com )
+. Navigate to the following catalog:  `Services -> Catalog -> Catalog Items -> OPENTLC Middleware Solutions Labs`
+. Select the following catalog item: `Op Intel using Strimzi & Spark`
 +
-image::images/guid_grabber_response.png[Information Page]
+image::images/OpIntel.png[OpIntel-CatalogItem]
+. Click `Order` at the top of the next page
 
-. Your remote virtual machine is accessible via the `ssh` protocol.
-+
-Follow the directions exactly as indicated in the Guid Grabber Information Page to ssh into your remote lab VM.
+. In the subsequent order form, select the following:
+.. *OpenShift Container Platform version:* `3.9.41`
+.. *Region*: select the region you currently reside in
+.. Click `Submit` at the top of the page
 
-. When you are completely done with your lab environment, please click *Reset Workstation* so that you can move on to the next lab.
-If you fail to do this, you will be locked into the GUID from the previous lab.
+
+=== Confirmation Emails
+
+. Upon ordering your VM, you will receive several emails confirming your order.
+These emails are sent to the email associated with your OPENTLC account.
 +
-[NOTE]
-Clicking *Reset Workstation* will not stop or delete the lab environment.
+The most important email is the last one which indicates completion of the provisioning of your lab environment.
+This email arrive approximately 30 minutes from the time the lab was ordered.
+[blue]#Please save this email#.
+
+. SSH access to your VM
+.. The confirmation email will provide exact details as to how to ssh into your remote lab environment.
+.. Execute the steps outlined in the email to gain access to your lab environment.
 
 
 === Environment Variables
@@ -113,11 +130,11 @@ $ cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l
 4
 -----
 
-== Update Maven 
+== Update Maven
 
-On the VMs, it has an older version of Maven 3.0.5.  The labs require Maven 3.5.x. Here are quick steps to update Maven for your VM.  
+On the VMs, it has an older version of Maven 3.0.5.  The labs require Maven 3.5.x. Here are quick steps to update Maven for your VM.
 
-. Download Maven 
+. Download Maven
 * _The `curl` command below should be entered all on one line_
 +
 ----
@@ -220,7 +237,7 @@ $ echo -en "\n\nhttps://$OCP_DOMAIN:8443\n\n"
 
 === Kafka cluster
 
-Your lab environment includes access to a pre-installed Kafka cluster. The environment was created using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster. 
+Your lab environment includes access to a pre-installed Kafka cluster. The environment was created using an Ansible script which creates the operators and deployments required by Kafka. The strimzi-cluster-operator is the first entity that gets created (see detailed description that follows). The Cluster Operator is also able to deploy a Kafka Connect cluster which connects to an existing Kafka cluster.
 
 . Switch to your OpenShift project
 +
@@ -246,7 +263,7 @@ The Kafka connect cluster allows for connecting Kafka brokers to different sourc
 
 .. *strimzi-cluster-operator*
 +
-Before deploying a Kafka cluster, the Cluster Operator must be deployed. The Strimzi cluster operator is responsible for deploying a Kafka cluster alongside a Zookeeper ensemble. As mentioned above, the operator is also used to deploy Kafka connect. 
+Before deploying a Kafka cluster, the Cluster Operator must be deployed. The Strimzi cluster operator is responsible for deploying a Kafka cluster alongside a Zookeeper ensemble. As mentioned above, the operator is also used to deploy Kafka connect.
 +
 image::images/cop_arch.png[]
 
@@ -273,7 +290,7 @@ This is the set of Kafka brokers deployed using the Strimzi cluster operator. Th
 
 .. *my-cluster-zookeeper-**
 +
-When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds the necessary configuration to connect Kafka with Zookeeper. 
+When installing Kafka, AMQ Streams also installs a Zookeeper cluster and adds the necessary configuration to connect Kafka with Zookeeper.
 
 . Pre-provisioned Topics:
 +
@@ -297,7 +314,8 @@ $ exit
 The purpose of this lab section is to demonstrate topic publishing and subscribing using pre-deployed Kafka producers and consumers. When the producer in the example boots up, it publishes a certain number of messages. Similarly, when the consumer is created, it waits to receive the specified number of messages. The Kafka producer and consumer deployment yamls use the client code defined in
 
 -----
-https://github.com/strimzi/client-examples
+https://github.com/gpe-mw-training/operational_intelligence
+
 -----
 
 This lab provides a set of assets to assist with the utilization of Strimzi. You will want to clone these lab assets to your lab environment so that you can review them.
@@ -318,21 +336,30 @@ $ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOM
 +
 -----
 $ cd $HOME/lab/operational_intelligence/strimzi
+
+strimzi/
+├── kafka-connect.yaml
+├── strimzi-consumer.yaml
+└── strimzi-producer.yaml
+
 -----
 
 . Review the details of the lab assets found in this directory:
+.. *Kafka-connect.yaml*
++
+Strimzi uses the Cluster Operator to deploy and manage Kafka (including Zookeeper) and Kafka Connect clusters. The Cluster Operator is deployed inside of the OpenShift cluster. To deploy a Kafka cluster, a Kafka resource with the cluster configuration has to be created within the Kubernetes or OpenShift cluster. Based on what is declared inside of the Kafka resource, the Cluster Operator deploys a corresponding Kafka cluster.
 
 .. *strimzi-consumer.yaml*
 +
 It is important to pay attention to the following attributes in the yaml.
 +
-... image: code image that gets pulled 
+... image: code image that gets pulled
 ... resources: limits and requests. When allocating compute resources, each container may specify a request and a limit value each for CPU and memory. If the quota has a value specified for requests.cpu or requests.memory, then it requires that every incoming container make an explicit request for those resources. If the quota has a value specified for limits.cpu or limits.memory, then it requires that every incoming container specify an explicit limit for those resources.
 ... TOPIC, MESSAGE_COUNT: topic that the subscriber listens on and the number of messages it listens for
 
 .. *strimzi-producer.yaml*
 +
-The same set of attributes as the consumer are important. 
+The same set of attributes as the consumer are important.
 
 == Kafka producer and consumer
 Using the deployment yaml files provided earlier, you will provision a Strimzi producer and consumer.
@@ -386,14 +413,14 @@ If you have a lot of extraneous messages you can filter the messages using "Send
 
 === Additional Strimzi consumer
 
-This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
+This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to the different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
 
 
 image::images/sing_cons.png[400,400]
 
 image::images/mult_cons.png[400,400]
 
-. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
+. Add a consumer by creating a deployment yaml file which is similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
@@ -496,9 +523,16 @@ spec:
 $ cd ~/lab/operational_intelligence/strimzi
 -----
 
-. In kafka-connect.yaml, under the spec object, review the configuration
+. In kafka-connect.yaml, under the spec object, *review the configuration*
+
 +
 ----
+$ cd ~/lab/operational_intelligence/strimzi
+
+[johndoe@redhat.com@clientvm 0 ~/lab/operational_intelligence/strimzi]$ ls
+
+kafka-connect.yaml  strimzi-consumer.yaml  strimzi-producer.yaml
+
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.storage.StringConverter
@@ -510,13 +544,21 @@ $ cd ~/lab/operational_intelligence/strimzi
 +
 -----
 $ oc get pods
+
+NAME
+.
+					        READY     STATUS             RESTARTS   AGE
+uber-connect-cluster-connect-64dd9b5cc5-mlz26   0/1       Running            1          9d
+.
 -----
 
-. Create a local directory and copy the `uber.csv` file to that directory. You can locate this file under /home/lab-user/lab/operational_intelligence/uber-data-analysis/src/main/resources/data. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred. 
+. Note the name of the connect pod (*uber-connect-cluster-connect-64dd9b5cc5-mlz26*) and use that in the oc rsync command. rsh in to the container and check that the file has been transferred.
+Name of the connect pod would be like this *my-connect-cluster-connect-XXXXXX* based on the student's VM in which they are querying for *oc get pods*.
+>>>>>>> 1b26026aff61297290cb0a14a8a14d075392ddbc
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
-$ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
+$ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26
 $ ls /tmp
 $ exit
 -----
