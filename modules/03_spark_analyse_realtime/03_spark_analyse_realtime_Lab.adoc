@@ -4,7 +4,16 @@
 :toc2:
 :linkattrs:
 
-= Large Data Sets of Uber Data Analysis using Spark
+= Automated Analysis of Uber traffic using AMQ Streams
+
+.Goals
+. Importing of a json file of traffic cluster centers
+. Consumption of raw Uber data record stream via a Kafka Topic
+. Enrichment of streamed Uber data with assignment of specific traffic cluster center Id to each record
+. Additional enrichment of streamed Uber data with assignment of a key performance indicator to each record
+. Publishing of Enriched Data records to a different Kafka Topic for additional downstream rule processing
+. Visualization of heat-map of simulated traffic in cluster centers
+
 
 .Prerequisite
 * Skills
@@ -24,9 +33,9 @@
 
 == Overview
 
-=== Lab Goals
-. This Lab will provide you large datasets of UberData.
-. Kafka streaming of Uber.csv file to Apache Spark on Oshinko Cluster.
+=== Key Performance Indicators
+
+[red]#TO-DO#
 
 === Technical Background
 
@@ -258,7 +267,7 @@ oshinko-web-1-86blg   2/2       Running   0
 $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/webui"\n\n"
 -----
 +
-image::images/oshinko_homepage.png[]
+image::images/oshinko_homepage.png[oshinko_homepage]
 
 .. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
 +
@@ -566,36 +575,28 @@ Recall that the lab assets provided as SparkProducerConsumer.scala.
 This application is currently running on Zeppelin Notebook. Let us explore what it does.
 
 ... Incoming Data is in CSV format, get enriched with JSON Format and the KMeans Cluster ID is assigned to it.
-
 +
 image::images/picture3.png[LoadData]
-
-
 +
 image::images/picture4.png[KMeans]
-
 +
 image::images/picture5.png[KMeansClusterID]
 
 ... Parsing the Data Set Records
 A Scala Uber case class defines the schema corresponding to the CSV records. The parseUber function parses the comma separated values into the Uber case class.
-
 +
 image::images/picture6.png[ubercaseclass]
 
 ... Loading the K-Means Model
 The Spark KMeansModel class is used to load the saved K-means model fitted on the historical Uber trip data.
-
 +
 image::images/picture7.png[LoadKMeans]
 
 .. Output of Model clusterCenters
-
 +
 image::images/picture8.png[outputmodelclusters]
 
 ... Next, we create a KMeans object, set the parameters to define the number of clusters and the maximum number of iterations to determine the clusters, and then we fit the model to the input data
-
 +
 image::images/picture9.png[FeatureArray]
 
@@ -614,7 +615,6 @@ $ echo -en "\n\nhttp://"$(oc get route/apache-zeppelin -o template --template {{
 .. Import the JSON File given the GitHub URL in the Zeppelin Notebook
 
 .  https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/uber-realtime-data-analysis/notebooks/Uber.json
-
 +
 image::images/UberImport.png[uberstream8]
 
@@ -622,7 +622,7 @@ image::images/UberImport.png[uberstream8]
    You can Edit the Zeppelin Paragraph and change the Directory Structure to */data/uber.csv*.
    All Paragraphs are editable in Zeppelin Notebook.
 .. *Why we are doing this?*
-   We need to import the data into the Spark Master Node into the Mounted Volume /data/uber.csv which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
+   We need to import the data into the Spark Master Node into the Mounted Volume */data/uber.csv* which locates the file to get loaded into the Memory and also it gives the advantage of Data Locality Principle.
 
 
 === Execute Uber _Paragraphs_
@@ -648,63 +648,50 @@ These are the basic steps for the Spark Streaming Consumer Producer code:
 ... *Initialize a Spark StreamingContext Object*
 
 .. ConsumerStrategies.Subscribe, as shown below, is used to set the topics and Kafka configuration parameters. We use the KafkaUtils createDirectStream method with a StreamingContext, the consumer and location strategies, to create an input stream from a Kafka Streams topic. This creates a DStream that represents the stream of incoming data, where each message is a key value pair. We use the DStream map transformation to create a DStream with the message values.
-
 +
 image::images/picture11.png[stream]
-
 +
 image::images/picture12.png[DStream]
 
 .. Apply Transformations (Which create New DStreams)
 
 .. We use the DStream foreachRDD method to apply processing to each RDD in this DStream. We parse the message values into Uber objects, with the map operation on the DStream. Then we convert the RDD to a DataFrame, which allows you to use DataFrames and SQL operations on streaming data.
-
 +
 image::images/picture13.png[code]
 
 .. Here is the Output from the df.show
-
 +
 image::images/picture14.png[dfshow]
 
-
 .. A VectorAssembler is used to transform and return a new DataFrame with the latitude and longitude feature columns in a vector column.
-
 +
 image::images/picture15.png[vectorAssemblerLoad]
-
 +
 image::images/picture16.png[VectorAssemblerCode]
 
 .. Then the model is used to get the clusters from the features with the model transform method, which returns a DataFrame with the cluster predictions.
-
 +
 image::images/picture17.png[LoadModel]
 
 
 .. Write messages from the transformed DStream to a Topic
-
 +
 image::images/picture20.png[Enriched]
 
 .. The Dataset result of the query is converted to JSON RDD Strings, then the RDD sendToKafka method is used to send the JSON key-value messages to a topic (the key is null in this case).
-
 +
 image::images/picture21.png[jsonconversion]
-
 +
 image::images/picture22.png[dstreamRDD]
 
 
 .. Start receiving the data and processing it. Wait for the process to be stopped.
 To start receiving data, we must explicitly call start() on the StreamingContext, then call awaitTermination to wait for the streaming computation to finish.
-
 +
 image::images/picture23.png[processingdata]
 
 .. *Spark Kafka Consumer Code*
 Next, we will go over some of the Spark streaming code which consumes the JSON-enriched messages.
-
 +
 image::images/picture24.png[consumer]
 
@@ -714,14 +701,13 @@ image::images/picture24.png[consumer]
 .. Converting the JSON message values to Dataset[Row] using spark.read.json with the schema
 .. Creating two temporary views for subsequent SQL queries
 .. Using ssc.remember to cache data for queries
-
 +
 image::images/picture26.png[kafkaStream]
 
 .. Output of the Cluster Centers
-
 +
 image::images/picture28.png[outputcluster]
+
 
 
 == Conclusions

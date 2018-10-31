@@ -1,0 +1,34 @@
+:noaudio:
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+
+= Surge Price Multiplier Determination using RHT Decision Manager
+
+.Goals
+. Apply surge price multiplier rules to Uber traffic data
+
+:numbered:
+
+== Overview
+
+=== Operation Intelligence
+
+=== Deployment Architecture
+
+=== Technical Background
+
+==== Red Hat Decision Manager
+
+== Surge Price Multiplier Rules
+=== Explore Pricing Rules in Decision Central
+=== Build kJar
+
+== Decision Manager based Pricing Rule app
+
+=== Identify Kafka Topic details
+
+=== Build container image using s2i
+
+=== Verification of Uber traffic data with surge prices

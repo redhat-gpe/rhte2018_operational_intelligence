@@ -6,13 +6,22 @@
 
 = Spark Analysis of Historical Data
 
-.Prerequisite
+.Goals
+
+* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
+* Analysis of Uber Historical Data using Apache Spark
+* Usage of Interactive NoteBooks like Apache Zeppelin to:
+** Query and analyze raw Uber historical data
+** Identify traffic cluster centers determined from analysis of Uber historical data
+** Visualize traffic cluster centers
+* Version control of a json file of traffic cluster centers for use in future Uber data analysis
+
+.Prerequisites
 * Skills
 ** Programming Knowledge of Python, Scala and Java Languages
 ** Knowledge of git
 ** Knowledge on OpenShift Deployments
 ** Basic Knowledge of Cluster Computing and Distributed Architectures
-
 * Tools
 ** `curl` utility
 ** `sed` utility
@@ -24,11 +33,13 @@
 
 == Overview
 
-=== Lab Goals
+=== Business Intelligence
 
-* Apache Spark Deployment using Apache Zeppelin on Oshinko Cluster
-* Uber Historical Data Analysis using Apache Spark
-* Usage of Interactive NoteBooks like Apache Zeppelin
+[red]#TO-DO#
+
+. Historical
+. Reactive
+. Dashboard / KPI related
 
 === Technical Background
 
@@ -730,7 +741,6 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 === Where do we get these DataSets?
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
-
 
 ifdef::showscript[]
 

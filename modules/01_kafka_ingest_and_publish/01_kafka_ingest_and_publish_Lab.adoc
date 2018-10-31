@@ -314,7 +314,8 @@ $ exit
 The purpose of this lab section is to demonstrate topic publishing and subscribing using pre-deployed Kafka producers and consumers. When the producer in the example boots up, it publishes a certain number of messages. Similarly, when the consumer is created, it waits to receive the specified number of messages. The Kafka producer and consumer deployment yamls use the client code defined in
 
 -----
-https://github.com/strimzi/client-examples
+https://github.com/gpe-mw-training/operational_intelligence
+
 -----
 
 This lab provides a set of assets to assist with the utilization of Strimzi. You will want to clone these lab assets to your lab environment so that you can review them.
@@ -335,9 +336,18 @@ $ git clone https://github.com/gpe-mw-training/operational_intelligence.git $HOM
 +
 -----
 $ cd $HOME/lab/operational_intelligence/strimzi
+
+strimzi/
+├── kafka-connect.yaml
+├── strimzi-consumer.yaml
+└── strimzi-producer.yaml
+
 -----
 
 . Review the details of the lab assets found in this directory:
+.. *Kafka-connect.yaml*
++
+Strimzi uses the Cluster Operator to deploy and manage Kafka (including Zookeeper) and Kafka Connect clusters. The Cluster Operator is deployed inside of the OpenShift cluster. To deploy a Kafka cluster, a Kafka resource with the cluster configuration has to be created within the Kubernetes or OpenShift cluster. Based on what is declared inside of the Kafka resource, the Cluster Operator deploys a corresponding Kafka cluster.
 
 .. *strimzi-consumer.yaml*
 +
@@ -403,14 +413,14 @@ If you have a lot of extraneous messages you can filter the messages using "Send
 
 === Additional Strimzi consumer
 
-This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
+This section of the lab demonstrates how adding a consumer causes different partitions to get mapped to the different consumers. The following diagrams illustrate how the redistribution of partitions occurs when adding new consumers.
 
 
 image::images/sing_cons.png[400,400]
 
 image::images/mult_cons.png[400,400]
 
-. Add a consumer by creating a deployment yaml file similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
+. Add a consumer by creating a deployment yaml file which is similar to the existing strimzi-consumer.yaml in the strimzi/ directory. The initial section of it should look similar to
 +
 ----
 apiVersion: extensions/v1beta1
@@ -513,9 +523,16 @@ spec:
 $ cd ~/lab/operational_intelligence/strimzi
 -----
 
-. In kafka-connect.yaml, under the spec object, review the configuration
+. In kafka-connect.yaml, under the spec object, *review the configuration*
+
 +
 ----
+$ cd ~/lab/operational_intelligence/strimzi
+
+[johndoe@redhat.com@clientvm 0 ~/lab/operational_intelligence/strimzi]$ ls
+
+kafka-connect.yaml  strimzi-consumer.yaml  strimzi-producer.yaml
+
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.storage.StringConverter
@@ -527,14 +544,23 @@ $ cd ~/lab/operational_intelligence/strimzi
 +
 -----
 $ oc get pods
+
+NAME
+.
+					        READY     STATUS             RESTARTS   AGE
+uber-connect-cluster-connect-64dd9b5cc5-mlz26   0/1       Running            1          9d
+.
 -----
 
-. Note the name of the connect pod and use that in the oc rsync command. rsh in to the container and check that the file has been transferred
+. Note the name of the connect pod (*uber-connect-cluster-connect-64dd9b5cc5-mlz26*) and use that in the oc rsync command. rsh in to the container and check that the file has been transferred.
+Name of the connect pod would be like this *my-connect-cluster-connect-XXXXXX* based on the student's VM in which they are querying for *oc get pods*.
+>>>>>>> 1b26026aff61297290cb0a14a8a14d075392ddbc
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
 $ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26
 $ ls /tmp
+$ exit
 -----
 
 . A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
@@ -584,15 +610,16 @@ spec:
             value: "1000"
 -----
 
-. Use the following command to create the new consumer
+. Exit the connector pod and use the following command to create the new consumer
 +
 -----
 $ oc apply -f connector-consumer.yaml
 -----
 
-. Create the configuration for the file source
+. rsh into the connector pod as before and create the configuration for the file source
 +
 ----
+% oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
 % cat <<EOF >> /tmp/source-plugin.json
 {
   "name": "source-test",
@@ -612,9 +639,10 @@ EOF
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
 
-. Verify the contents are being published to the message consumer configured
+. Exit the connector pod and verify the contents are being published to the message consumer configured
 +
 -----
+$ exit
 $ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
