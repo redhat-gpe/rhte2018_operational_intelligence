@@ -626,7 +626,7 @@ $ oc apply -f connector-consumer.yaml
     "tasks.max": "3",
     "topic": "my-topic-2",
     "file": "/tmp/uber.csv"
-  }
+  } 
 }
 EOF
 ----
