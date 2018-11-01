@@ -55,7 +55,7 @@ KafkaAPI is composed of Five Core API's which we need to know:
 +
 Uber trip data is published to a Kafka Streams topic using the Kafka API. A Spark streaming application subscribed to the first topic: Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
 
-image::images/DataFlowSchematic.png[DataFlow]
+image::images/DataFlowDiagram.png[DataFlow]
 
 . Deployment Topology diagram with DataFlow.
 +
