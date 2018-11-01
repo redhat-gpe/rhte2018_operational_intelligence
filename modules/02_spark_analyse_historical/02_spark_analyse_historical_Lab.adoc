@@ -15,7 +15,6 @@
 ** Identify traffic cluster centers determined from analysis of Uber historical data
 ** Visualize traffic cluster centers
 * Version control of a json file of traffic cluster centers for use in future Uber data analysis
-* Creation of PMML file for future rule processing of Uber traffic data
 
 .Prerequisites
 * Skills
@@ -34,6 +33,13 @@
 
 == Overview
 
+=== Business Intelligence
+
+[red]#TO-DO#
+
+. Historical
+. Reactive
+. Dashboard / KPI related
 
 === Technical Background
 
@@ -735,7 +741,6 @@ In this first post, I’ll help you get started using Apache Spark’s machine l
 === Where do we get these DataSets?
 
 http://data.beta.nyc/dataset/uber-trip-data-foiled-apr-sep-2014
-
 
 ifdef::showscript[]
 

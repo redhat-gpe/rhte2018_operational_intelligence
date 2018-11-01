@@ -4,54 +4,46 @@
 :toc2:
 :linkattrs:
 
-= Large Data Sets of Uber Data Analysis using Spark
+= Automated Analysis of Uber traffic using AMQ Streams
+
+.Goals
+. Importing of a json file of traffic cluster centers
+. Consumption of raw Uber data record stream via a Kafka Topic
+. Enrichment of streamed Uber data with assignment of specific traffic cluster center Id to each record
+. Additional enrichment of streamed Uber data with assignment of a key performance indicator to each record
+. Publishing of Enriched Data records to a different Kafka Topic for additional downstream rule processing
+. Visualization of heat-map of simulated traffic in cluster centers
+
 
 .Prerequisite
 * Skills
-** Programming Knowledge of Python, Scala and Java Languages
-** Knowledge of git
-** Knowledge on OpenShift Deployments
-** Basic Knowledge of Cluster Computing and Distributed Architectures
-
-* Tools
-** `curl` utility
-** `sed` utility
-** `oc` version 3.9 utility
-** `Interactive Notebooks - Apache Zeppelin`
-** `git` command basics
+** Programming knowledge using link:https://vertx.io/[vert.x]
 
 :numbered:
 
 == Overview
 
-=== Lab Goals
-. Importing of a json file of traffic cluster centers
-. Consumption of Uber data record stream via a Kafka Topic
-. Enrichment of Uber data by assigning specific traffic cluster center Id to each record
-. Publishing of Enriched Data records to a different Kafka Topic for additional downstream rule processing
+=== Key Performance Indicators
+
+[red]#TO-DO#
 
 === Technical Background
 
-==== Apache Spark with Red Hat Strimzi Cluster
+. *link:https://spark.apache.org/docs/2.2.0/streaming-kafka-0-8-integration.html[Spark / Kafka Integration]*
 
-. *Apache Strimzi*
-+
-Strimzi provides a way to run an Apache Kafka cluster on Kubernetes or OpenShift in various deployment configurations.
+. *link:https://kafka.apache.org/documentation/#api[Kafka Streaming API]*
 
-. *KafkaAPI*
+.. The *Producer API* allows applications to send streams of data to topics in the Kafka cluster.
+.. The *Consumer API* allows applications to read streams of data from topics in the Kafka cluster.
+.. The *Streams API* allows transforming streams of data from input topics to output topics.
+.. The *Connect API* allows implementing connectors that continually pull from some source system or application into Kafka or push from Kafka into some sink system or application.
+.. The *AdminClient* API allows managing and inspecting topics, brokers, and other Kafka objects.
 
-KafkaAPI is composed of Five Core API's which we need to know:
-
-. The Producer API allows applications to send streams of data to topics in the Kafka cluster.
-. The Consumer API allows applications to read streams of data from topics in the Kafka cluster.
-. The Streams API allows transforming streams of data from input topics to output topics.
-. The Connect API allows implementing connectors that continually pull from some source system or application into Kafka or push from Kafka into some sink system or application.
-. The AdminClient API allows managing and inspecting topics, brokers, and other Kafka objects.
-
+. *link:https://vertx.io/[vert.x]*
 
 
 === Architecture
-. DataPipeLine Architecture Diagram.
+. Data flow:
 +
 Uber trip data is published to a Kafka Streams topic using the Kafka API. A Spark streaming application subscribed to the first topic: Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
 +
@@ -61,9 +53,6 @@ image::images/DataFlowDiagram.png[DataFlow]
 +
 image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
 
-=== Reference
-.  https://kafka.apache.org/
-.  https://strimzi.io/
 
 === Modify the Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.

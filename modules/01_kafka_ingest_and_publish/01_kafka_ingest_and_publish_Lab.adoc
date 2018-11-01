@@ -547,19 +547,20 @@ $ oc get pods
 
 NAME
 .
-                                       READY     STATUS             RESTARTS   AGE
-my-connect-cluster-connect-64dd9b5cc5-mlz26   0/1       Running            492        9d
+					        READY     STATUS             RESTARTS   AGE
+uber-connect-cluster-connect-64dd9b5cc5-mlz26   0/1       Running            1          9d
 .
-
 -----
 
-. Note the name of the connect pod (*my-connect-cluster-connect-64dd9b5cc5-mlz26*) and use that in the oc rsync command. rsh in to the container and check that the file has been transferred.
+. Note the name of the connect pod (*uber-connect-cluster-connect-64dd9b5cc5-mlz26*) and use that in the oc rsync command. rsh in to the container and check that the file has been transferred.
 Name of the connect pod would be like this *my-connect-cluster-connect-XXXXXX* based on the student's VM in which they are querying for *oc get pods*.
+>>>>>>> 1b26026aff61297290cb0a14a8a14d075392ddbc
 +
 -----
 $ oc rsync <your-local-dir> my-connect-cluster-connect-64dd9b5cc5-mlz26:/tmp/
 $ oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26
 $ ls /tmp
+$ exit
 -----
 
 . A topic (my-topic-2) that Kafka Connect uses to publish to the Kafka broker has been created for you
@@ -609,15 +610,16 @@ spec:
             value: "1000"
 -----
 
-. Use the following command to create the new consumer
+. Exit the connector pod and use the following command to create the new consumer
 +
 -----
 $ oc apply -f connector-consumer.yaml
 -----
 
-. Create the configuration for the file source
+. rsh into the connector pod as before and create the configuration for the file source
 +
 ----
+% oc rsh my-connect-cluster-connect-64dd9b5cc5-mlz26 
 % cat <<EOF >> /tmp/source-plugin.json
 {
   "name": "source-test",
@@ -637,10 +639,11 @@ EOF
 % curl -X POST -H "Content-Type: application/json" --data @/tmp/source-plugin.json http://localhost:8083/connectors
 ----
 
-. Verify the contents are being published to the message consumer configured
+. Exit the connector pod and verify the contents are being published to the message consumer configured
 +
 -----
-$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.item    s[0].metadata.name}') -f
+$ exit
+$ oc logs $(oc get pod -l app=connector-consumer -o=jsonpath='{.items[0].metadata.name}') -f
 ....
 2018-08-21 22:08:26 INFO  KafkaConsumerExample:27 -	value: {"schema":{"type":"string","optional":false},"payload":"{1, 100, \"nandan\", \"uber data\", 15}"}
 -----
