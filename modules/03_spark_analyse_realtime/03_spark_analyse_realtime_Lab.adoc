@@ -47,6 +47,8 @@
 +
 Uber trip data is published to a Kafka Streams topic using the Kafka API. A Spark streaming application subscribed to the first topic: Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
 +
+[red]#TO-DO#
+
 image::images/DataFlowDiagram.png[DataFlow]
 
 
@@ -110,12 +112,11 @@ uber-realtime-spark-stream-analysis/
         └── scala
             └── com
                 ├── sparkkafka
-                │   └── uber
-                │       ├── SparkKafkaConsumerProducer.scala
-                └── sparkml
-                    └── uber
-                        ├── ClusterUber.scala
-                        └── SqlUber.scala
+                   └── uber
+                       ├── UberEnrinchmentDataConsumer.Scala
+                       |-- UberRawDataConsumer.Scala
+                       |-- UberRawDataProducer.Scala
+
 
 -----
 
@@ -132,31 +133,13 @@ At this time, Red Hat does not intend to provide supported versions of these pac
 ... Available in the lab assets at:  `uber-data-analysis/src/main/resources/data/uber.csv`
 ... It is the raw data from the UberData for NLC which describes the Latitude, Longitude, timestamp and BaseId
 
-.. *SparkKafkaConsumerProducer.scala*
+.. *UberEnrinchmentDataConsumer.scala*
 
   ... Consumes the Uber.csv file which is a near-real-time-uber-data and send its to the UberTopic which has already been created in Lab1.
   ... Produces the Enriched UberData with KMeans clusterId which is send to the spark streaming which helps for accurate predictions.
  .. How Integration happening with Spark ?
  ... In Lab1 we create a topic called UberTopic which consumes the Uber.csv file and pushed into the spark-streaming. Please refer the deployment Topology diagram with Uber.csv file.
 
-+
-SparkkafkaConsumerProducer.scala is the code applied to the Zeppelin Notebook to analyze the data.
-
-... This file is provided to you as background and context only.
-For the purpose of this lab, you will not be modifying or compiling this scala class file.
-... Compiling the SparkkafkaConsumerProducer.scala has already been done for you and the output being the exported asset introduced next:  _Uber.json_.
-
-.. *UberNearRealTime.json*
-+
-... Later in this lab you will analyze this Uber.json.  It is generated from SCALA IDE or Using Zeppelin Paragraph Cells Compilation.
-... Later in this lab you will import this JSON File in the Zeppelin NoteBook and run the each paragraph .
-
-... *oshinko-cluster.yaml*
-....  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
-
-... *zeppelin-openshift.yaml*
-
-.... This template file use to create the deployment objects of Zeppelin and the students are expected to run for provisioning commands. Below given a detailed explaination of Zeppelin Provisioning and its interpreter Configurations.
 
 == Kafka Strimzi Assets
 Recall the OC commands created in Lab1.
@@ -309,6 +292,49 @@ In Lab2 we just created a model with the Historical data (Uber.csv), build a tra
 In Lab3 we are going to use the Deployed Model and to give accurate predictions.
 
 image::images/picture1.png[recall]
+
+=== Importing of JSON File of different traffic cluster centers
+[red]#TO-DO#
+
+
+==== Deployment diagram
+[red]#TO-DO#
+
+==== OC commands
+[red]#TO-DO#
+
+=== Consumption of Raw Uber Data Record Stream Via a Kafka topic
+[red]#TO-DO#
+
+==== Deployment diagram
+[red]#TO-DO#
+
+==== OC commands
+[red]#TO-DO#
+
+=== Enrichment of UberRawData
+[red]#TO-DO#
+
+==== Deployment diagram
+[red]#TO-DO#
+
+==== OC commands
+[red]#TO-DO#
+
+=== Visualization of Heat-Map of simulated Traffic in Cluster centers
+[red]#TO-DO#
+
+==== Deployment diagram
+[red]#TO-DO#
+
+==== OC commands
+[red]#TO-DO#
+
+=== Overall Integration
+[red]#TO-DO#
+
+==== Architecture and Deployment diagram
+[red]#TO-DO#
 
 
 == Conclusions
