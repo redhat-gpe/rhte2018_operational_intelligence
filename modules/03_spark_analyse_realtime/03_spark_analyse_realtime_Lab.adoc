@@ -306,6 +306,10 @@ image::images/picture1.png[recall]
 === Consumption of Raw Uber Data Record Stream Via a Kafka topic
 [red]#TO-DO#
 
+===== Ranking - Why it is important?
+In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
+In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
+
 ==== Deployment diagram
 [red]#TO-DO#
 
