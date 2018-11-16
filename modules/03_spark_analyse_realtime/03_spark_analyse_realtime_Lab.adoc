@@ -326,10 +326,19 @@ In lab3, we use the ranking which is dynamic helps in calculating the raise in p
 [red]#TO-DO#
 
 === Visualization of Heat-Map of simulated Traffic in Cluster centers
-[red]#TO-DO#
+== The vert.x toolkit and Web Application Architecture
+
+The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js, employs a non-blocking model with a single threaded event-loop to handle work. The Vert.x SockJS event bus bridge allows web applications to communicate bi-directionally with the Vert.x event bus using Websockets, which allows you to build real-time web applications with server push functionality.
++
+image::images/Vert.xGeneral.png[Vertx]
 
 ==== Deployment diagram
-[red]#TO-DO#
++
+image::images/VertxDataFlow.png [vertxdataflow]
+
+A Vert.x Kafka client verticle consumes messages from the Kafka Streams topic and publishes the messages on a Vert.x event bus.
+A Javascript browser client subscribes to the Vert.x event bus using SockJS and displays the Uber trip locations on a Google Heatmap.
+
 
 ==== OC commands
 [red]#TO-DO#
