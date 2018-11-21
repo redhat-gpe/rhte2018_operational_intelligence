@@ -723,6 +723,38 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 == Appendix
 
+=== How to setup the code in Local IDE?
+. Download the Scala IDE from this link http://scala-ide.org/
+. Git clone the assets. This should *not* be in your Virtual Machine.
+
+---
+ $ git clone https://github.com/gpe-mw-training/operational_intelligence.git
+
+ $ cd operational_intelligence/uber-data-Analysis
+
+---
+. Import as a Maven Project in Scala-IDE.
++
+image::images/MavenImport.png[import]
+
+. Select where POM.xml file exists.
++
+image::images/RootFolder.png[rootfolder]
+
+. Enable the CheckBox of WorkingSets.
++
+image::images/WorkingSets.png[ws]
+
+. Run as Maven Build which will resolve the compilation errors.
++
+image::images/MavenBuild.png[mb]
+
+Enter the goal as
+----
+clean install package -e
+----
+. Run as Scala Application pointing in Main.scala class on your IDE.
+
 
 === Background
 
