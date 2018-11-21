@@ -748,7 +748,6 @@ image::images/WorkingSets.png[ws]
 . Run as Maven Build which will resolve the compilation errors.
 +
 image::images/MavenBuild.png[mb]
-
 Enter the goal as
 ----
 clean install package -e
