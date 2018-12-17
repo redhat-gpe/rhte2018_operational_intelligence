@@ -45,10 +45,17 @@
 === Architecture
 . Data flow:
 +
-Uber trip data is published to a Kafka Streams topic using the Kafka API. A Spark streaming application subscribed to the first topic: Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
-+
 image::images/DataFlowDiagram.png[DataFlow]
 
+.. Uber trip data is published to a Kafka Streams topic (uberrawdatatopic) using the Kafka API.
+.. A Spark streaming application subscribes to the uberrawdatatopic and enriches the data with a traffic cluster Id
+.. The Spark streaming application pushes the enriched data to a topic called: uberenricheddatatopic.
+.. Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
+
+
+. Deployment Topology diagram with DataFlow.
++
+image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
 
 === Modify the Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
