@@ -304,31 +304,6 @@ Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist
 +
 image::images/provision_oc.png[]
 
-. Two `Deployment Config` resources will have been created.
-These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
-These DCs are not configured with limits and requests as required by your lab environment.
-Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
-
-.. Add limits and requests to the master pod:
-+
------
-$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
-    --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
-
-$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
-    --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-m", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
------
-
-.. Add limits and requests to the worker pod:
-+
------
-$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
-   --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
-
-
-$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
-       --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-w", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
------
 
 .. The end result are the new Oshinko master and worker pods having started:
 +
@@ -855,5 +830,30 @@ openshift.io/Image              storage                 -       1Gi     -       
 openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
 openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
 
+. Two `Deployment Config` resources will have been created.
+These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
+These DCs are not configured with limits and requests as required by your lab environment.
+Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
+
+.. Add limits and requests to the master pod:
++
+-----
+$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
+    --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
+
+$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
+    --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-m", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
+-----
+
+.. Add limits and requests to the worker pod:
++
+-----
+$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
+   --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
+
+
+$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
+       --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-w", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
+-----
 
 endif::showscript[]
