@@ -1,0 +1,424 @@
+:noaudio:
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+
+= Data Analytics Application Deployment on OSHINKO CLUSTER
+
+.Goals
+
+* Simple Data Analytics Application Deployment on OSHINKO CLUSTER
+* Apache Spark Project Setup on JBoss Developer Studio.
+
+.Prerequisites
+* Skills
+** Programming Knowledge of Maven and Java Languages.
+** Knowledge of git
+** Knowledge on OpenShift Deployments
+** Basic Knowledge of Cluster Computing and Distributed Architectures
+* Tools
+** `curl` utility
+** `sed` utility
+** `oc` version 3.9 utility
+** `git` command basics
+
+:numbered:
+
+== Overview
+
+=== Technical Background
+
+==== Apache Spark
+. *Apache Spark*
++
+Apache Spark is a fast, easy-to-use and general engine for big data processing that has built-in modules for streaming, SQL, Machine Learning (ML) and graph processing. Spark is a cluster-computing framework, which means that it competes more with MapReduce than with the entire Hadoop ecosystem. For example, Spark doesn't have its own distributed filesystem, but can use HDFS. Spark uses memory and can use disk for processing, whereas MapReduce is strictly disk-based.
+
+. *Spark SQL*
++
+Spark SQL is a Spark module for structured data processing. It enables unmodified Hadoop Hive queries to run up to 100x faster on existing deployments and data. It also provides powerful integration with the rest of the Spark ecosystem (e.g., integrating SQL query processing with machine learning).
+
+. *Resilient Distributed Datasets*
++
+Resilient Distributed Datasets (RDD) is a fundamental data structure of Spark. It is an immutable distributed collection of objects. Each dataset in RDD is divided into logical partitions, which may be computed on different nodes of the cluster. Spark Actions are RDD operations that produce non-RDD values. They materialize a value in a Spark program. In other words, a RDD operation returns a value of any type.
+
+. *SparkContext*
++
+SparkContext is the heart of a Spark application. Once a SparkContext is created you can use it to create RDDs, accumulators and broadcast variables, access Spark services and run jobs (until SparkContext is stopped).
+
+==== Oshinko Cluster
+
+The _Oshinko_ project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift Container Platform.
+
+This Lab demonstrates the usage of an Oshinko cluster running in your OpenShift Container Platform environment.
+
+
+=== Reference
+
+.  http://spark.apache.org/
+.  http://spark.apache.org/examples.html
+.  http://spark.apache.org/mllib/
+.  https://jaceklaskowski.gitbooks.io/mastering-apache-spark/
+.  https://www.amazon.in/Learning-Spark-Holden-Karau/dp/1449358624
+.  https://spark.apache.org/sql/
+
+
+=== Validate Environment Variables
+In a previous lab, you should have already set various environment variables in the shell of your lab environment.
+
+At this time, ensure that the following environment variables remain set:
+
+-----
+echo "export OCP_PROJECT=\$OCP_USERNAME-simple-data-analytics" >> ~/.bashrc
+
+source ~/.bashrc
+
+
+$ echo $OCP_USERNAME
+developer
+
+$ echo $OCP_PASSWD
+xxxxxxxx
+-----
+
+== Lab Asset Overview
+
+This lab provides a set of assets to assist with the provisioning of Oshinko and Zeppelin.
+You will want to clone these lab assets to your lab environment so that you can review them.
+
+. Make a new directory where all lab assets will reside.
+  Already the lab assets are cloned in Lab1. Please refer instructions of Lab1.
+. Change directory to the newly cloned project.
++
+-----
+$ cd $HOME/lab/operational_intelligence/
+-----
+
+. Review the various files specific to this lab :
++
+-----
+├── templates
+│   ├── oshinko-cluster.yaml
+│   ├── simple-data-analytics
+│   ├── pom.xml
+│   ├── README.md
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── com
+│           │       └── redhat
+│           │           └── gpte
+│           │               └── SimpleDataAnalytics.java
+│           └── resources
+
+-----
+
+
+. Several key assets to review are as follows:
+
+.. *pom.xml*
++
+Notice that community Apache Spark and community Scala packages are being utilized.
+At this time, Red Hat does not intend to provide supported versions of these packages.
+
+.. *SimpleDataAnalytics.java*
++
+The above class file is a simple hello world application which uses SparkSQL for performing some Query Operations and Analytics.
+It is packaged as a Jar file and Deployed in our Oshinko Cluster. This code is developed in JBoss Developer Studio.
+
+.. *Templates*
+
+... *oshinko-cluster.yaml*
+....  This template file use to create the deployment Objects of Oshinko Cluster and the students are expected to run for provisioning commands. Below given a detailed explaination of Oshinko Cluster provisioning.
+
+== Oshinko
+=== Overview
+
+Oshinko is the project focused on providing a Spark cluster on OpenShift Container Platform.
+In this section of the lab, you will provision Oshinko.
+
+The Oshinko project covers several individual applications which all focus on the goal of deploying and managing Apache Spark clusters on Red Hat OpenShift and OpenShift Origin.
+With the Oshinko family of applications you can create, scale, and destroy Apache Spark clusters. These clusters can then be used by your applications within an OpenShift project by providing a simple connection URL to the cluster. There are multiple paths to achieving this: browser based graphical interface, command line tool, and a RESTful server.
+
+To begin your exploration, we recommend starting with the oshinko-webui application.
+
+The oshinko-webui is a self-contained deployment of the Oshinko technologies.
+An OpenShift user can deploy the oshinko-webui container into their project and then access the server with a web browser.
+Through the browser interface you will be able to manage Apache Spark clusters within your project.
+Once installed, it consists of a Node.JS application that is contained within a Pod and provides a web browser based user interface for controlling the lifecycle of Spark clusters.
+
+
+Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
+
+
+
+=== Oshinko Web UI
+
+. Log into OpenShift Environment using OC Client Tool to your Lab Region
++
+-----
+$ oc login https://$HOSTNAME:8443 -u $OCP_USERNAME -p $OCP_PASSWD
+-----
+
+. Create and switch to the OCP project specific to this lab:
++
+-----
+$ oc new-project $OCP_USERNAME-simple-data-analytics --description=$OCP_USERNAME-simple-data-analytics
+
+
+
+$ oc project $OCP_USERNAME-Simple-Data-Analytics
+-----
+
+. In your OpenShift namespace, create needed Oshinko templates:
++
+-----
+$ oc create \
+     -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/1.0.3/templates/oshinko-cluster.yaml \
+     -n $OCP_USERNAME-Simple-Data-Analytics
+-----
+
+. Provision the Oshinko-WebUI
++
+-----
+
+$ oc new-app oshinko-webui -n $OCP_USERNAME-simple-data-analytics > /tmp/oshinko-web.txt
+
+-----
++
+.. Review the output found in /tmp/oshinko-web.txt
++
+----
+--> Deploying template "user3-simple-data/oshinko-webui" to project user3-simple-data
+
+     * With parameters:
+        * SPARK_DEFAULT=
+        * OSHINKO_WEB_NAME=oshinko-web
+        * OSHINKO_WEB_IMAGE=radanalyticsio/oshinko-webui:stable
+        * OSHINKO_WEB_ROUTE_HOSTNAME=
+        * OSHINKO_REFRESH_INTERVAL=5
+
+--> Creating resources ...
+    service "oshinko-web-proxy" created
+    service "oshinko-web" created
+    route "oshinko-web" created
+    deploymentconfig "oshinko-web" created
+--> Success
+    Access your application via route 'oshinko-web-user3-uber-data.apps.6d13.openshift.opentlc.com'
+    Run 'oc status' to view your app.
+
+----
+. Review the template that has been created
++
+-----
+$ oc get template oshinko-webui -n $OCP_USERNAME-uber-data -o yaml | more
+-----
+
+
+. Wait until both containers of the oshinko-web pod have started:
++
+-----
+$ oc get pods -w
+NAME                  READY     STATUS    RESTARTS   AGE
+
+
+oshinko-web-1-86blg   2/2       Running   0
+-----
+
+
+. Log into the Oshinko web UI
+.. Point your browser to the output of the following command:
++
+-----
+$ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-data)/webui"\n\n"
+-----
++
+image::images/oshinko_homepage.png[]
+
+.. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
++
+Subsequently, you should be able to access the UI without authenticating.
+
+=== Oshinko Cluster S2i Deployment
+
+Via the OC Command Utility we can deploy this simple-data-analytics application using S2i Build tool.
+
+.. The Command Line Arguments is given below :
++
+-----
+$ oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=spark-simple \
+    -p APP_MAIN_CLASS=com.redhat.gpte.SimpleDataAnalytics \
+    -p GIT_URI=https://github.com/Pkrish15/spark-simple \
+    -p APP_FILE=spark-simple.jar
+-----
++
+.. Check the Build logs
+-----
+oc logs -f bc/spark-simple
+-----
+
+.. Check the Deployment logs
+-----
+oc logs -f dc/spark-simple
+-----
+== Conclusions
+
+====  What did we learn?
+
+Oshinko Cluster - Cluster Management Solution for Apache Spark.
+
+Apache Spark - Basics of Apache Spark like Actions and Transformations.
+
+Apache Zeppelin NoteBook - Usage of Interactive Notebooks like Zeppelin and it's interaction with Oshinko Cluster for Apache Spark in a current Big Data scenario.
+
+SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+
+
+== Questions
+
+TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+
+== Appendix
+
+=== How to setup the code in Local IDE?
+. Download the RedHat Developer Studio from this link https://developers.redhat.com/products/devstudio/download/
+. Git clone the assets. This should *NOT* be in your Virtual Machine.
+
+---
+ $ git clone https://github.com/gpe-mw-training/operational_intelligence.git
+
+ $ cd operational_intelligence/simple-data-Analytics
+
+---
+. Import as a Maven Project in RedHat-Developer-Studio.
++
+image::images/MavenImport.png[import]
+
+. Select where POM.xml file exists.
++
+image::images/RootFolder.png[rootfolder]
+
+. Enable the CheckBox of WorkingSets.
++
+image::images/WorkingSets.png[ws]
+
+. Run as Maven Build which will resolve the compilation errors.
++
+image::images/MavenBuild.png[mb]
+Enter the goal as
+----
+clean install package -e
+----
+. Run as Scala Application pointing in Main.scala class on your IDE.
+
+
+ifdef::showscript[]
+
+=== ClusterQuota and Limit Range for Zeppelin Interpreter
+
+==== Cluster Quota
+A resource quota, defined by a ResourceQuota object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that may be consumed by resources in that project.
+
+==== Limit Range
+A limit range, defined by a LimitRange object, enumerates compute resource constraints in a project at the pod, container, image, image stream, and persistent volume claim level, and specifies the amount of resources that a pod, container, image, image stream, or persistent volume claim can consume.
+
+All resource create and modification requests are evaluated against each LimitRange object in the project. If the resource violates any of the enumerated constraints, then the resource is rejected. If the resource does not set an explicit value, and if the constraint supports a default value, then the default value is applied to the resource.
+
+By default, all OCP projects are assigned a limit range.  the limit range assigns default limits and requests for both CPU and RAM if the DCs themselves don't specify limits and requests.
+The default CPU limit is set to 1/20th of a CPU.  So Spark was running on 1/20th of a CPU.
+
+In general, all of us should always understand the details of LimitRanges assigned to our projects.
+And its very likely that we should be adding/tweaking the limits and requests in our DC's.
+
+==== CPU Limits
+
+Each container in a pod can specify the amount of CPU it is limited to use on a node. CPU limits control the maximum amount of CPU that your container may use independent of contention on the node. If a container attempts to exceed the specified limit, the system will throttle the container. This allows the container to have a consistent level of service independent of the number of pods scheduled to the node.
+
+==== Memory Requests
+By default, a container is able to consume as much memory on the node as possible. In order to improve placement of pods in the cluster, specify the amount of memory required for a container to run. The scheduler will then take available node memory capacity into account prior to binding your pod to a node. A container is still able to consume as much memory on the node as possible even when specifying a request.
+
+==== Memory Limits
+If you specify a memory limit, you can constrain the amount of memory the container can use. For example, if you specify a limit of 200Mi, a container will be limited to using that amount of memory on the node. If the container exceeds the specified memory limit, it will be terminated and potentially restarted dependent upon the container restart policy.
+
+=== Do we need to Know them
+The above parameters are managed by the cluster Administrator and Infrastructure team, Hence it is not needed for the students to learn. But a basic concept of Knowing this will help.
+
+*Students are expected to learn this much alone.*
+----
+For Viewing Quotas
+
+$ oc get quota -n user3-uber-data
+NAME                AGE
+besteffort          11m
+compute-resources   2m
+object-counts       29m
+...
+...
+$ oc describe quota object-counts -n user3-uber-data
+Name:			object-counts
+Namespace:		user3-uber-data
+Resource		Used	Hard
+--------		----	----
+configmaps		3	10
+persistentvolumeclaims	0	4
+replicationcontrollers	3	20
+secrets			9	10
+services		2	10
+
+For Viewing Limit Ranges
+
+$ oc get limits -n user3-uber-data
+NAME              AGE
+resource-limits   6d
+
+$ oc describe limits resource-limits
+Name:		resource-limits
+Namespace:	use3-uber-data
+Type		Resource	Min	Max	Default Request	Default Limit	Max Limit/Request Ratio
+----		--------	---	---	---------------	-------------	-----------------------
+Pod		cpu		30m	2	-		-		-
+Pod		memory		150Mi	1Gi	-		-		-
+Container	memory		150Mi	1Gi	307Mi		512Mi		-
+Container	cpu		30m	2	60m		1		-
+
+$ oc describe limits resource-limits -n user3-uber-data
+Name:                           resource-limits
+Namespace:                      demoproject
+Type                            Resource                Min     Max     Default Request Default Limit   Max Limit/Request Ratio
+----                            --------                ---     ---     --------------- -------------   -----------------------
+Pod                             cpu                     200m    2       -               -               -
+Pod                             memory                  6Mi     1Gi     -               -               -
+Container                       cpu                     100m    2       200m            300m            10
+Container                       memory                  4Mi     1Gi     100Mi           200Mi           -
+openshift.io/Image              storage                 -       1Gi     -               -               -
+openshift.io/ImageStream        openshift.io/image      -       12      -               -               -
+openshift.io/ImageStream        openshift.io/image-tags -       10      -               -               -
+
+. Two `Deployment Config` resources will have been created.
+These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
+These DCs are not configured with limits and requests as required by your lab environment.
+Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
+
+.. Add limits and requests to the master pod:
++
+-----
+$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
+    --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
+
+$ oc patch dc/uber-data-cluster-m -n $OCP_USERNAME-uber-data \
+    --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-m", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
+-----
+
+.. Add limits and requests to the worker pod:
++
+-----
+$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
+   --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
+
+
+$ oc patch dc/uber-data-cluster-w -n $OCP_USERNAME-uber-data \
+       --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-data-cluster-w", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
+-----
+
+endif::showscript[]
