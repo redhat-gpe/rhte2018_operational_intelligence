@@ -151,7 +151,6 @@ Once installed, it consists of a Node.JS application that is contained within a 
 Another important part of Oshinko to highlight is the oshinko-s2i repository and associated images which implement the source-to-image workflow for Apache Spark based applications. These images enable you to create full applications that can be built, deployed and upgraded directly from a source repository.
 
 
-
 === Oshinko Web UI
 
 . Log into OpenShift Environment using OC Client Tool to your Lab Region
@@ -211,7 +210,7 @@ $ oc new-app oshinko-webui -n $OCP_USERNAME-simple-data-analytics > /tmp/oshinko
 . Review the template that has been created
 +
 -----
-$ oc get template oshinko-webui -n $OCP_USERNAME-uber-data -o yaml | more
+$ oc get template oshinko-webui -n $OCP_USERNAME-simple-data-analytics -o yaml | more
 -----
 
 
@@ -255,13 +254,154 @@ $ oc new-app --template oshinko-java-spark-build-dc \
 +
 .. Check the Build logs
 -----
-oc logs -f bc/spark-simple
+oc logs -f bc/spark-simple >>bcsimple.txt
 -----
 
 .. Check the Deployment logs
 -----
-oc logs -f dc/spark-simple
+oc logs -f dc/spark-simple >>dcsimple.txt
+
+*Review the Output*
+
++ [[ /usr/local/s2i/run == *\/\u\s\r\/\l\o\c\a\l\/\s\2\i* ]]
++ exec /usr/local/s2i/run
+oshinko v0.5.6
+Default spark image: radanalyticsio/openshift-spark:2.3-latest
+Didn't find cluster cluster-4a2bcb, creating ephemeral cluster
+Using ephemeral cluster cluster-4a2bcb
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark master http://cluster-4a2bcb-ui:8080 to be available ...
+Waiting for spark workers (0/1 alive) ...
+Waiting for spark workers (0/1 alive) ...
+Waiting for spark workers (1/1 alive) ...
+All spark workers alive
+Cluster configuration is - Config:
+    ExposeWebUI: "true"
+    MastersCount: 1
+    Metrics: "false"
+    SparkImage: radanalyticsio/openshift-spark:2.3-latest
+    WorkersCount: 1
+  Ephemeral: spark-simple-1
+  Image: radanalyticsio/openshift-spark:2.3-latest
+  MasterUrl: spark://cluster-4a2bcb:7077
+  MasterWebRoute: http://cluster-4a2bcb-ui-route-spark-hello-world.apps.na39.openshift.opentlc.com
+  MasterWebUrl: http://cluster-4a2bcb-ui:8080
+  Name: cluster-4a2bcb
+  Namespace: spark-hello-world
+  Status: Running
+  href: /clusters/cluster-4a2bcb
+spark-submit --class com.redhat.gpte.SimpleDataAnalytics --master spark://cluster-4a2bcb:7077 --conf spark.driver.host=spark-simple-headless /opt/app-root/src/spark-simple.jar
+19/01/04 10:01:17 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+19/01/04 10:01:17 INFO SparkContext: Running Spark version 2.3.0
+19/01/04 10:01:17 INFO SparkContext: Submitted application: documentation
+19/01/04 10:01:17 INFO SecurityManager: Changing view acls to: 1002560000
+19/01/04 10:01:17 INFO SecurityManager: Changing modify acls to: 1002560000
+19/01/04 10:01:17 INFO SecurityManager: Changing view acls groups to:
+19/01/04 10:01:17 INFO SecurityManager: Changing modify acls groups to:
+19/01/04 10:01:17 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(1002560000); groups with view permissions: Set(); users  with modify permissions: Set(1002560000); groups with modify permissions: Set()
+19/01/04 10:01:19 INFO Utils: Successfully started service 'sparkDriver' on port 40325.
+19/01/04 10:01:19 INFO SparkEnv: Registering MapOutputTracker
+19/01/04 10:01:19 INFO SparkEnv: Registering BlockManagerMaster
+19/01/04 10:01:19 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+19/01/04 10:01:19 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+19/01/04 10:01:19 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-68d902a6-0efe-4c5b-9a8c-0c63faaff6a7
+19/01/04 10:01:19 INFO MemoryStore: MemoryStore started with capacity 366.3 MB
+19/01/04 10:01:19 INFO SparkEnv: Registering OutputCommitCoordinator
+19/01/04 10:01:20 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+19/01/04 10:01:20 INFO SparkUI: Bound SparkUI to 0.0.0.0, and started at http://spark-simple-headless:4040
+19/01/04 10:01:21 INFO SparkContext: Added JAR file:/opt/app-root/src/spark-simple.jar at spark://spark-simple-headless:40325/jars/spark-simple.jar with timestamp 1546596081143
+19/01/04 10:01:21 INFO Executor: Starting executor ID driver on host localhost
+19/01/04 10:01:21 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 34285.
+19/01/04 10:01:21 INFO NettyBlockTransferService: Server created on spark-simple-headless:34285
+19/01/04 10:01:21 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+19/01/04 10:01:21 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, spark-simple-headless, 34285, None)
+19/01/04 10:01:21 INFO BlockManagerMasterEndpoint: Registering block manager spark-simple-headless:34285 with 366.3 MB RAM, BlockManagerId(driver, spark-simple-headless, 34285, None)
+19/01/04 10:01:21 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, spark-simple-headless, 34285, None)
+19/01/04 10:01:21 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, spark-simple-headless, 34285, None)
++-----+
+| test|
++-----+
+|  one|
+|  two|
+|three|
+| four|
++-----+
+
++------+
+|  name|
++------+
+|movie1|
+|movie2|
+|movie3|
+|movie4|
++------+
+
++------+------+---------+
+|  name|rating|timestamp|
++------+------+---------+
+|movie1|2323.0|     1212|
+|movie2|2323.0|     1212|
+|movie3|2323.0|     1212|
+|movie4|2323.0|     1212|
++------+------+---------+
+
+Deleting cluster 'cluster-4a2bcb'
+cluster "cluster-4a2bcb" deleted
 -----
+
+=== Oshinko Architecture is Different.
+
+.. Our architecture uses OpenShift’s multi-tenancy capabilities to provide multiple, trivial-to-manage, custom-tuned Spark clusters to users.
+.. We are *not* aiming to provide multi-tenant Spark clusters which is unique from other vendors.
+.. Customers with operational experience naturally move toward our architecture themselves.
+.. Green customers will gravitate to messaging from other vendors.
+.. Oshinko is aimed at providing Spark Clusters as a resource.
+.. Oshinko is a set of applications, templates and images for managing Spark Clusters.
+.. Stateless and it uses the Kubernetes and OpenShift APIs for Orchestration.
+
+=== Deployment Using S2I Build Tool.
+.. In an S2I workflow, a user spark app is injected into a driver framework.
+.. The oshinko startup script will create a cluster of a given name and run the app against the cluster.
+.. When the app finishes, the cluster is deleted (Please refer below Image)
+
++
+image::images/OshiknoArchitecture.png[osharch]
+
+.. Clusters can also be managed from OSHINKO WebUI. But this is not a goal for this lab.
+
+== Availability of Spark clusters
+=== *Important to remember:*
+.. These clusters are only available to applications running on OpenShift because they are contained within the “*pod network*.”
+.. A client to the Spark cluster (aka the Driver) needs full, bi-directional contact with the master and all workers.
+It’s strategic for users to run their applications, or at least portions, on OpenShift
+
+== Description of the Template parameters on S2I Java Build.
+=== S2I Java Build on Oshinko Cluster
+.. S21 Build starts with the below command.
+----
+oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=spark-simple \
+    -p APP_MAIN_CLASS=com.redhat.gpte.SimpleDataAnalytics \
+    -p GIT_URI=https://github.com/Pkrish15/spark-simple \
+    -p APP_FILE=spark-simple.jar
+----
+.. APPLICATION_NAME = Name of the Application, can be any namespace. But it is prefered to match the name with Maven Artifact to avoid confusion.
+.. APP_MAIN_CLASS= Where the Java Main Program Resides.
+.. GIT_URI= GitHub URL.
+.. APP_FILE= Maven Artifact (Jar file)
+. *Other Parameters which is not used here.*
+.. SPARK_OPTIONS= The name of the spark cluster to run against. The cluster will be created if it does not exist, and a random cluster name will be chosen if this value is left blank.
+.. OSHINKO_CLUSTER_NAME= The name of a stored cluster configuration to use if a cluster is created, default is 'default'.
+.. OSHINKO_NAMED_CONFIG= The name of a configmap to use for the spark configuration of the driver. If this configmap is empty the default spark configuration will be used.
+.. OSHINKO_SPARK_DRIVER_CONFIG= If a cluster is created on-demand, delete the cluster when the application finishes if this option is set to 'true'
+.. OSHINKO_DEL_CLUSTER= Takes Boolean Value, if it is "true" cluster get deleted, if it is "false" cluster is not deleted.
+.. SBT_ARGS= Additional sbt arguments, useful for adding task arguments to sbt like `publish makePom`
+
 == Conclusions
 
 ====  What did we learn?
@@ -270,48 +410,12 @@ Oshinko Cluster - Cluster Management Solution for Apache Spark.
 
 Apache Spark - Basics of Apache Spark like Actions and Transformations.
 
-Apache Zeppelin NoteBook - Usage of Interactive Notebooks like Zeppelin and it's interaction with Oshinko Cluster for Apache Spark in a current Big Data scenario.
-
 SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
 
 
 == Questions
 
 TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
-
-== Appendix
-
-=== How to setup the code in Local IDE?
-. Download the RedHat Developer Studio from this link https://developers.redhat.com/products/devstudio/download/
-. Git clone the assets. This should *NOT* be in your Virtual Machine.
-
----
- $ git clone https://github.com/gpe-mw-training/operational_intelligence.git
-
- $ cd operational_intelligence/simple-data-Analytics
-
----
-. Import as a Maven Project in RedHat-Developer-Studio.
-+
-image::images/MavenImport.png[import]
-
-. Select where POM.xml file exists.
-+
-image::images/RootFolder.png[rootfolder]
-
-. Enable the CheckBox of WorkingSets.
-+
-image::images/WorkingSets.png[ws]
-
-. Run as Maven Build which will resolve the compilation errors.
-+
-image::images/MavenBuild.png[mb]
-Enter the goal as
-----
-clean install package -e
-----
-. Run as Scala Application pointing in Main.scala class on your IDE.
-
 
 ifdef::showscript[]
 

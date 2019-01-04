@@ -65,3 +65,12 @@ clean install package -e
 
 === Execution
 
+=== Deep Dive on the Code.
+
+==== Why SparkSQL is Chosen for DataAnalytics?
+
+==== What are the Other Alternatives other than SparkSQL?
+
+==== SparkUI
+
+==== How the data is shared between the Spark Clusters?
