@@ -432,12 +432,10 @@ oc new-app --template oshinko-java-spark-build-dc \
 
 ====  What did we learn?
 
-Oshinko Cluster - Cluster Management Solution for Apache Spark.
-
-Apache Spark - Basics of Apache Spark like Actions and Transformations.
-
-SparkSQL - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
-
+.. Oshinko Cluster - Cluster Management Solution for Apache Spark.
+.. Apache Spark Master Slave Architecture.
+.. How Oshinko Cluster gets differentiated from Traditional Apache Spark Master Slave Architecture.
+.. Deployment on Oshinko Cluster using S2I Build.
 
 == Questions
 

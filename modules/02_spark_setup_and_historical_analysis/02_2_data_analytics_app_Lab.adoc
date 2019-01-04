@@ -59,9 +59,42 @@ Enter the goal as
 clean install package -e
 ----
 
-. Run as Scala Application pointing in Main.scala class on your IDE.
+. Run as Java Application pointing in SimpleDataAnalytics.java class on your IDE.
 
-=== Deployment
+=== Analysing the Execution of code.
+
++
+image::images/Debug.png[debug]
+
+image::images/spark-simple.png[sp]
+
+image::images/SparkUI.png[spui]
+
+image::images/OutputHighlightled.png[out]
+
+image::images/sparkuisqltestshow.png[spts]
+
+image::images/sqlquerycode.png[sql]
+
+image::images/SQLUICompleted.png[sqlui]
+
+image::images/tablescanui.png[ts]
+
+image::images/temptable.png[tt]
+
+image::images/TempTable.png[TT]
+
+image::images/temptablesparkui.png[tts]
+
+image::images/testshow.png[ts]
+
+image::images/testshowsql.png[tss]
+
+
+
+
+
+
 
 === Execution
 
