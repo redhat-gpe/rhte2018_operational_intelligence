@@ -63,7 +63,6 @@ clean install package -e
 
 === Analysing the Execution of code.
 
-+
 image::images/Debug.png[debug]
 
 image::images/spark-simple.png[sp]
@@ -90,15 +89,14 @@ image::images/testshow.png[ts]
 
 image::images/testshowsql.png[tss]
 
-
-
-
-
-
-
-=== Execution
-
 === Deep Dive on the Code.
+image::images/importstatements.png[is]
+
+image::images/SparkSessionCode.png[ss]
+
+image::images/SparkActionSQLCode.png[sasc]
+
+==== Actions and Transformations in Spark
 
 ==== Why SparkSQL is Chosen for DataAnalytics?
 
@@ -106,4 +104,15 @@ image::images/testshowsql.png[tss]
 
 ==== SparkUI
 
-==== How the data is shared between the Spark Clusters?
+== Conclusions
+
+=== What did we learn?
+
+== Questions?
+
+TO-DO :  questions to test student knowledge of the concepts / learning objectives of this lab
+
+
+ifdef::showscript[]
+
+endif::showscript[]
