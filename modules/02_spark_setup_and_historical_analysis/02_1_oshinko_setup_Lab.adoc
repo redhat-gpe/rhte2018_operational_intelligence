@@ -353,8 +353,34 @@ spark-submit --class com.redhat.gpte.SimpleDataAnalytics --master spark://cluste
 Deleting cluster 'cluster-4a2bcb'
 cluster "cluster-4a2bcb" deleted
 -----
+=== Traditional Usecases for an Analytics platform
+Creating intelligent applications means bringing different development streams together.
 
-=== Oshinko Architecture is Different.
+.. Data scientists create deliverables through technology like notebooks
+... Highly interactive
+... Not productized
+... The deliverable might be an algorithm or a model
+.. Developers build intelligent applications around analytics
+... Multiple non-analytic components and integrations
+... Place-holder for analytics
+.. Different skill sets, different activities
+.. Enabling collaboration adds value
+
+=== Spark Architecture
+.. Spark uses a master/worker architecture.
+.. There is a driver that talks to a single coordinator called master that manages workers in which executors run.
+
++
+image::images/SparkArchitecture.png[SparkArchitecture]
+
+.. The driver and the executors run in their own Java processes.
+.. You can run them all on the same (horizontal cluster) or separate machines (vertical cluster) or in a mixed machine configuration.
+
+... Spark in containers
++
+image::images/SparkPod.png[SP]
+
+=== How oshinko Architecture is Different?
 
 .. Our architecture uses OpenShift’s multi-tenancy capabilities to provide multiple, trivial-to-manage, custom-tuned Spark clusters to users.
 .. We are *not* aiming to provide multi-tenant Spark clusters which is unique from other vendors.
@@ -380,8 +406,8 @@ image::images/OshiknoArchitecture.png[osharch]
 .. A client to the Spark cluster (aka the Driver) needs full, bi-directional contact with the master and all workers.
 It’s strategic for users to run their applications, or at least portions, on OpenShift
 
-== Description of the Template parameters on S2I Java Build.
-=== S2I Java Build on Oshinko Cluster
+== Description of the Template parameters on S2I Java Build on Oshinko Cluster.
+
 .. S21 Build starts with the below command.
 ----
 oc new-app --template oshinko-java-spark-build-dc \
