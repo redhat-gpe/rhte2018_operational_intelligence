@@ -359,6 +359,21 @@ spark-submit --class com.redhat.gpte.SimpleDataAnalytics --master spark://cluste
 Deleting cluster 'cluster-4a2bcb'
 cluster "cluster-4a2bcb" deleted
 -----
+== Validation in Oshinko webui
+
+=== View the Cluster in OshinkoWebUI
+... You can view the Cluster is getting Created in the Oshinko WebUI with Master and Worker Nodes when the spark Job is getting Executed.
+... The Cluster gets deleted once the Spark Job is Complete.
+
+image::images/OshinkoClusterValidation.png[ocv]
+
+=== Validation from the Command line
+
+... You can also view from the command line using the following command.
+----
+oc get pods -w
+----
+
 
 == Conclusions
 
@@ -383,6 +398,8 @@ TO-DO :  questions to test student knowledge of the concepts / learning objectiv
 
 
 ifdef::showscript[]
+
+
 === Analysing the Execution of code.
 .. Put a Break Point nearer to the main method as shown in the below.
 ... Why we are doing this? In order to hold the Spark Session and explain in the code execution
