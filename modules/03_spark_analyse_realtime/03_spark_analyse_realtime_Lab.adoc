@@ -240,7 +240,7 @@ image::images/oshinko_homepage.png[oshinko_homepage]
 
 .. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
 +
-Subsequently, you should be able to access the UI without authenticating.
+Subsequently, you should be able to access the UI without authenticating and Ensure that OshinkWebUI is up and running. All our Modules will be deployed in the Oshinko cluster.
 
 
 === What we did in the Lab2?
@@ -303,9 +303,26 @@ Addition of Cluster Center Parameter.
 {"dt":"2014-08-01 00:06:00","lat":40.7489,"lon":-73.9777,"base":"B02617","cluster":8}
 {"dt":"2014-08-01 00:06:00","lat":40.7672,"lon":-73.953,"base":"B02617","cluster":0}
 ----
+=== Injecting the Data (JSON and Cluster.txt) in PVC.
+. Create a configuration map based on the uber.csv data file found in your lab assets:
+
+----
+oc set volume dc/oshinko-web \
+> --add --overwrite \
+> --name=uber-data-volume \
+> -t configmap \
+> --configmap-name=uber-data-cm \
+> -m /data/uber.csv \
+> --sub-path=uber.csv \
+> --default-mode=0644
+
+----
+. Create a configuration map based on the cluster.txt data file found in your lab assets:
 
 
-===== Ranking - Why it is important?
+
+
+=== Ranking - Why it is important?
 .. In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
 .. In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
 
