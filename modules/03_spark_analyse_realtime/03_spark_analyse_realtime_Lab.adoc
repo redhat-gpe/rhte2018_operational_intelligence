@@ -285,7 +285,6 @@ $ oc patch dc/uber-realtime-data-cluster-w -n $OCP_USERNAME-uber-realtime-data \
 $ oc get pods
 NAME                          READY     STATUS      RESTARTS   AGE
 ...
-
 uber-realtime-data-cluster-m-2-b4cl4   1/1       Running     0          1m
 uber-realtime-data-cluster-w-2-678fp   1/1       Running     0          10s
 -----
@@ -299,56 +298,78 @@ In Lab3 we are going to use the Deployed Model and to give accurate predictions.
 image::images/picture1.png[recall]
 
 === Importing of JSON File of different traffic cluster centers
+.. In Lab2 we used the model with the Historical Data (uber.csv).
+.. In Lab3 we are going to Enrich the data with ClusterId and the output format will be like as shown below.
+
+image::images/uberEnricheddatatopic.png[ubet]
+
+.. Visual representation of the data along with Cluster Centers will be displayed as shown below.
+
+image::images/clusterCenters.png[cc]
+.. We are saving this JSON File in our Version Control as cluster.txt file and we would use it for near Real Time Streaming.
+.. uber.csv is our sample data which we used in our Lab2. This data is converted into cluster.txt file and it is done in our LocalIDE.
+
+image::images/versioncontrol.png[vc]
+==== Deployment Methodology
 [red]#TO-DO#
 
+==== How it is Handled?
+It is handled in *LocalIDE* only, ClusterUber.scala code handles this.
+----
+//In this Line
 
-==== Deployment diagram
-[red]#TO-DO#
-
-==== OC commands
-[red]#TO-DO#
+model.write.overwrite().save("savemodel")
+   // model can be  re-loaded like this
+   // val sameModel = KMeansModel.load("/data/savemodel")
+   //
+   // to save the categories dataframe as json data
+   val res = spark.sql("select dt, lat, lon, base, prediction as cid FROM uber order by dt")
+   res.write.format("json").save("uber.json")
+   res.write.format("txt").save("cluster.txt")
+ }
+----
+.. uber.json file is persisted in a disk and it is stored in our GitHub.
+.. It will be used for an Input for Spark Stream Processing.
 
 === Consumption of Raw Uber Data Record Stream Via a Kafka topic
-[red]#TO-DO#
+.. Uber trip data is published to a UberRawData topic using the Kafka API.
+image::images/uberrawdatatopic.png[UberRawData]
+
+.. A Spark streaming application subscribed to the UberRawData topic.
+Ingests a stream of uber trip events
+... Identifies the location cluster corresponding to the latitude and longitude of the uber trip
+... Adds the cluster location to the event and publishes the results in JSON format to uberenricheddatatopic
+A Spark streaming application subscribed to the uberEnricheddatatopic topic:
+... Analyzes the uber trip location clusters that are popular by date and time.
+image::images/uberEnricheddatatopic[uedt]
 
 ===== Ranking - Why it is important?
 In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
 In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
 
-==== Deployment diagram
-[red]#TO-DO#
-
-==== OC commands
+==== How it is handled?
 [red]#TO-DO#
 
 === Enrichment of UberRawData
 [red]#TO-DO#
 
-==== Deployment diagram
+==== Deployment Methodology
 [red]#TO-DO#
 
-==== OC commands
-[red]#TO-DO#
 
-=== Visualization of Heat-Map of simulated Traffic in Cluster centers
-== The vert.x toolkit and Web Application Architecture
-
+== Visualization of Heat-Map of simulated Traffic in Cluster centers
+=== The vert.x toolkit and Web Application Architecture
 The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js, employs a non-blocking model with a single threaded event-loop to handle work. The Vert.x SockJS event bus bridge allows web applications to communicate bi-directionally with the Vert.x event bus using Websockets, which allows you to build real-time web applications with server push functionality.
-+
+
 image::images/Vert.xGeneral.png[Vertx]
 
 ==== Deployment diagram
-+
-image::images/VertxDataFlow.png [vertxdataflow]
+.. A Vert.x Kafka client verticle consumes messages from the Kafka Streams topic and publishes the messages on a Vert.x event bus.
+.. A Javascript browser client subscribes to the Vert.x event bus using SockJS and displays the Uber trip locations on a Google Heatmap.
 
-A Vert.x Kafka client verticle consumes messages from the Kafka Streams topic and publishes the messages on a Vert.x event bus.
-A Javascript browser client subscribes to the Vert.x event bus using SockJS and displays the Uber trip locations on a Google Heatmap.
-
+image::images/VertxDataFlow.png[vertxdataflow]
 
 ==== OC commands
-[red]#TO-DO#
-
-=== Overall Integration
 [red]#TO-DO#
 
 ==== Architecture and Deployment diagram
