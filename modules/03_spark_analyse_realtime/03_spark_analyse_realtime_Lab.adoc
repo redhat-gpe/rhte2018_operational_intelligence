@@ -242,56 +242,6 @@ image::images/oshinko_homepage.png[oshinko_homepage]
 +
 Subsequently, you should be able to access the UI without authenticating.
 
-=== Oshinko Cluster
-In a real-time scenario, we would have different clusters for each services and use cases. Hence, we are not going to use the same cluster which was used in Lab2. We are going to create a new cluster for Lab3.
-Because of this cluster can act as an Independent services. Hence we are doing this.
-
-Via the Oshinko Web UI, you can now create an Oshinko cluster which will consist of both a master and worker pods.
-
-. In the homepage of the Oshinko Web UI, click: `Deploy`
-. Populate the pop-up with the following:
-.. *Name*: uber-realtime-data-cluster
-.. *Number of workers*: 1
-. Click the `Deploy` button
-+
-image::images/uberrealtimedatacluster.png[uberrealtimedatacluster]
-
-. Two `Deployment Config` resources will have been created.
-These two DCs are responsible for the provisioning of the Oshinko Master and Worker.
-These DCs are not configured with limits and requests as required by your lab environment.
-Execute the following series of steps to add limits and requests to your DCs so that the underlying pods will start:
-
-.. Add limits and requests to the master pod:
-+
------
-$ oc patch dc/uber-realtime-data-cluster-m -n $OCP_USERNAME-uber-realtime-data \
-    --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
-
-$ oc patch dc/uber-realtime-data-cluster-m -n $OCP_USERNAME-uber-realtime-data \
-    --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-realtime-data-cluster-m", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
------
-
-.. Add limits and requests to the worker pod:
-+
------
-$ oc patch dc/uber-realtime-data-cluster-w -n $OCP_USERNAME-uber-realtime-data \
-   --patch '{"spec":{"strategy":{"resources": { "limits":{"cpu": "2","memory": "4Gi"},"requests":{"cpu":"1","memory":"512Mi"}   } }}}'
-
-
-$ oc patch dc/uber-realtime-data-cluster-w -n $OCP_USERNAME-uber-realtime-data \
-       --patch '{"spec":{"template":{"spec":{"containers":[{"name":"uber-realtime-data-cluster-w", "resources": {   "limits":{"cpu": "1","memory": "2Gi"},"requests":{"cpu":"500m","memory":"256Mi"}   }}]}}}}'
------
-
-.. The end result are the new Oshinko master and worker pods having started:
-+
------
-$ oc get pods
-NAME                          READY     STATUS      RESTARTS   AGE
-...
-uber-realtime-data-cluster-m-2-b4cl4   1/1       Running     0          1m
-uber-realtime-data-cluster-w-2-678fp   1/1       Running     0          10s
------
-
 
 === What we did in the Lab2?
 In Lab2 we just created a model with the Historical data (Uber.csv), build a training set, Identified the patterns and did a Test Predictions.
@@ -400,7 +350,7 @@ $ oc new-app --template oshinko-java-spark-build-dc \
     -p GIT_URI= https://github.com/gpe-mw-training/operational_intelligence.git \
     -p APP_FILE=uber-spark-stream-analysis.jar
 -----
-+
+
 .. Check the Build logs
 -----
 oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark.txt
@@ -410,9 +360,6 @@ oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark.txt
 -----
 oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark.txt
 -----
-
-
-
 
 == Visualization of Heat-Map of simulated Traffic in Cluster centers
 === The vert.x toolkit and Web Application Architecture
