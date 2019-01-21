@@ -25,7 +25,8 @@
 
 === Key Performance Indicators
 
-[red]#TO-DO#
+==== Adding Rank of the Cluster centers
+
 
 === Technical Background
 
@@ -101,9 +102,7 @@ uber-realtime-spark-stream-analysis/
 ├── data
 │   ├── cluster.txt
 │   └── uber.csv
-├── notebooks
-│   ├── ubernearrealtime.json
-│  
+├ 
 ├── pom.xml
 ├── ReadMe.adoc
 └── src
@@ -122,6 +121,10 @@ uber-realtime-spark-stream-analysis/
                        |-- UberRawDataConsumer.Scala
                        |-- UberRawDataProducer.Scala
 
+                |--redhat
+                     |--gpte
+                         |--UberData
+                              |-- ClusterUber.scala
 
 -----
 
@@ -310,8 +313,7 @@ image::images/clusterCenters.png[cc]
 .. uber.csv is our sample data which we used in our Lab2. This data is converted into cluster.txt file and it is done in our LocalIDE.
 
 image::images/versioncontrol.png[vc]
-==== Deployment Methodology
-[red]#TO-DO#
+
 
 ==== How it is Handled?
 It is handled in *LocalIDE* only, ClusterUber.scala code handles this.
@@ -333,6 +335,7 @@ model.write.overwrite().save("savemodel")
 
 === Consumption of Raw Uber Data Record Stream Via a Kafka topic
 .. Uber trip data is published to a UberRawData topic using the Kafka API.
+
 image::images/uberrawdatatopic.png[UberRawData]
 
 .. A Spark streaming application subscribed to the UberRawData topic.
@@ -341,14 +344,30 @@ Ingests a stream of uber trip events
 ... Adds the cluster location to the event and publishes the results in JSON format to uberenricheddatatopic
 A Spark streaming application subscribed to the uberEnricheddatatopic topic:
 ... Analyzes the uber trip location clusters that are popular by date and time.
+
+
 image::images/uberEnricheddatatopic[uedt]
 
 ===== Ranking - Why it is important?
-In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
-In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
+.. In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
+.. In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
 
 ==== How it is handled?
-[red]#TO-DO#
+.. In UberEnrinchmentDataConsumer.scala the following below lines indicate
+
+----
+val clust = categories.select($"dt", $"lat", $"lon", $"base", $"prediction".alias("cid")).orderBy($"dt")
+ val res = clust.join(ccdf, Seq("cid")).orderBy($"dt")
+
+ // Find the rank of Cluster using the parameters date, lat, lon and baseId and sort them.
+ val rank= res.orderBy($"dt",$"lat",$"lon",$"base")
+// val rank= clust.join(($"cid"),Seq("cid"))
+ res.show
+ rank.show
+ //OutPut shown here with the cluster parameter in JSON file which is Rank
+ // {"dt":"2014-08-01 00:04:00","lat":40.7047,"lon":-73.9349,"base":"B02617","cluster":6}
+
+----
 
 === Enrichment of UberRawData
 [red]#TO-DO#
