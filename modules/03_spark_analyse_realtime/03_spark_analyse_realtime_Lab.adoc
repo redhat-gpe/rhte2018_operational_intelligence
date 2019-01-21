@@ -342,11 +342,18 @@ image::images/uberrawdatatopic.png[UberRawData]
 Ingests a stream of uber trip events
 ... Identifies the location cluster corresponding to the latitude and longitude of the uber trip
 ... Adds the cluster location to the event and publishes the results in JSON format to uberenricheddatatopic
-A Spark streaming application subscribed to the uberEnricheddatatopic topic:
-... Analyzes the uber trip location clusters that are popular by date and time.
+... A Spark streaming application subscribed to the uberEnricheddatatopic topic.
+..... Analyzes the uber trip location clusters that are popular by date and time. Enriched Data will look like this below.
+Addition of Cluster Center Parameter.
 
+----
+{"dt":"2014-08-01 00:04:00","lat":40.7047,"lon":-73.9349,"base":"B02617","cluster":6}
+{"dt":"2014-08-01 00:06:00","lat":40.7226,"lon":-74.0034,"base":"B02598","cluster":9}
+{"dt":"2014-08-01 00:06:00","lat":40.7577,"lon":-73.9619,"base":"B02617","cluster":3}
+{"dt":"2014-08-01 00:06:00","lat":40.7489,"lon":-73.9777,"base":"B02617","cluster":8}
+{"dt":"2014-08-01 00:06:00","lat":40.7672,"lon":-73.953,"base":"B02617","cluster":0}
+----
 
-image::images/uberEnricheddatatopic[uedt]
 
 ===== Ranking - Why it is important?
 .. In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
@@ -365,15 +372,46 @@ val clust = categories.select($"dt", $"lat", $"lon", $"base", $"prediction".alia
  res.show
  rank.show
  //OutPut shown here with the cluster parameter in JSON file which is Rank
- // {"dt":"2014-08-01 00:04:00","lat":40.7047,"lon":-73.9349,"base":"B02617","cluster":6}
+// {"dt":"2014-08-01 00:04:00","lat":40.7047,"lon":-73.9349,"base":"B02617","cluster":9}
+// {"dt":"2014-08-01 00:06:00","lat":40.7226,"lon":-74.0034,"base":"B02598","cluster":6}
+// {"dt":"2014-08-01 00:06:00","lat":40.7577,"lon":-73.9619,"base":"B02617","cluster":3}
+// {"dt":"2014-08-01 00:06:00","lat":40.7489,"lon":-73.9777,"base":"B02617","cluster":2}
+// {"dt":"2014-08-01 00:06:00","lat":40.7672,"lon":-73.953,"base":"B02617","cluster":0}
 
 ----
 
 === Enrichment of UberRawData
-[red]#TO-DO#
+==== Why Data Enrichment is needed?
+... In-order to determine on how many pickups occurred in each cluster.
+... Which Hours of the day and which cluster had the highest number of pickups.
+... In-order to identify the Heatmap Layer for Realtime Dashboard Display.
 
 ==== Deployment Methodology
-[red]#TO-DO#
+
+===== Execution of ClusterUber Application on Oshinko CLUSTER
+Via the OC Command Utility we can deploy this Module using the below oc command line.
+
+.. The Command Line Arguments is given below :
++
+-----
+$ oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=uber-real-time-analysis \
+    -p APP_MAIN_CLASS=com.redhat.gpte.uberdata.ClusterUber \
+    -p GIT_URI= https://github.com/gpe-mw-training/operational_intelligence.git \
+    -p APP_FILE=uber-spark-stream-analysis.jar
+-----
++
+.. Check the Build logs
+-----
+oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark.txt
+-----
+
+.. Check the Deployment logs
+-----
+oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark.txt
+-----
+
+
 
 
 == Visualization of Heat-Map of simulated Traffic in Cluster centers
