@@ -390,11 +390,66 @@ image::images/Vert.xGeneral.png[Vertx]
 
 image::images/VertxDataFlow.png[vertxdataflow]
 
-==== OC commands
-[red]#TO-DO#
+==== Deployment in OpenShift.
+. Create a build using the following command.
+----
+$ oc create -f https://raw.githubusercontent.com/gpe-mw-training/operational_intelligence/master/templates/vertx.yaml
 
-==== Architecture and Deployment diagram
-[red]#TO-DO#
+OutPut
+
+buildconfig "vertx-s2i" created
+imagestream "vertx-centos" created
+imagestream "vertx-s2i" created
+template "uber-heatmap" created
+
+$ oc new-app uber-heatmap
+
+OutPut
+
+--> Deploying template "developer-uber-realtime-data/uber-heatmap" to project developer-uber-realtime-data
+
+     uber-heatmap
+     ---------
+     RealTime Vert.x application build with Maven
+
+     * With parameters:
+        * APPLICATION_NAME=uber-heat-map-analysis
+        * APPLICATION_HOSTNAME=
+        * GIT_URI=https://github.com/gpe-mw-training/operational_intelligence.git
+        * GIT_REF=initial-work
+        * CONTEXT_DIR=uber-heat-map-analysis
+        * APP_OPTIONS=
+        * GITHUB_TRIGGER_SECRET=gsnhp1Lu # generated
+        * GENERIC_TRIGGER_SECRET=LEvXMMcl # generated
+
+--> Creating resources ...
+    buildconfig "uber-heat-map-analysis" created
+    imagestream "uber-heat-map-analysis" created
+    deploymentconfig "uber-heat-map-analysis" created
+    route "uber-heat-map-analysis" created
+    service "uber-heat-map-analysis" created
+--> Success
+    Build scheduled, use 'oc logs -f bc/uber-heat-map-analysis' to track its progress.
+    Access your application via route 'uber-heat-map-analysis-developer-uber-realtime-data.apps.clientvm.1f6b.openshift.opentlc.com'
+    Run 'oc status' to view your app.
+
+----
+
+
+==== OutPut Visualization representation
+
+*The Dashboard Vert.x HTML5 Javascript Client*
+The client uses a Google Maps Heatmap Layer to visually depict the intensity of the Uber trip cluster locations on a Manhattan Google map. With the Google Heatmap, areas of higher intensity will be colored red, and areas of lower intensity will appear green. The dashboard app uses Google Maps markers to mark cluster centers.
+
+image::images/Vertx_realtime.png[vr]
+.. The messages received from the server application are in JSON format and contain the following for each trip location: the cluster center id, datetime, latitude and longitude for the trip, base for the trip, and latitude and longitude for the cluster center.
+
+An example is shown below:
+
+----
+{"cid":18, "dt":"2014-08-01 08:51:00", "lat":40.6858, "lon":-73.9923, "base":"B02682", "clat":40.67462874550765, "clon":-73.98667466026531}
+----
+
 
 
 == Conclusions
