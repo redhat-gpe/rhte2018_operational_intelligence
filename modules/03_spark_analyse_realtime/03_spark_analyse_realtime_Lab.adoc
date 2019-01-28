@@ -319,9 +319,6 @@ oc set volume dc/oshinko-web \
 ----
 . Create a configuration map based on the cluster.txt data file found in your lab assets:
 
-
-
-
 === Ranking - Why it is important?
 .. In lab2, we could display the cluster centers in Zeppelin notebooks which shows the ranking. Here the ranking is static, which helps us to learn about the pattern recognition and historical analysis of data.
 .. In lab3, we use the ranking which is dynamic helps in calculating the raise in price which is used by the Red Hat Decision Manager.
@@ -365,21 +362,67 @@ $ oc new-app --template oshinko-java-spark-build-dc \
     -p APPLICATION_NAME=uber-real-time-analysis \
     -p APP_MAIN_CLASS=com.redhat.gpte.uberdata.ClusterUber \
     -p GIT_URI= https://github.com/gpe-mw-training/operational_intelligence.git \
-    -p APP_FILE=uber-spark-stream-analysis.jar
+    -p APP_FILE=uberEnrichmentData.jar
 -----
 
 .. Check the Build logs
 -----
-oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark.txt
+$ oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark1.txt
 -----
 
 .. Check the Deployment logs
 -----
-oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark.txt
+$ oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark1.txt
 -----
+==== Execution of UberRawDataProducer Application on Oshinko Cluster
+Via the OC Command Utility we can deploy this Module using the below oc command line.
 
-== Visualization of Heat-Map of simulated Traffic in Cluster centers
-=== The vert.x toolkit and Web Application Architecture
+.. The Command Line Arguments is given below :
++
+----
+$ oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=uber-real-time-analysis \
+    -p APP_MAIN_CLASS=com.redhat.gpte.sparkkafka.uber.UberRawDataProducer \
+    -p GIT_URI= https://github.com/gpe-mw-training/operational_intelligence.git \
+    -p APP_FILE=uberEnrichmentData.jar
+----
+
+.. Check the Build logs
+
+----
+$ oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark2.txt
+----
+.. Check the Deployment logs
+
+----
+$ oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark2.txt
+----
+
+
+==== Execution of EnrichedUberData Application on Oshinko Cluster
+Via the OC Command Utility we can deploy this Module using the below oc command line.
+
+.. The Command Line Arguments is given below :
++
+----
+$ oc new-app --template oshinko-java-spark-build-dc \
+    -p APPLICATION_NAME=uber-real-time-analysis \
+    -p APP_MAIN_CLASS=com.redhat.gpte.sparkkafka.uber.UberEnrichmentDataConsumer \
+    -p GIT_URI= https://github.com/gpe-mw-training/operational_intelligence.git \
+    -p APP_FILE=uberEnrichmentData.jar
+----
+
+.. Check the Build logs
+
+----
+$ oc logs -f bc/uber-spark-stream-analysis >>bcuber-spark3.txt
+----
+.. Check the Deployment logs
+
+----
+$ oc logs -f dc/uber-spark-stream-analysis >>dcuber-spark3.txt
+----
+=== Uber-Heat-Map-analysis
 The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js, employs a non-blocking model with a single threaded event-loop to handle work. The Vert.x SockJS event bus bridge allows web applications to communicate bi-directionally with the Vert.x event bus using Websockets, which allows you to build real-time web applications with server push functionality.
 
 image::images/Vert.xGeneral.png[Vertx]
