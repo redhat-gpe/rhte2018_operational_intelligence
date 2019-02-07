@@ -536,6 +536,10 @@ OutPut
     Access your application via route 'uber-heat-map-analysis-developer-uber-realtime-data.apps.clientvm.1f6b.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
+$ mvn clean install package -e
+
+$ java -jar ./target/uber-heatmap.jar web 8080 uberEnricheddatatopic
+
 ----
 
 
