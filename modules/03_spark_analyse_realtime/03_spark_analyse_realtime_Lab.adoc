@@ -25,6 +25,12 @@
 == Overview
 
 === Key Performance Indicators
+.. Business Metrics which plays a key factor in achieving our goals.
+
+... Enrichment of Uber Data.
+... Assigning *RANK* to the cluster Centers.
+... Publishing of Enriched Data records to the downstream applications.
+... Heat-Map Visualization for a traffic cluster centers.
 
 ==== Adding Rank of the Cluster centers
 
@@ -201,7 +207,7 @@ $ oc new-app Strimzi
     statefulsets.apps "kafka" created
     configmaps "zookeeper-metrics-config" created
     statefulsets.apps "zookeeper" created
-    
+
 --> Success
 
 
