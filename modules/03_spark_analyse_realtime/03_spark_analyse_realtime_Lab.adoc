@@ -61,10 +61,6 @@ image::images/DataFlowDiagram.png[DataFlow]
 .. Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
 
 
-. Deployment Topology diagram with DataFlow.
-+
-image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
-
 === Modify the Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
@@ -295,13 +291,6 @@ oshinko-web-1-86blg   2/2       Running   0
 -----
 $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/webui"\n\n"
 -----
-+
-image::images/oshinko_homepage.png[oshinko_homepage]
-
-.. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
-+
-Subsequently, you should be able to access the UI without authenticating and Ensure that OshinkWebUI is up and running. All our Modules will be deployed in the Oshinko cluster.
-
 
 === What we did in the Lab2?
 In Lab2 we just created a model with the Historical data (Uber.csv), build a training set, Identified the patterns and did a Test Predictions.
@@ -557,19 +546,17 @@ An example is shown below:
 {"cid":18, "dt":"2014-08-01 08:51:00", "lat":40.6858, "lon":-73.9923, "base":"B02682", "clat":40.67462874550765, "clon":-73.98667466026531}
 ----
 
-
-
 == Conclusions
 
 ====  What did we learn?
 
-Apache Strimzi - Basics of Apache Strimzi and it's deployment on OpenShift.
+*Apache Strimzi* - Basics of Apache Strimzi and it's deployment on OpenShift.
 
-Vert.x Toolkit - The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js,
+*Vert.x Toolkit* - The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js,
 
-Spark Streaming - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+*Spark Streaming* - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
 
-Kafka with Apache Spark Integration - We learned Apache Kafka integration with Spark on Strimzi Cluster.
+*Kafka with Apache Spark Integration* - We learned Apache Kafka integration with Spark on Strimzi Cluster.
 
 == Questions
 
