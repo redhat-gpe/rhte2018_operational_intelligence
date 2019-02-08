@@ -565,6 +565,8 @@ An example is shown below:
 
 Apache Strimzi - Basics of Apache Strimzi and it's deployment on OpenShift.
 
+Vert.x Toolkit - The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js,
+
 Spark Streaming - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
 
 Kafka with Apache Spark Integration - We learned Apache Kafka integration with Spark on Strimzi Cluster.
