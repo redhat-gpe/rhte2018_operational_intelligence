@@ -18,12 +18,19 @@
 .Prerequisite
 * Skills
 ** Programming knowledge using link:https://vertx.io/[vert.x]
+** Maven
 
 :numbered:
 
 == Overview
 
 === Key Performance Indicators
+.. Business Metrics which plays a key factor in achieving our goals.
+
+... Enrichment of Uber Data.
+... Assigning *RANK* to the cluster Centers.
+... Publishing of Enriched Data records to the downstream applications.
+... Heat-Map Visualization for a traffic cluster centers.
 
 ==== Adding Rank of the Cluster centers
 
@@ -54,10 +61,6 @@ image::images/DataFlowDiagram.png[DataFlow]
 .. Ingests a stream of uber trip events Identifies the location cluster corresponding to the latitude and longitude of the uber trip Adds the cluster location to the event and publishes the results in JSON format to another topic A Spark streaming application subscribed to the second topic: Analyzes the uber trip location clusters that are popular by date and time.
 
 
-. Deployment Topology diagram with DataFlow.
-+
-image::images/DeploymentTopologyLab3Data.png[DeploymentTopoData]
-
 === Modify the Environment Variables
 In a previous lab, you should have already set various environment variables in the shell of your lab environment.
 
@@ -78,7 +81,7 @@ $ echo $OCP_USERNAME
 developer
 
 $ echo $OCP_PASSWD
-xxxxxxxx
+r3dh4t1!
 -----
 
 == Lab Asset Overview
@@ -150,8 +153,61 @@ At this time, Red Hat does not intend to provide supported versions of these pac
 
 
 == Kafka Strimzi Assets
-Recall the OC commands created in Lab1.
+.. Apache Kafka is provided by Strimzi.
+.. To experiment with the latest Strimzi version please refer to the official documentation.
 
+----
+$ oc create -f https://raw.githubusercontent.com/Pkrish15/operational_intelligence/master/templates/openshift-kafka-strimzi-template.yaml
+
+template "strimzi" created
+----
+.. Create a new-app Strimzi using the following Command
+
+----
+$ oc new-app Strimzi
+
+--> Deploying template "developer-uber-realtime-data/strimzi" to project developer-uber-realtime-data
+
+     Apache Kafka (Ephemeral storage)
+     ---------
+     This template installes Apache Zookeeper and Apache Kafka clusters. For more information about using this template see https://github.com/strimzi/strimzi
+
+     WARNING: Any data stored will be lost upon pod destruction. Only use this template for testing."
+
+     Use 'kafka:9092' as bootstrap server in your application
+
+     * With parameters:
+        * Number of Zookeper cluster nodes (odd number of nodes is recomended)=1
+        * Number of Kafka cluster nodes=3
+        * Repository Name=strimzi
+        * Kafka image Name=kafka-statefulsets
+        * Kafka image tag=0.1.0
+        * Zookeeper image Name=zookeeper
+        * Zookeeper image tag=0.1.0
+        * Zookeeper healthcheck initial delay=15
+        * Zookeeper healthcheck timeout=5
+        * Kafka healthcheck initial delay=15
+        * Kafka healthcheck timeout=5
+        * Default replication factor=1
+        * Offsets replication factor=3
+        * Transaction state replication factor=3
+        * Kafka metrics enabled=true
+        * Zookeeper metrics enabled=true
+
+--> Creating resources ...
+    service "kafka" created
+    service "kafka-headless" created
+    service "zookeeper" created
+    service "zookeeper-headless" created
+    configmaps "kafka-metrics-config" created
+    statefulsets.apps "kafka" created
+    configmaps "zookeeper-metrics-config" created
+    statefulsets.apps "zookeeper" created
+
+--> Success
+
+
+----
 
 == Oshinko
 
@@ -235,13 +291,6 @@ oshinko-web-1-86blg   2/2       Running   0
 -----
 $ echo -en "\n\nhttp://"$(oc get route/oshinko-web -o template --template {{.spec.host}} -n $OCP_USERNAME-uber-realtime-data)/webui"\n\n"
 -----
-+
-image::images/oshinko_homepage.png[oshinko_homepage]
-
-.. At this time, the Oshinko web UI is not secured. It is recommended to use Oshinko webui non-secured port.
-+
-Subsequently, you should be able to access the UI without authenticating and Ensure that OshinkWebUI is up and running. All our Modules will be deployed in the Oshinko cluster.
-
 
 === What we did in the Lab2?
 In Lab2 we just created a model with the Historical data (Uber.csv), build a training set, Identified the patterns and did a Test Predictions.
@@ -476,6 +525,10 @@ OutPut
     Access your application via route 'uber-heat-map-analysis-developer-uber-realtime-data.apps.clientvm.1f6b.openshift.opentlc.com'
     Run 'oc status' to view your app.
 
+$ mvn clean install package -e
+
+$ java -jar ./target/uber-heatmap.jar web 8080 uberEnricheddatatopic
+
 ----
 
 
@@ -493,17 +546,17 @@ An example is shown below:
 {"cid":18, "dt":"2014-08-01 08:51:00", "lat":40.6858, "lon":-73.9923, "base":"B02682", "clat":40.67462874550765, "clon":-73.98667466026531}
 ----
 
-
-
 == Conclusions
 
 ====  What did we learn?
 
-Apache Strimzi - Basics of Apache Strimzi and it's deployment on OpenShift.
+*Apache Strimzi* - Basics of Apache Strimzi and it's deployment on OpenShift.
 
-Spark Streaming - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+*Vert.x Toolkit* - The Vert.x toolkit is event-driven, using an event bus to distribute events to work handler services, called verticles. Vert.x, similar to Node.js,
 
-Kafka with Apache Spark Integration - We learned Apache Kafka integration with Spark on Strimzi Cluster.
+*Spark Streaming* - Excellent API for structured streaming and it is an advanced concept in Apache Spark. Since, it uses catalyst optimizer, it provides an excellent performance benefits and it is the most prefered query language for the datascientists all over the world.
+
+*Kafka with Apache Spark Integration* - We learned Apache Kafka integration with Spark on Strimzi Cluster.
 
 == Questions
 
